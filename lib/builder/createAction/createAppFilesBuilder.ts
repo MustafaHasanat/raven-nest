@@ -79,7 +79,7 @@ const createAppFilesBuilder = async (
                 }),
                 memo: {
                     pairs: { mainDest, rootDir, projectName },
-                    category: MemoCategory.EAGLE_NEST,
+                    category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite,
             });

@@ -40,7 +40,7 @@ type AppProps = {
 
 const appConstants: AppProps = {
     program: {
-        name: "eaglenest",
+        name: "ravennest",
         description: "Build Nest.js common blocks and files insanely faster!",
         version: {
             number: "1.0.0",

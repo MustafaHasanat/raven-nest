@@ -13,7 +13,7 @@ import {
   CustomResponseType,
   filteredGetQuery,
   validateNewInstance,
-} from 'src/eaglenest';
+} from 'src/ravennest';
 
 import { TABLE_UPPER_NAME } from "../../entities/TABLE_LOWER_NAME.entity";
 import { CreateTABLE_UPPER_NAMEDto } from "../../dto/TABLE_PLURAL_LOWER_NAME/create-TABLE_LOWER_NAME.dto";

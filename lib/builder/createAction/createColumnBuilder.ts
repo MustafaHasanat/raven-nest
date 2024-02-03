@@ -105,7 +105,7 @@ const createColumnBuilder = async (memoValues: MemoValues) => {
                 mainDest,
                 memo: {
                     pairs: { mainDest },
-                    category: MemoCategory.EAGLE_NEST,
+                    category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite,
             });

@@ -29,7 +29,7 @@ const createLandingPageBuilder = async (memoValues: MemoValues) => {
                 ),
                 memo: {
                     pairs: { publicDir, projectName },
-                    category: MemoCategory.EAGLE_NEST,
+                    category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite,
             });

@@ -13,7 +13,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import { ApiBody, ApiConsumes, ApiQuery } from "@nestjs/swagger";
 import { TablesNames } from "src/enums/tables-data.enum";
-import { CustomResponseType, ControllerWrapper } from "src/eaglenest";
+import { CustomResponseType, ControllerWrapper } from "src/ravennest";
 import { S3 } from "aws-sdk";
 
 @ControllerWrapper("aws")

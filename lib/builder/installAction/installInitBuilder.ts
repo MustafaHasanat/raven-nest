@@ -12,7 +12,7 @@ export default async function installInitBuilder() {
     inquirer
         .prompt([constants.shared.overwrite(["memo.json", ".gitignore"])])
         .then(async ({ overwrite }) => {
-            pathCreator(["src/eaglenest"]);
+            pathCreator(["src/ravennest"]);
 
             await manipulator({
                 cloningCommands: installInitCloning(),

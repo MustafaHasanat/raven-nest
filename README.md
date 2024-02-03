@@ -1,4 +1,4 @@
-# Eagle Nest
+# Raven Nest
 
 Build Nest.js common blocks and files insanely faster!
 
@@ -27,18 +27,18 @@ You might also notice some placeholder variables or values written in an upperca
 -   Install **nest-cli** globally:  
      `npm install -g @nestjs/cli`
 
--   Install **eaglenest** globally:  
-     `npm install -g @mustafa-alhasanat/eagle-nest`
+-   Install **ravennest** globally:  
+     `npm install -g @mustafa-alhasanat/raven-nest`
 
 -   Create a new project:  
      `nest new project-name`  
      `cd project-name`
 
--   Install **eaglenest** for your project as a dev-dependency:  
-     `npm install --save-dev @mustafa-alhasanat/eagle-nest`
+-   Install **ravennest** for your project as a dev-dependency:  
+     `npm install --save-dev @mustafa-alhasanat/raven-nest`
 
 -   Install the recommended dependencies:  
-     `eaglenest install`
+     `ravennest install`
 
 > Now you're ready to go!
 
@@ -79,7 +79,7 @@ Install the recommended dependencies in your project if they're not yet installe
 
 Create the necessary files and directories for the selected 'files-set'.
 
-> Usage: `eaglenest create [options] <files-set>`
+> Usage: `ravennest create [options] <files-set>`
 
 ### Argument choices
 
@@ -105,9 +105,9 @@ Create the necessary files and directories for the selected 'files-set'.
 
 ### Examples
 
--   `eaglenest create main`
--   `eaglenest create --auth --format --aws --mailer app`
--   `eaglenest create --special user table`
+-   `ravennest create main`
+-   `ravennest create --auth --format --aws --mailer app`
+-   `ravennest create --special user table`
 
 # Specifications
 

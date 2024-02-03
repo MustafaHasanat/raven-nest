@@ -30,7 +30,7 @@ const createMainBuilder = async (memoValues: MemoValues) => {
                 injectionCommands: createMainInjection(".env"),
                 memo: {
                     pairs: { mainDest, projectName },
-                    category: MemoCategory.EAGLE_NEST,
+                    category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite,
             });

@@ -12,7 +12,7 @@ import {
 import { ApiBody, ApiOperation } from "@nestjs/swagger";
 import { Request, Response } from "express";
 import { LoginUserDto } from "src/dto/users/login-user.dto";
-import { ControllerWrapper } from "src/eaglenest";
+import { ControllerWrapper } from "src/ravennest";
 import { UsersService } from "src/schemas/users/users.service";
 import { AuthService } from "./auth.service";
 

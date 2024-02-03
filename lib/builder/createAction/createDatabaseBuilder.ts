@@ -42,7 +42,7 @@ const createDatabaseBuilder = async (memoValues: MemoValues) => {
                 }),
                 memo: {
                     pairs: { rootDir, mainDest },
-                    category: MemoCategory.EAGLE_NEST,
+                    category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite
             });

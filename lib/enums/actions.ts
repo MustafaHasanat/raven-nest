@@ -1,5 +1,5 @@
 export enum MemoCategory {
-    EAGLE_NEST = "eaglenest",
+    RAVEN_NEST = "ravennest",
 }
 
 export enum ProjectType {

@@ -28,7 +28,7 @@ const preAction = async ({
 }: PreActionProps) => {
     const memoValues = await checkMemo({
         keys: memos,
-        category: MemoCategory.EAGLE_NEST,
+        category: MemoCategory.RAVEN_NEST,
     });
     if (!memoValues) return;
 

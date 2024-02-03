@@ -96,7 +96,7 @@ const createTableBuilder = async (
                     : createTableInjection(createTableObj),
                 memo: {
                     pairs: { mainDest },
-                    category: MemoCategory.EAGLE_NEST,
+                    category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite,
             });
