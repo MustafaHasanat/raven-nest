@@ -1,0 +1,9 @@
+    
+    if (TABLE_LOWER_NAME1Id) {
+        const TABLE_LOWER_NAME1 = await this.TABLE_PLURAL_UPPER_NAME1Service.getTABLE_UPPER_NAME1ById(TABLE_LOWER_NAME1Id);
+        if (TABLE_LOWER_NAME1.status !== 200) {
+            return notFoundRes("TABLE_UPPER_NAME1 doesn't exist");
+        }
+        TABLE_LOWER_NAME2Obj['TABLE_LOWER_NAME1'] = TABLE_LOWER_NAME1.data;
+    }
+    

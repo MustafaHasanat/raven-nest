@@ -1,0 +1,8 @@
+    @Get('/TABLE_LOWER_NAME_Y/:id')
+    @ApiOperation({ summary: 'get a single TABLE_LOWER_NAME_X using its TABLE_LOWER_NAME_Y ID' })
+    async getTABLE_UPPER_NAME_XByTABLE_UPPER_NAME_YId(@Param('id') id: string, @Res() res: Response) {
+    const response: CustomResponseType<any> =
+        await this.TABLE_PLURAL_LOWER_NAME_XService.getTABLE_UPPER_NAME_XByTABLE_UPPER_NAME_YId(id);
+
+    return res.status(response.status).json(response);
+    }

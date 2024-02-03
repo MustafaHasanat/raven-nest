@@ -1,0 +1,10 @@
+    
+    @Get('/TABLE_LOWER_NAME1/:id')
+    @ApiOperation({ summary: 'get all TABLE_PLURAL_LOWER_NAME2 that has the same TABLE_LOWER_NAME1 ID' })
+    async getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(@Param('id') id: string, @Res() res: Response) {
+        const response: CustomResponseType<TABLE_UPPER_NAME2[]> =
+            await this.TABLE_PLURAL_LOWER_NAME2Service.getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(id);
+        return res.status(response.status).json(response);
+    }
+    
+    

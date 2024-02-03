@@ -1,0 +1,11 @@
+
+export enum UserFields {
+    USERNAME = "username",
+    FIRST_NAME = "firstName",
+    LAST_NAME = "lastName",
+    EMAIL = "email",
+    PHONE_NUMBER = "phoneNumber",
+    GENDER = "gender",
+    ROLE = "role",
+    ADDRESS = "address",
+}

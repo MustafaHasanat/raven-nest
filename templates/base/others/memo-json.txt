@@ -1,0 +1,7 @@
+{
+    "usage": "This file will be used to track the actions of the tool. You can delete it after you finish setting up you project.",
+
+    "eaglenest": {
+        "usage": "This section is reserved for the eagle-nest tool."
+    }
+}

@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  strapi:
+    container_name: strapi
+    image: strapi
+    restart: always
+    environment:
+      DATABASE_HOST: 172.20.0.3
+    ports:
+      - "1337:1337"
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: arromi
+      POSTGRES_PASSWORD: 5^00583Arromi
+      POSTGRES_DB: rnk
+    ports:
+      - "5432:5432"
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: arromi.creatives@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 5^00583Arromi
+    ports:
+      - "5050:80"

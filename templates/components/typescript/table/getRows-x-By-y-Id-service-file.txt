@@ -1,0 +1,22 @@
+  
+  async getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(
+    TABLE_LOWER_NAME1Id: string,
+  ): Promise<CustomResponseType<TABLE_UPPER_NAME2[]>> {
+    try {
+      const response = await this.TABLE_LOWER_NAME2Repository.find({
+        where: { TABLE_LOWER_NAME1: { id: TABLE_LOWER_NAME1Id } },
+        order: { CHANGE_THIS_TO_DEFAULT_FIELD: 'ASC' },
+      });
+
+      return foundRes(
+        response.length
+          ? 'TABLE_PLURAL_UPPER_NAME2 have been found'
+          : 'TABLE_PLURAL_UPPER_NAME2 list is empty',
+        response,
+      );
+    } catch (error) {
+      return errorRes(error);
+    }
+  }
+   
+   

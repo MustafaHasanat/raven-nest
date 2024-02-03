@@ -1,0 +1,11 @@
+
+        // --- mailer ---
+        MailerModule.forRoot({
+            transport: {
+              service: process.env.MAILER_SERVICE_PROVIDER,
+              auth: {
+                user: process.env.OFFICIAL_EMAIL,
+                pass: process.env.OFFICIAL_EMAIL_PASSWORD,
+              },
+            },
+          }),

@@ -1,0 +1,20 @@
+
+  async getTABLE_UPPER_NAME_XByTABLE_UPPER_NAME_YId(
+    TABLE_LOWER_NAME_YId: string,
+  ): Promise<CustomResponseType<TABLE_UPPER_NAME_X>> {
+    try {
+      const response = await this.TABLE_LOWER_NAME_XRepository.findOne({
+        where: { TABLE_LOWER_NAME_Y: { id: TABLE_LOWER_NAME_YId } },
+        order: { CHANGE_THIS_TO_DEFAULT_FIELD: 'ASC' },
+      });
+
+      if (!response) {
+        return notFoundRes('No TABLE_PLURAL_LOWER_NAME_X have this TABLE_LOWER_NAME_Y ID');
+      }
+
+      return foundRes('TABLE_UPPER_NAME_X has been found', response);
+    } catch (error) {
+      return errorRes(error);
+    }
+  }
+  

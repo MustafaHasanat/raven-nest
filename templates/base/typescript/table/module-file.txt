@@ -1,0 +1,14 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { TABLE_PLURAL_UPPER_NAMEService } from './TABLE_PLURAL_LOWER_NAME.service';
+import { TABLE_PLURAL_UPPER_NAMEController } from './TABLE_PLURAL_LOWER_NAME.controller';
+import { TABLE_UPPER_NAME } from '../../entities/TABLE_LOWER_NAME.entity';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([TABLE_UPPER_NAME])],
+  controllers: [TABLE_PLURAL_UPPER_NAMEController],
+  providers: [TABLE_PLURAL_UPPER_NAMEService],
+  exports: [TABLE_PLURAL_UPPER_NAMEService],
+})
+export class TABLE_PLURAL_UPPER_NAMEModule {}

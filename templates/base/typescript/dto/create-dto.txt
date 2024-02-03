@@ -1,0 +1,4 @@
+export class CreateTABLE_UPPER_NAMEDto {
+
+    // --- Relational fields ---
+}
