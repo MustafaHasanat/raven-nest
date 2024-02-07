@@ -1,3 +1,4 @@
+import { ColumnTypeChoice } from "lib/enums/createAction.js";
 import NameVariant from "../models/nameVariant.js";
 import SubPath from "../models/subPath.js";
 import { InjectTemplate } from "../types/injectTemplate.js";
@@ -18,7 +19,13 @@ export interface CreateTableProps {
 export interface CreateColumnProps {
     columnData: {
         columnName: string;
-        columnType: string;
+        columnType: ColumnTypeChoice,
+        mapsData: {
+            dtoCreate: string | null;
+            dtoUpdate: string | null;
+            entityType: string;
+            dtoType: string;
+        };
         entityProperties: string | null;
         decorators: {
             decoratorsValues: string | null;
@@ -42,6 +49,5 @@ export interface CreateRelationProps {
     table2: {
         nameVariant: NameVariant;
         paths: SubPath;
-        camelCaseColumnName: string;
     };
 }

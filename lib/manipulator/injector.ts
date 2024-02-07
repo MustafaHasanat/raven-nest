@@ -50,7 +50,7 @@ const injectString = ({
         const index = original.indexOf(keyword);
         if (index === -1 && !["*", "**"].includes(keyword)) {
             specialLog({
-                message: `'keyword=${keyword}' doesn't exist in the 'original' string`,
+                message: `keyword='${keyword}' doesn't exist in the 'original' string`,
                 situation: "ERROR",
                 scope: "mismatch",
             });
@@ -219,6 +219,8 @@ const deletionAction = async (props: {
         keyword,
         deletion: {
             isWholeLine = false,
+            mayNotBeThere = false,
+            onlyFirstOccurrence = false,
             conditional: { type, data } = {
                 type: "NONE",
                 data: null,
@@ -229,10 +231,21 @@ const deletionAction = async (props: {
     let newString = "";
     const startIndex = injectableContents.indexOf(keyword);
     const endIndex = injectableContents.indexOf("\n", startIndex);
+    const isItThere = startIndex !== -1;
 
-    if (startIndex === -1) {
+    if (isItThere && !mayNotBeThere) {
         specialLog({
             message: `The 'keyword=${keyword}' doesn't exist in the injectable content`,
+            situation: "ERROR",
+            scope: "deletionAction",
+        });
+        return null;
+    }
+
+    if (mayNotBeThere && isWholeLine) {
+        specialLog({
+            message:
+                "You can't have both 'mayNotBeThere' and 'isWholeLine' parameters together",
             situation: "ERROR",
             scope: "deletionAction",
         });
@@ -245,19 +258,25 @@ const deletionAction = async (props: {
             startIndex,
             endIndex
         ) as string;
-    } else {
-        newString = "";
     }
 
-    const modifiedInjectable = await replaceStrings({
-        contents: injectableContents,
-        items: [
-            {
-                oldString: isWholeLine ? newString : keyword,
-                newString: type === "REPLACED_WITH" ? `${data}` : newString,
-            },
-        ],
-    });
+    const modifiedInjectable = onlyFirstOccurrence
+        ? injectableContents.replace(keyword, "")
+        : await replaceStrings({
+              contents: injectableContents,
+              items:
+                  !isItThere && mayNotBeThere
+                      ? []
+                      : [
+                            {
+                                oldString: isWholeLine ? newString : keyword,
+                                newString:
+                                    type === "REPLACED_WITH"
+                                        ? `${data}`
+                                        : newString,
+                            },
+                        ],
+          });
 
     // recursively apply all the actions on teh original file
     return await deletionAction({

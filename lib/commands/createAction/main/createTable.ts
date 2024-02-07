@@ -10,6 +10,8 @@ const createTableCloning = ({
         upperCaseName,
         pluralLowerCaseName,
         pluralUpperCaseName,
+        upperSnakeCaseName,
+        lowerSnakeCaseName,
     },
 }: CreateTableProps): CloneTemplate[] => {
     return [
@@ -99,10 +101,14 @@ const createTableCloning = ({
                     oldString: "TABLE_PLURAL_LOWER_NAME",
                     newString: pluralLowerCaseName,
                 },
+                {
+                    oldString: "TABLE_UPPER_SNAKE_CASE_NAME",
+                    newString: upperSnakeCaseName,
+                },
             ],
         },
         {
-            signature: "TABLE.serviceP.ts",
+            signature: "TABLE.service.ts",
             target: "base/typescript/table/service-file.txt",
             destination: schemasPath,
             newFileName: `${pluralLowerCaseName}.service.ts`,
@@ -123,13 +129,22 @@ const createTableCloning = ({
                     oldString: "TABLE_PLURAL_LOWER_NAME",
                     newString: pluralLowerCaseName,
                 },
+                {
+                    oldString: "TABLE_LOWER_SNAKE_CASE_NAME",
+                    newString: lowerSnakeCaseName,
+                },
             ],
         },
     ];
 };
 
 const createTableInjection = ({
-    paths: { entitiesPath, mainPath: appModulePath, enumsPath },
+    paths: {
+        entitiesPath,
+        mainPath: appModulePath,
+        enumsPath,
+        middlewaresPath,
+    },
     nameVariant: {
         camelCaseName,
         upperCaseName,
@@ -143,26 +158,26 @@ const createTableInjection = ({
         injectable: join(entitiesPath, "entities.ts"),
         additions: [
             {
-                addition: {
-                    base: `import { ${upperCaseName} } from "./${camelCaseName}.entity";\n`,
-                    additionIsFile: false,
-                    conditional: {
-                        type: "SUPPOSED_TO_BE_THERE",
-                        data: `import { ${upperCaseName} }`,
-                    },
-                },
-                keyword: "*",
-            },
-            {
+                keyword: "entities = [",
                 addition: {
                     base: `\n${upperCaseName},\n`,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: upperCaseName,
+                        data: upperCaseName + ",",
                     },
                 },
-                keyword: "entities = [",
+            },
+            {
+                keyword: "*",
+                addition: {
+                    base: `import { ${upperCaseName} } from "./${camelCaseName}.entity";\n`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `import { ${upperCaseName} } from "./${camelCaseName}.entity"`,
+                    },
+                },
             },
         ],
     },
@@ -171,16 +186,24 @@ const createTableInjection = ({
         injectable: join(appModulePath, "app.module.ts"),
         additions: [
             {
+                keyword: "*",
                 addition: {
                     base: `import { ${pluralUpperCaseName}Module } from "./schemas/${pluralLowerCaseName}/${pluralLowerCaseName}.module";\n`,
                     additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `import { ${pluralUpperCaseName}Module`,
+                    },
                 },
-                keyword: "*",
             },
             {
                 addition: {
                     base: `\n${pluralUpperCaseName}Module,`,
                     additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `${pluralUpperCaseName}Module,`,
+                    },
                 },
                 keyword: "// ===== tables =====",
             },
@@ -191,9 +214,24 @@ const createTableInjection = ({
         injectable: join(enumsPath, "tables-data.enum.ts"),
         additions: [
             {
+                keyword: "AllTablesColumns =",
+                addition: {
+                    base: ` | ${upperCaseName}Fields`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `${upperCaseName}Fields`,
+                    },
+                },
+            },
+            {
                 addition: {
                     base: `export enum ${upperCaseName}Fields {}\n\n`,
                     additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `export enum ${upperCaseName}Fields`,
+                    },
                 },
                 keyword: "*",
             },
@@ -201,20 +239,38 @@ const createTableInjection = ({
                 addition: {
                     base: `\n${upperSnakeCaseName} = '${camelCaseName}', `,
                     additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `${upperSnakeCaseName} = '${camelCaseName}'`,
+                    },
                 },
                 keyword: "TablesNames {",
-            },
-            {
-                addition: {
-                    base: `${upperCaseName}Fields | `,
-                    additionIsFile: false,
-                },
-                keyword: "AllTablesColumns = ",
             },
         ],
         deletions: [
             {
-                keyword: "| null",
+                keyword: `| null`,
+                deletion: {
+                    mayNotBeThere: true,
+                    onlyFirstOccurrence: true,
+                },
+            },
+        ],
+    },
+    {
+        signature: "transformers.ts",
+        injectable: join(middlewaresPath, "transformers.ts"),
+        additions: [
+            {
+                keyword: "// ----- tables' transformers -----",
+                addition: {
+                    base: `\nif (table === TablesNames.${upperSnakeCaseName}) {}\n`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `.${upperSnakeCaseName})`,
+                    },
+                },
             },
         ],
     },

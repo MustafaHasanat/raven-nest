@@ -36,7 +36,8 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
-        private readonly s3Service: S3Service
+        // ----- external services -----
+        private readonly s3Service: S3Service,
     ) {}
 
     // --- helper methods ---
@@ -221,9 +222,8 @@ export class UsersService {
     async getUserById(id: string): Promise<CustomResponseType<User>> {
         try {
             const response = await this.userRepository.findOneBy({ id });
-            if (!response) {
-                return notFoundRes("User doesn't exist");
-            }
+            if (!response) return notFoundRes("User doesn't exist");
+            
             return foundRes<User>(
                 "User has been found",
                 this.userDataFilter<User>(response)

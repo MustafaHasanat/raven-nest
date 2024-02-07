@@ -166,7 +166,7 @@ const createSpecialTableInjection = ({
                         base: `${upperCaseName}Fields | `,
                         additionIsFile: false,
                     },
-                    keyword: "AllTablesColumns = ",
+                    keyword: "AllTablesColumns =",
                 },
             ],
             deletions: [

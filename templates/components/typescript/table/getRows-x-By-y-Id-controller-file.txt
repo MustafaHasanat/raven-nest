@@ -1,10 +1,25 @@
-    
-    @Get('/TABLE_LOWER_NAME1/:id')
-    @ApiOperation({ summary: 'get all TABLE_PLURAL_LOWER_NAME2 that has the same TABLE_LOWER_NAME1 ID' })
-    async getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(@Param('id') id: string, @Res() res: Response) {
+
+    @Get("/TABLE_LOWER_NAME1/:id")
+    @GetAllWrapper({
+        summary: "get all TABLE_PLURAL_LOWER_NAME2 that has the same TABLE_LOWER_NAME1 ID",
+        fieldsEnum: TABLE_UPPER_NAME2Fields,
+        isMainGet: false,
+    })
+    @ApiOperation({})
+    async getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(
+        @Param("id") id: string,
+        @Query()
+        query: Omit<GetQueryProps<TABLE_UPPER_NAME2Fields>, "conditions">,
+        @Res() res: Response
+    ) {
+        const { sortBy, reverse, page } = query;
         const response: CustomResponseType<TABLE_UPPER_NAME2[]> =
-            await this.TABLE_PLURAL_LOWER_NAME2Service.getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(id);
+            await this.TABLE_PLURAL_LOWER_NAME2Service.getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id({
+                id,
+                sortBy,
+                reverse: reverse === "true",
+                page: Number(page),
+            });
         return res.status(response.status).json(response);
     }
-    
     

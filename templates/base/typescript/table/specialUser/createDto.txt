@@ -52,7 +52,7 @@ export class CreateUserDto extends IntersectionType(LoginUserDto) {
     @ApiProperty({
         example: "+962780387522",
         description:
-            "Phone number must start with a '+' sign followed by country code, then the number",
+            "Phone number must start with a plus sign followed by country code, then the number",
         required: false,
     })
     phoneNumber?: string;

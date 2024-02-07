@@ -6,6 +6,7 @@ export interface DecoratorsMapProps {
 export interface GetColumnAttributesProps {
     columnDecorators: string[];
     columnProperties: string[];
+    isRequired: boolean
 }
 
 export interface GetColumnAttributesReturn {

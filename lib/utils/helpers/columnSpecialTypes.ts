@@ -4,10 +4,11 @@ import { ColumnTypeChoice } from "../../enums/createAction.js";
 import inquirer from "inquirer";
 import { replaceStrings } from "./stringsHelpers.js";
 import constants from "../../utils/constants/builderConstants.js";
+import { columnTypeDefaultMap } from "../constants/builderMaps.js";
 
 // --- interfaces ---
 
-type AddSpecialItemsProps = {
+type AddSpecialItemsBase = {
     columnName: string;
     columnType: ColumnTypeChoice;
     entityProperties: string | null;
@@ -18,8 +19,19 @@ type AddSpecialItemsProps = {
     };
 };
 
-type AddSpecialItemsReturn = AddSpecialItemsProps & {
+type AddSpecialItemsProps = AddSpecialItemsBase & {
+    isRequired: boolean;
+    description: string;
+};
+
+type AddSpecialItemsReturn = AddSpecialItemsBase & {
     specialInjections: InjectTemplate[];
+    mapsData: {
+        dtoCreate: string | null;
+        dtoUpdate: string | null;
+        entityType: string;
+        dtoType: string;
+    };
 };
 
 // --- methods ---
@@ -34,10 +46,13 @@ const addSpecialItems = async ({
     columnType,
     entityProperties,
     dtoProperties,
+    isRequired,
+    description,
     decorators: { decoratorsValues, decoratorsImports },
 }: AddSpecialItemsProps): Promise<AddSpecialItemsReturn> => {
     const fullEntityProperties = entityProperties;
     const fullDtoProperties = dtoProperties;
+    let specialDescription = null;
     let modifiedDecoratorsValues = decoratorsValues;
     let modifiedDecoratorsImports = decoratorsImports;
 
@@ -62,6 +77,10 @@ const addSpecialItems = async ({
                     });
                 });
         }
+        if (decoratorsValues.indexOf("IsPhoneNumber") !== -1) {
+            specialDescription =
+                "Phone number must start with a plus sign, followed by country code, then the number";
+        }
     }
 
     switch (columnType) {
@@ -82,6 +101,10 @@ const addSpecialItems = async ({
     return {
         columnName,
         columnType,
+        mapsData: columnTypeDefaultMap(
+            isRequired,
+            description || `${specialDescription || ""}`
+        )[columnType],
         entityProperties: fullEntityProperties,
         dtoProperties: fullDtoProperties,
         decorators: {

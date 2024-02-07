@@ -183,6 +183,12 @@ const builderConstants: BuilderConstantsProps = {
                 "Select the type of the new column: (exactly one must be selected)",
             choices: columnTypeChoices,
         },
+        description: {
+            type: "input",
+            name: "description",
+            default: "",
+            message: "Write down a description for this field: (optional)",
+        },
         columnProperties: {
             ...sharedAttrs.checkbox.multiple,
             type: "checkbox",
@@ -223,13 +229,6 @@ const builderConstants: BuilderConstantsProps = {
                 "Select the type of the new relation: (exactly one must be selected)",
             choices: relationChoices,
         },
-        fieldName: {
-            ...sharedAttrs.input.name,
-            type: "input",
-            name: "fieldName",
-            message:
-                "Enter the name of one of your 2nd table's fields: (camelCased)",
-        },
         mainDest: {
             ...sharedAttrs.input.dest,
             type: "input",
@@ -243,7 +242,7 @@ const builderConstants: BuilderConstantsProps = {
             type: "input",
             name: "tables",
             message:
-                "Enter the names of the tables separated by a dash \n(use singular camelCase nouns to avoid errors, like: user-product)",
+                "Enter the names of the tables separated by a dash: \n- use singular camelCase nouns to avoid errors, like: user-product \n- the order of the names is important",
             validate: tableNamesValidator,
         },
     },

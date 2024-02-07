@@ -24,13 +24,14 @@ import { TABLE_UPPER_NAMEFields } from '../../enums/tables-data.enum';
 export class TABLE_PLURAL_UPPER_NAMEService {
     constructor(
         @InjectRepository(TABLE_UPPER_NAME)
-        private readonly TABLE_LOWER_NAMERepository: Repository<TABLE_UPPER_NAME>
+        private readonly TABLE_LOWER_NAMERepository: Repository<TABLE_UPPER_NAME>,
+        // ----- external services -----
     ) {}
 
     // --- Basic REST APIs ---
 
     async getTABLE_PLURAL_UPPER_NAME({
-        sortBy = TABLE_UPPER_NAMEFields.CHANGE_THIS_TO_DEFAULT_FIELD,
+        sortBy = Object.values(TABLE_UPPER_NAMEFields)[0],
         reverse = false,
         page = 1,
         conditions,
@@ -65,10 +66,8 @@ export class TABLE_PLURAL_UPPER_NAMEService {
     async getTABLE_UPPER_NAMEById(id: string): Promise<CustomResponseType<TABLE_UPPER_NAME>> {
         try {
             const response = await this.TABLE_LOWER_NAMERepository.findOneBy({ id });
-
-            if (response) {
-                return notFoundRes("TABLE_UPPER_NAME does not exist");
-            }
+            
+            if (!response) return notFoundRes("TABLE_UPPER_NAME does not exist");
 
             return foundRes("TABLE_UPPER_NAME has been found", response);
         } catch (error) {
@@ -171,7 +170,7 @@ export class TABLE_PLURAL_UPPER_NAMEService {
     async deleteAllTABLE_PLURAL_UPPER_NAME(): Promise<CustomResponseType<DeleteResult>> {
         try {
             const response = await this.TABLE_LOWER_NAMERepository.query(
-                `TRUNCATE TABLE "TABLE_LOWER_NAME" CASCADE;`
+                `TRUNCATE TABLE "TABLE_LOWER_SNAKE_CASE_NAME" CASCADE;`
             );
 
             return deletedRes(

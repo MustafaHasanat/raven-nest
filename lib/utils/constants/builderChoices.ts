@@ -102,6 +102,11 @@ const columnDecoratorsChoices = [
         value: "isInt",
         description: "the number must be an integer",
     },
+    {
+        name: "isDate",
+        value: "isDate",
+        description: "the input must be of date type (format: M/D/Y)",
+    },
 ];
 
 const relationChoices = [

@@ -1,22 +1,33 @@
-  
-  async getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id(
-    TABLE_LOWER_NAME1Id: string,
-  ): Promise<CustomResponseType<TABLE_UPPER_NAME2[]>> {
-    try {
-      const response = await this.TABLE_LOWER_NAME2Repository.find({
-        where: { TABLE_LOWER_NAME1: { id: TABLE_LOWER_NAME1Id } },
-        order: { CHANGE_THIS_TO_DEFAULT_FIELD: 'ASC' },
-      });
 
-      return foundRes(
-        response.length
-          ? 'TABLE_PLURAL_UPPER_NAME2 have been found'
-          : 'TABLE_PLURAL_UPPER_NAME2 list is empty',
-        response,
-      );
-    } catch (error) {
-      return errorRes(error);
+    async getTABLE_PLURAL_UPPER_NAME2ByTABLE_UPPER_NAME1Id({
+        id,
+        sortBy = Object.values(TABLE_UPPER_NAME2Fields)[0],
+        reverse = false,
+        page = 1,
+    }: GetAllProps<TABLE_UPPER_NAME2Fields> & { id: string }): Promise<
+        CustomResponseType<TABLE_UPPER_NAME2[]>
+    > {
+        try {
+            const findQuery = filteredGetQuery({
+                whereQuery: { TABLE_LOWER_NAME1: { id } },
+                sortBy,
+                reverse,
+                page,
+            });
+            if (findQuery.status !== 200) return notFoundRes(findQuery.message);
+
+            const response = await this.TABLE_LOWER_NAME2Repository.find(
+                findQuery.data
+            );
+
+            return foundRes(
+                response.length
+                    ? "TABLE_PLURAL_UPPER_NAME2 have been found"
+                    : "TABLE_PLURAL_UPPER_NAME2 list is empty",
+                response
+            );
+        } catch (error) {
+            return errorRes(error);
+        }
     }
-  }
-   
-   
+    

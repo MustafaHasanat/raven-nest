@@ -59,7 +59,7 @@ const installPackages = async ({
                     uninstalledPackages.forEach(
                         ({ packageName, commandType }, index) => {
                             specialLog({
-                                message: `${index}) ${packageName}`,
+                                message: `${index + 1}) ${packageName}`,
                                 situation: "PROCESS",
                             });
                             console.log(

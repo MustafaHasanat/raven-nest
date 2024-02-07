@@ -24,9 +24,8 @@ const relationBuilder = async ({
         .prompt([
             constants.createRelation.relationType,
             constants.createRelation.tables,
-            constants.createRelation.fieldName,
         ])
-        .then(async ({ tables, relationType, fieldName }) => {
+        .then(async ({ tables, relationType }) => {
             const [firstTableName, secondTableName] = tables.split("-");
 
             // get the names variants and the paths
@@ -51,7 +50,6 @@ const relationBuilder = async ({
                     table2: {
                         nameVariant: tableNameVariantObj2,
                         paths: subPathObj2,
-                        camelCaseColumnName: fieldName,
                     },
                 }),
                 memo,

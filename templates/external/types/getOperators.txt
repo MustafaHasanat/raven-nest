@@ -15,10 +15,11 @@ type GetConditionsProps<FieldType> = {
 };
 
 type GetAllProps<FieldType> = {
-    conditions: GetConditionsProps<FieldType>[];
+    conditions?: GetConditionsProps<FieldType>[];
     sortBy?: FieldType;
     reverse?: boolean;
     page?: number;
+    whereQuery?: { [key: string]: any };
 };
 
 type GetQueryProps<FieldType> = {

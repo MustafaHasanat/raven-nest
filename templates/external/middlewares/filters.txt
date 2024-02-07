@@ -38,14 +38,15 @@ function filteredGetQuery({
     sortBy,
     reverse,
     page = 1,
-    conditions,
+    conditions = [],
+    whereQuery,
 }: GetAllProps<any>): {
     message: string;
     data: FindManyOptions;
     status: number;
 } {
     try {
-        const whereQuery: { [key: string]: any } = {};
+        const finalWhereQuery: { [key: string]: any } = whereQuery || {};
 
         if (page < 0) {
             return {
@@ -55,35 +56,36 @@ function filteredGetQuery({
             };
         }
 
-        conditions.forEach((condition) => {
-            const {
-                field,
-                filterOperator,
-                filteredTerm: { dataType, value },
-            } = condition;
+        if (conditions.length > 0)
+            conditions.forEach((condition) => {
+                const {
+                    field,
+                    filterOperator,
+                    filteredTerm: { dataType, value },
+                } = condition;
 
-            const isNumber = ![
-                FilterOperator.CONTAINS,
-                FilterOperator.STRING_EQUALS,
-            ].includes(filterOperator);
+                const isNumber = ![
+                    FilterOperator.CONTAINS,
+                    FilterOperator.STRING_EQUALS,
+                ].includes(filterOperator);
 
-            if (isNumber && dataType === "string") {
-                return {
-                    message:
-                        "The inputs (field, filterOperator, filteredTerm.dataType, filteredTerm.value) must be consistent",
-                    data: null,
-                    status: 400,
-                };
-            }
+                if (isNumber && dataType === "string") {
+                    return {
+                        message:
+                            "The inputs (field, filterOperator, filteredTerm.dataType, filteredTerm.value) must be consistent",
+                        data: null,
+                        status: 400,
+                    };
+                }
 
-            const where = mappingMethod(
-                field,
-                isNumber ? (value as number) : value,
-                filterOperator
-            );
+                const where = mappingMethod(
+                    field,
+                    isNumber ? (value as number) : value,
+                    filterOperator
+                );
 
-            whereQuery[field] = where[field];
-        });
+                finalWhereQuery[field] = where[field];
+            });
 
         const pageOptions =
             page === 0
@@ -96,7 +98,7 @@ function filteredGetQuery({
         return {
             message: "Data retrieved successfully",
             data: {
-                where: { ...whereQuery },
+                where: { ...finalWhereQuery },
                 order: {
                     [sortBy]: reverse ? SortDirection.DESC : SortDirection.ASC,
                 },

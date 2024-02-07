@@ -59,10 +59,9 @@ const decoratorsMap = (
     );
 
     const decoratorsValues = decoratorsArr.join("\n");
-    const decoratorsImports = `import {
-
- ${importsArr.join(", ")}
-} from 'class-validator';`;
+    const decoratorsImports = !importsArr.length
+        ? ""
+        : `import { ${importsArr.join(", ")} } from 'class-validator';`;
 
     return {
         decoratorsValues,
@@ -73,9 +72,13 @@ const decoratorsMap = (
 const getColumnAttributes = ({
     columnProperties,
     columnDecorators,
+    isRequired,
 }: GetColumnAttributesProps): GetColumnAttributesReturn => {
+    const entityProperties = propertiesEntityMap(columnProperties) || "";
     return {
-        entityProperties: propertiesEntityMap(columnProperties),
+        entityProperties: isRequired
+            ? entityProperties
+            : `${entityProperties}${entityProperties ? ",\n" : ""}nullable: true`,
         dtoProperties: propertiesDtoMap(columnProperties),
         decorators: decoratorsMap(columnDecorators),
     };

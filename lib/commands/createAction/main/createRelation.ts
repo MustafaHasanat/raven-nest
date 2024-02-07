@@ -21,7 +21,6 @@ const createRelationInjection = ({
             pluralUpperCaseName: pluralUpperCaseName2,
         },
         paths: { dtoPath: dtoPath2, schemasPath: schemasPath2 },
-        camelCaseColumnName: camelCaseColumnName2,
     },
 }: CreateRelationProps): InjectTemplate[] => {
     // OneToMany relation
@@ -117,9 +116,9 @@ const createRelationInjection = ({
                         },
                     },
                     {
-                        keyword: `@InjectRepository(${upperCaseName2})`,
+                        keyword: "// ----- external services -----",
                         addition: {
-                            base: `\nprivate readonly ${pluralLowerCaseName1}Service: ${pluralUpperCaseName1}Service,`,
+                            base: `\n,private readonly ${pluralLowerCaseName1}Service: ${pluralUpperCaseName1}Service,`,
                             additionIsFile: false,
                         },
                     },
@@ -217,17 +216,6 @@ const createRelationInjection = ({
                         ],
                     },
                 ],
-                deletions: [
-                    {
-                        keyword: "CHANGE_THIS_TO_DEFAULT_FIELD",
-                        deletion: {
-                            conditional: {
-                                type: "REPLACED_WITH",
-                                data: camelCaseColumnName2,
-                            },
-                        },
-                    },
-                ],
             },
             {
                 signature: "TABLE2.controller.ts",
@@ -281,7 +269,7 @@ const createRelationInjection = ({
                     {
                         keyword: "// --- Relational fields ---",
                         addition: {
-                            base: `\n@ApiProperty({ required: true })\n${camelCaseName1}: string;\n`,
+                            base: `\n@ApiProperty({ required: true, description: "enter the related ${camelCaseName1} ID" })\n${camelCaseName1}: string;\n`,
                             additionIsFile: false,
                         },
                     },
@@ -305,7 +293,7 @@ const createRelationInjection = ({
                     {
                         keyword: "// --- Relational fields ---",
                         addition: {
-                            base: `\n@ApiProperty({ required: false, default: '' })\n${camelCaseName1}?: string;\n`,
+                            base: `\n@ApiProperty({ required: false, default: '', description: "enter the related ${camelCaseName1} ID" })\n${camelCaseName1}?: string;\n`,
                             additionIsFile: false,
                         },
                     },

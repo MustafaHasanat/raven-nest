@@ -12,6 +12,7 @@ import {
     memosToQuestions,
 } from "../../manipulator/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
+import { ColumnTypeChoice } from "../..//enums/createAction.js";
 
 const columnBuilder = async ({
     mainDest,
@@ -29,6 +30,7 @@ const columnBuilder = async ({
             { ...constants.createColumn.tableName, default: prevTableName },
             constants.createColumn.columnName,
             constants.createColumn.columnType,
+            constants.createColumn.description,
             constants.createColumn.columnProperties,
             constants.createColumn.columnDecorators,
         ])
@@ -36,9 +38,17 @@ const columnBuilder = async ({
             async ({
                 tableName,
                 columnName,
+                description,
                 columnType,
                 columnProperties,
                 columnDecorators,
+            }: {
+                tableName: string;
+                columnName: string;
+                description: string;
+                columnType: ColumnTypeChoice[];
+                columnProperties: string[];
+                columnDecorators: string[];
             }) => {
                 // get the names variants and the paths
                 const tableNameVariantObj = new NameVariant(tableName);
@@ -48,14 +58,20 @@ const columnBuilder = async ({
                     nameVariant: tableNameVariantObj,
                 });
 
+                const isRequired =
+                    columnProperties.indexOf("isRequired") !== -1;
+
                 const isDone = await manipulator({
                     injectionCommands: createColumnInjection({
                         columnData: await addSpecialItems({
                             columnName,
                             columnType: columnType[0],
+                            isRequired,
+                            description,
                             ...getColumnAttributes({
                                 columnProperties,
                                 columnDecorators,
+                                isRequired,
                             }),
                         }),
                         paths: subPathObj,
@@ -97,7 +113,8 @@ const createColumnBuilder = async (memoValues: MemoValues) => {
                 "create-TABLE.dto.ts",
                 "update-TABLE.dto.ts",
                 "tables-data.enum.ts",
-                "TABLE.service.ts"
+                "TABLE.service.ts",
+                "transformers.ts",
             ]),
         ])
         .then(async ({ mainDest, overwrite }) => {

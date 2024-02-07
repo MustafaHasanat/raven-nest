@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { existsSync, writeFileSync } from "fs";
+import { existsSync } from "fs";
 
 const pathConvertor = (dest: string, suffix: string): string =>
     `${dest || ""}${dest ? "/" : ""}${suffix}`;
@@ -72,10 +72,6 @@ const generateJWTSecret = () => {
     return execSync("openssl rand -base64 32").toString();
 };
 
-const fileCreator = (fileName: string) => {
-    writeFileSync(fileName, "");
-};
-
 export {
     pathConvertor,
     missingFiles,
@@ -83,5 +79,4 @@ export {
     firstCharToLower,
     pluralize,
     generateJWTSecret,
-    fileCreator,
 };

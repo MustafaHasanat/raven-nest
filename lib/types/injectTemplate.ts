@@ -19,12 +19,10 @@ type InjectionDeletionAction = {
     keyword: string;
     deletion?: {
         isWholeLine?: boolean;
+        mayNotBeThere?: boolean;
+        onlyFirstOccurrence?: boolean;
         conditional?: {
-            type:
-                | "WHOLE_LINE"
-                | "REPLACED_WITH"
-                | "REPLACED_OR_ADD_WITH"
-                | "NONE";
+            type: "REPLACED_WITH" | "NONE";
             data: string | null;
         };
     };

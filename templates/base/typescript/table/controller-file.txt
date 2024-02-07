@@ -28,7 +28,8 @@ import { TABLE_PLURAL_UPPER_NAMEService } from "./TABLE_PLURAL_LOWER_NAME.servic
 import { TABLE_UPPER_NAME } from "../../entities/TABLE_LOWER_NAME.entity";
 import { CreateTABLE_UPPER_NAMEDto } from "../../dto/TABLE_PLURAL_LOWER_NAME/create-TABLE_LOWER_NAME.dto";
 import { UpdateTABLE_UPPER_NAMEDto } from "../../dto/TABLE_PLURAL_LOWER_NAME/update-TABLE_LOWER_NAME.dto";
-import { TABLE_UPPER_NAMEFields } from '../../enums/tables-data.enum';
+import { TABLE_UPPER_NAMEFields, TablesNames } from '../../enums/tables-data.enum';
+import { newInstanceTransformer } from "src/middlewares/transformers";
 
 @ControllerWrapper("TABLE_PLURAL_UPPER_NAME")
 export class TABLE_PLURAL_UPPER_NAMEController {
@@ -90,7 +91,10 @@ export class TABLE_PLURAL_UPPER_NAMEController {
     ) {
         const response: CustomResponseType<TABLE_UPPER_NAME> =
             await this.TABLE_PLURAL_LOWER_NAMEService.createTABLE_UPPER_NAME(
-                createTABLE_UPPER_NAMEDto
+                newInstanceTransformer<CreateTABLE_UPPER_NAMEDto>(
+                    createTABLE_UPPER_NAMEDto,
+                    TablesNames.TABLE_UPPER_SNAKE_CASE_NAME
+                )
             );
 
         return res.status(response.status).json(response);
@@ -110,7 +114,10 @@ export class TABLE_PLURAL_UPPER_NAMEController {
         const response: CustomResponseType<UpdateResult> =
             await this.TABLE_PLURAL_LOWER_NAMEService.updateTABLE_UPPER_NAME(
                 id,
-                updateTABLE_UPPER_NAMEDto
+                newInstanceTransformer<UpdateTABLE_UPPER_NAMEDto>(
+                    updateTABLE_UPPER_NAMEDto,
+                    TablesNames.TABLE_UPPER_SNAKE_CASE_NAME
+                )
             );
 
         return res.status(response.status).json(response);

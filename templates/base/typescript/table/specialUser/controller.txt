@@ -31,8 +31,9 @@ import { User } from "src/entities/user.entity";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "src/dto/users/create-user.dto";
 import { UpdateUserDto } from "src/dto/users/update-user.dto";
-import { UserFields } from "src/enums/tables-data.enum";
+import { UserFields, TablesNames } from "src/enums/tables-data.enum";
 import { FullTokenPayload } from "src/types/token-payload.type";
+import { newInstanceTransformer } from "src/middlewares/transformers";
 
 @ControllerWrapper("users")
 export class UsersController {
@@ -94,7 +95,10 @@ export class UsersController {
         const response: CustomResponseType<User> =
             await this.usersService.createUser(
                 {
-                    ...createUserDto,
+                    ...newInstanceTransformer<CreateUserDto>(
+                        createUserDto,
+                        TablesNames.USERS
+                    ),
                     avatar,
                 },
                 this.getUserTokenData(req)
@@ -117,7 +121,10 @@ export class UsersController {
             await this.usersService.updateUser(
                 id,
                 {
-                    ...updateUserDto,
+                    ...newInstanceTransformer<CreateUserDto>(
+                        updateUserDto,
+                        TablesNames.USERS
+                    ),
                     avatar,
                 },
                 this.getUserTokenData(req)

@@ -8,13 +8,13 @@ import manipulator from "../../manipulator/index.js";
 import { MemoValues, QuestionQuery } from "../../types/actions.js";
 import { memosToQuestions } from "../../manipulator/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
-import { fileCreator } from "../../utils/helpers/filesHelpers.js";
+import { existsSync, writeFileSync } from "fs";
 
 /**
  * This function will be fired by the --create-main option
  */
 const createMainBuilder = async (memoValues: MemoValues) => {
-    fileCreator(".env");
+    if (!existsSync(".env")) writeFileSync(".env", "");
 
     inquirer
         .prompt([

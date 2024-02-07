@@ -7,7 +7,7 @@ export {
     filteredGetQuery,
     filterNullsObject,
     filterNullsArray,
-} from "./helpers/filters";
+} from "./middlewares/filters";
 export {
     foundRes,
     notFoundRes,
@@ -33,6 +33,6 @@ export {
     validateNewInstance,
     validateGetConditions,
     emailValidator,
-} from "./helpers/validators";
+} from "./middlewares/validators";
 export { sendEmail } from "./helpers/services";
 export { mailing } from "./constants/services";

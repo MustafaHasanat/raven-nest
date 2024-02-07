@@ -52,21 +52,27 @@ const installInitCloning = (): CloneTemplate[] => [
     },
     {
         signature: "",
-        target: "external/helpers/filters.txt",
-        destination: "src/ravennest/helpers",
-        newFileName: "filters.ts",
-    },
-    {
-        signature: "",
         target: "external/helpers/services.txt",
         destination: "src/ravennest/helpers",
         newFileName: "services.ts",
     },
     {
         signature: "",
-        target: "external/helpers/validators.txt",
-        destination: "src/ravennest/helpers",
+        target: "external/middlewares/filters.txt",
+        destination: "src/ravennest/middlewares",
+        newFileName: "filters.ts",
+    },
+    {
+        signature: "",
+        target: "external/middlewares/validators.txt",
+        destination: "src/ravennest/middlewares",
         newFileName: "validators.ts",
+    },
+    {
+        signature: "",
+        target: "base/typescript/middlewares/transformers.txt",
+        destination: "src/middlewares",
+        newFileName: "transformers.ts",
     },
     {
         signature: "",
@@ -97,7 +103,7 @@ const installInitCloning = (): CloneTemplate[] => [
         target: "external/index-fle.txt",
         destination: "src/ravennest",
         newFileName: "index.ts",
-    }
+    },
 ];
 
 const installInitInjection = (): InjectTemplate[] => [

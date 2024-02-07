@@ -1,4 +1,4 @@
-import { columnTypeDefaultMap } from "../../../utils/constants/builderMaps.js";
+import { ColumnTypeChoice } from "../../../enums/createAction.js";
 import { CreateColumnProps } from "../../../interfaces/builder.js";
 import { InjectTemplate } from "../../../types/injectTemplate.js";
 import { join } from "path";
@@ -7,19 +7,17 @@ const createColumnInjection = ({
     columnData: {
         columnName,
         columnType,
+        mapsData: { dtoCreate, dtoUpdate, entityType, dtoType },
         entityProperties,
         dtoProperties,
         decorators: { decoratorsValues, decoratorsImports },
         specialInjections,
     },
-    paths: { entitiesPath, dtoPath, enumsPath, schemasPath },
-    tableNameVariants: { camelCaseName, upperCaseName, pluralLowerCaseName },
+    paths: { entitiesPath, dtoPath, enumsPath, middlewaresPath },
+    tableNameVariants: { camelCaseName, upperCaseName },
     columNameVariants: { upperSnakeCaseName },
-}: CreateColumnProps): InjectTemplate[] => {
-    const { dtoCreate, dtoUpdate, entityType, dtoType } =
-        columnTypeDefaultMap[columnType];
-
-    return [
+}: CreateColumnProps): InjectTemplate[] =>
+    [
         {
             signature: "TABLE.entity.ts",
             injectable: join(entitiesPath, `${camelCaseName}.entity.ts`),
@@ -57,9 +55,7 @@ const createColumnInjection = ({
                 {
                     keyword: "*",
                     addition: {
-                        base: `${
-                            decoratorsImports || ""
-                        }\nimport { ApiProperty } from '@nestjs/swagger';\n\n`,
+                        base: `import { ApiProperty } from '@nestjs/swagger';\n`,
                         additionIsFile: false,
                         conditional: {
                             type: "SUPPOSED_TO_BE_THERE",
@@ -67,14 +63,21 @@ const createColumnInjection = ({
                         },
                     },
                 },
+                decoratorsImports
+                    ? {
+                          keyword: "*",
+                          addition: {
+                              base: `${decoratorsImports}\n`,
+                              additionIsFile: false,
+                          },
+                      }
+                    : null,
                 {
-                    keyword: "Dto {",
+                    keyword: "--- Original fields ---",
                     addition: {
                         base: `\n${decoratorsValues || ""}\n@ApiProperty({\n${
                             dtoProperties ? dtoProperties + "," : ""
-                        }\n${
-                            dtoCreate || ""
-                        }\n})\n${columnName}: ${dtoType};\n`,
+                        }\n${dtoCreate || ""}\n})\n${columnName}: ${dtoType};\n`,
                         additionIsFile: false,
                     },
                 },
@@ -92,7 +95,7 @@ const createColumnInjection = ({
                     },
                 },
                 {
-                    keyword: "Dto) {",
+                    keyword: "--- Original fields ---",
                     addition: {
                         base: `\n\n@ApiProperty({ ${
                             dtoUpdate || ""
@@ -115,23 +118,28 @@ const createColumnInjection = ({
                 },
             ],
         },
-        {
-            signature: "TABLE.service.ts",
-            injectable: `${schemasPath}/${pluralLowerCaseName}.service.ts`,
-            deletions: [
-                {
-                    keyword: "CHANGE_THIS_TO_DEFAULT_FIELD",
-                    deletion: {
-                        conditional: {
-                            type: "REPLACED_WITH",
-                            data: upperSnakeCaseName,
-                        },
-                    },
-                },
-            ],
-        },
+        ...(columnType !== ColumnTypeChoice.STRING
+            ? [
+                  {
+                      signature: "transformers.ts",
+                      injectable: join(middlewaresPath, "transformers.ts"),
+                      additions: [
+                          {
+                              keyword: `TablesNames.${upperSnakeCaseName}) {`,
+                              addition: {
+                                  base: `\nbody?.${columnName} && (modifiedBody.${columnName} = fieldMap(body?.${columnName}).${columnType});`,
+                                  additionIsFile: false,
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: upperSnakeCaseName,
+                                  },
+                              },
+                          },
+                      ],
+                  },
+              ]
+            : []),
         ...specialInjections,
-    ];
-};
+    ] as InjectTemplate[];
 
 export { createColumnInjection };

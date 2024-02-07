@@ -24,5 +24,4 @@ export enum CreateSpecialArgument {
 
 export enum DockerFileSetArgument {
     INIT = "init",
-    DATABASE = "database",
 }

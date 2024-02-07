@@ -28,6 +28,7 @@ export interface BuilderConstantsProps {
     createColumn: {
         newColumn: QuestionCollection<any>;
         tableName: QuestionCollection<any>;
+        description: QuestionCollection<any>;
         mainDest: QuestionCollection<any>;
         columnName: QuestionCollection<any>;
         columnType: QuestionCollection<any>;
@@ -37,7 +38,6 @@ export interface BuilderConstantsProps {
     };
     createRelation: {
         newRelation: QuestionCollection<any>;
-        fieldName: QuestionCollection<any>;
         mainDest: QuestionCollection<any>;
         relationType: QuestionCollection<any>;
         tables: QuestionCollection<any>;

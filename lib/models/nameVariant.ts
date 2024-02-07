@@ -8,14 +8,18 @@ class NameVariant {
     constructor(name: string) {
         this.camelCaseName = name;
         this.upperCaseName = this.getUpperCaseName(name);
-        this.upperSnakeCaseName = this.getUpperSnakeCaseName(name);
+        this.lowerSnakeCaseName = this.getLowerSnakeCaseName(name);
+        this.upperSnakeCaseName = this.getUpperSnakeCaseName(this.lowerSnakeCaseName);
         this.pluralName = this.getPluralName(name);
         this.pluralUpperCaseName = this.getPluralUpperCaseName(this.pluralName);
         this.pluralLowerCaseName = this.getPluralLowerCaseName(this.pluralName);
-        this.pluralUpperSnakeCaseName = this.getUpperSnakeCaseName(this.pluralName);
+        this.pluralUpperSnakeCaseName = this.getUpperSnakeCaseName(
+            this.pluralName
+        );
     }
     camelCaseName = "";
     upperCaseName = "";
+    lowerSnakeCaseName = "";
     upperSnakeCaseName = "";
     pluralName = "";
     pluralLowerCaseName = "";
@@ -24,8 +28,11 @@ class NameVariant {
 
     private getUpperCaseName = (name: string) => firstCharToUpper(name);
 
-    private getUpperSnakeCaseName = (name: string) =>
-        name.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+    private getLowerSnakeCaseName = (name: string) =>
+        name.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
+
+    private getUpperSnakeCaseName = (snakeCaseName: string) =>
+        snakeCaseName.toUpperCase();
 
     private getPluralName = (name: string) => pluralize(name);
 
