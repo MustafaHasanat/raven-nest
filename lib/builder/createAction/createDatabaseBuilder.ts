@@ -29,22 +29,20 @@ const createDatabaseBuilder = async (memoValues: MemoValues) => {
         ])
         .then(async ({ overwrite, rootDir, mainDest }) => {
             await manipulator({
+                actionTag: "create-database",
                 cloningCommands: createDatabaseCloning(
                     pathConvertor(mainDest, "entities"),
                     pathConvertor(mainDest, "enums")
                 ),
                 injectionCommands: createDatabaseInjection({
-                    appModuleDest: pathConvertor(
-                        mainDest,
-                        "app.module.ts"
-                    ),
+                    appModuleDest: pathConvertor(mainDest, "app.module.ts"),
                     envLocation: pathConvertor(rootDir, ".env"),
                 }),
                 memo: {
                     pairs: { rootDir, mainDest },
                     category: MemoCategory.RAVEN_NEST,
                 },
-                overwrite
+                overwrite,
             });
         });
 };

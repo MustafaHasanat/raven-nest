@@ -41,6 +41,7 @@ const relationBuilder = async ({
             });
 
             const isDone = await manipulator({
+                actionTag: "create-relation",
                 injectionCommands: createRelationInjection({
                     relationType: relationType[0],
                     table1: {

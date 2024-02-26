@@ -21,7 +21,3 @@ export enum CreateSpecialArgument {
     PRODUCT = "product",
     NOTIFICATION = "notification",
 }
-
-export enum DockerFileSetArgument {
-    INIT = "init",
-}

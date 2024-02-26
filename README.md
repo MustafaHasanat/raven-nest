@@ -24,6 +24,8 @@ You might also notice some placeholder variables or values written in an upperca
 
 ## Getting started
 
+### Installation
+
 -   Install **nest-cli** globally:  
      `npm install -g @nestjs/cli`
 
@@ -34,19 +36,36 @@ You might also notice some placeholder variables or values written in an upperca
      `nest new project-name`  
      `cd project-name`
 
--   Install **ravennest** for your project as a dev-dependency:  
-     `npm install --save-dev @mustafa-alhasanat/raven-nest`
-
 -   Install the recommended dependencies:  
      `ravennest install`
 
 > Now you're ready to go!
 
-# Commands
+### Initializing your nest app
+
+-   Create the starting files:
+
+    -   `ravennest create main`
+    -   `ravennest create --auth --format --aws --mailer app`
+    -   `ravennest create landing-page`
+    -   `ravennest create database`
+
+-   Create the special pre-built Users-table (recommended):
+
+    -   `ravennest create --special user table`
+
+-   Create your first table:
+
+    -   `ravennest create table`
+    -   `ravennest create column`
+
+# Commands API
 
 ## The `install` command
 
 Install the recommended dependencies in your project if they're not yet installed. These are different from the ones installed using `nest new` command by default.
+
+> Usage: `ravennest install`
 
 ### The list of dependencies:
 
@@ -74,6 +93,18 @@ Install the recommended dependencies in your project if they're not yet installe
 "@types/bcrypt"
 "prettier"
 ```
+
+## The `dockerize` command
+
+Dockerize the application with the necessary modifications to the config files.
+
+> Usage: `ravennest dockerize`
+
+### Created Images
+
+-   **postgres-db**: an image for initializing a PostgreSQL DB in the container.
+
+-   **nest-app**: the main image that runs the application.
 
 ## The `create` command
 

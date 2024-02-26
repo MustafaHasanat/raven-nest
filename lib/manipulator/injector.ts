@@ -233,7 +233,7 @@ const deletionAction = async (props: {
     const endIndex = injectableContents.indexOf("\n", startIndex);
     const isItThere = startIndex !== -1;
 
-    if (isItThere && !mayNotBeThere) {
+    if (!isItThere && !mayNotBeThere) {
         specialLog({
             message: `The 'keyword=${keyword}' doesn't exist in the injectable content`,
             situation: "ERROR",
@@ -250,7 +250,7 @@ const deletionAction = async (props: {
             scope: "deletionAction",
         });
         return null;
-    }
+    }    
 
     if (isWholeLine) {
         newString = getStrInBetween(

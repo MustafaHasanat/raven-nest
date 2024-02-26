@@ -1,11 +1,19 @@
+import { InjectTemplate } from "lib/types/injectTemplate";
 import { CloneTemplate } from "../../types/cloneTemplate";
+import { join } from "path";
 
-const initDockerCloning = (): CloneTemplate[] => [
+const initDockerCloning = (projectName: string): CloneTemplate[] => [
     {
         signature: "docker-compose.yaml",
         target: "base/others/dockerCompose-file.txt",
         newFileName: "docker-compose.yaml",
         destination: ".",
+        replacements: [
+            {
+                oldString: "PROJECT_NAME",
+                newString: projectName,
+            },
+        ],
     },
     {
         signature: "Dockerfile",
@@ -21,4 +29,22 @@ const initDockerCloning = (): CloneTemplate[] => [
     },
 ];
 
-export { initDockerCloning };
+const initDockerInjection = (rootDir: string): InjectTemplate[] => [
+    {
+        injectable: join(rootDir, ".env"),
+        signature: ".env",
+        deletions: [
+            {
+                keyword: "DATABASE_HOST=localhost",
+                deletion: {
+                    conditional: {
+                        type: "REPLACED_WITH",
+                        data: "DATABASE_HOST=postgres-db",
+                    },
+                },
+            },
+        ],
+    },
+];
+
+export { initDockerCloning, initDockerInjection };

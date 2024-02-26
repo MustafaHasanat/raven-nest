@@ -26,6 +26,7 @@ const createMainBuilder = async (memoValues: MemoValues) => {
         ])
         .then(async ({ mainDest, projectName, overwrite }) => {
             await manipulator({
+                actionTag: "create-main",
                 cloningCommands: createMainCloning(mainDest, projectName),
                 injectionCommands: createMainInjection(".env"),
                 memo: {

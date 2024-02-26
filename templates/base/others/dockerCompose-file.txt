@@ -12,7 +12,7 @@ services:
       - ./pgdata:/var/lib/postgresql/data
 
   nest-app:
-    container_name: rnk-system
+    container_name: PROJECT_NAME
     build:
       context: .
       dockerfile: Dockerfile
@@ -25,15 +25,3 @@ services:
       - postgres-db
     volumes:
       - ./src:/app/src
-
-  # pgadmin:
-  #   container_name: pgadmin
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: arromi.creatives@gmail.com
-  #     PGADMIN_DEFAULT_PASSWORD: 5^00583Arromi
-  #   ports:
-  #     - "5050:80"
-  #   depends_on:
-  #     - db

@@ -36,7 +36,7 @@ const installAction = async () => {
         specialLog({
             message: `${error}`,
             situation: "ERROR",
-            scope: "newAction",
+            scope: "installAction",
         });
         return;
     }

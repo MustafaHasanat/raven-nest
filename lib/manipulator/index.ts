@@ -6,9 +6,11 @@ import cloneTemplates from "./cloner.js";
 import { missingFiles } from "../utils/helpers/filesHelpers.js";
 import { join } from "path";
 import { execSync } from "child_process";
-import { MemorizerProps, memorizer } from "./memorizer.js";
+import { MemorizerProps, memorizeAction, memorizer } from "./memorizer.js";
+import { ActionTag } from "../types/actions.js";
 
 interface ManipulatorProps {
+    actionTag: ActionTag;
     injectionCommands?: InjectTemplate[];
     cloningCommands?: CloneTemplate[];
     memo?: MemorizerProps;
@@ -17,6 +19,7 @@ interface ManipulatorProps {
 }
 
 export default async function manipulator({
+    actionTag,
     cloningCommands = [],
     injectionCommands = [],
     memo,
@@ -75,6 +78,7 @@ export default async function manipulator({
                 situation: "RESULT",
                 message: "All processes are done",
             });
+            await memorizeAction(actionTag);
             return true;
         }
         return false;

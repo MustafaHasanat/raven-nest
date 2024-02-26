@@ -31,7 +31,7 @@ type AppProps = {
     commands: {
         install: CommandType;
         create: CommandTypeArgument & CommandTypeOption;
-        docker: CommandTypeArgument;
+        dockerize: CommandType;
     };
     options?: {
         [option: string]: OptionType;
@@ -83,11 +83,10 @@ const appConstants: AppProps = {
                 },
             },
         },
-        docker: {
-            command: "docker",
+        dockerize: {
+            command: "dockerize",
             description:
                 "Configure docker images and containers for the server.",
-            argument: "<files-set>",
         },
     },
 };

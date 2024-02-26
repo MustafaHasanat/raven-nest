@@ -83,6 +83,7 @@ const createTableBuilder = async (
             };
 
             await manipulator({
+                actionTag: "create-table",
                 cloningCommands: isSpecialTable
                     ? createSpecialTableCloning({
                           ...createTableObj,

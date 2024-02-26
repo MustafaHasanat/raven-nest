@@ -1,7 +1,6 @@
 import { logNumberedList, specialLog } from "../utils/helpers/logHelpers.js";
-import { CreateFileSetArgument, MemoCategory } from "../enums/actions.js";
+import { CreateFileSetArgument } from "../enums/actions.js";
 import { execSync } from "child_process";
-import installPackages from "../manipulator/installer.js";
 import createMainBuilder from "../builder/createAction/createMainBuilder.js";
 import constants from "../utils/constants/creatorConstants.js";
 import createLandingPageBuilder from "../builder/createAction/createLandingPageBuilder.js";
@@ -11,30 +10,8 @@ import createTableBuilder from "../builder/createAction/createTableBuilder.js";
 import createColumnBuilder from "../builder/createAction/createColumnBuilder.js";
 import createRelationBuilder from "../builder/createAction/createRelationBuilder.js";
 import { OptionValues } from "commander";
-import { FullDependencies } from "../interfaces/constants.js";
-import { checkMemo } from "../manipulator/memorizer.js";
 import { MemoValues } from "../types/actions.js";
-
-interface PreActionProps {
-    deps?: FullDependencies | null;
-    memos?: string[];
-    builder: (memoValues: MemoValues) => Promise<void>;
-}
-
-const preAction = async ({
-    deps = null,
-    memos = [],
-    builder,
-}: PreActionProps) => {
-    const memoValues = await checkMemo({
-        keys: memos,
-        category: MemoCategory.RAVEN_NEST,
-    });
-    if (!memoValues) return;
-
-    deps && (await installPackages(deps));
-    await builder(memoValues);
-};
+import { preAction } from "../utils/helpers/preActionProcesses.js";
 
 export default async function createAction(
     filesSet: CreateFileSetArgument,

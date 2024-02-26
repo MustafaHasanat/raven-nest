@@ -62,6 +62,7 @@ const columnBuilder = async ({
                     columnProperties.indexOf("isRequired") !== -1;
 
                 const isDone = await manipulator({
+                    actionTag: "create-column",
                     injectionCommands: createColumnInjection({
                         columnData: await addSpecialItems({
                             columnName,

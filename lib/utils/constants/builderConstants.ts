@@ -24,7 +24,6 @@ const sharedAttrs = {
             validate: (input: string) =>
                 inputValidator({ input, isDestination: true }),
             filter: inputTrimmer,
-            when: (input: string) => dirFilter(input),
         },
     },
     checkbox: {
@@ -39,6 +38,23 @@ const sharedAttrs = {
 };
 
 const builderConstants: BuilderConstantsProps = {
+    dockerInit: {
+        projectName: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "projectName",
+            message: "What's the name of your project?",
+            validate: (input: string) =>
+                inputValidator({ input, allowSpaces: true }),
+        },
+        rootDir: {
+            ...sharedAttrs.input.dest,
+            type: "input",
+            name: "rootDir",
+            default: ".",
+            message: "What is the destination of your '.env' file?",
+        },
+    },
     // constants for the "main" choice
     createMain: {
         projectName: {

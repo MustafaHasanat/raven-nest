@@ -1,14 +1,13 @@
 import { Argument, Command, Option, OptionValues } from "commander";
 import constants from "../utils/constants/appConstants.js";
 import createAction from "../actions/createAction.js";
-import dockerAction from "../actions/dockerAction.js";
+import dockerizeAction from "./dockerizeAction.js";
 import { isNodeProject } from "../middlewares/isNodeProject.js";
 import defaultAction from "../actions/defaultAction.js";
 import installAction from "../actions/installAction.js";
 import {
     CreateFileSetArgument,
     CreateSpecialArgument,
-    DockerFileSetArgument,
 } from "../enums/actions.js";
 
 const {
@@ -50,10 +49,9 @@ const {
                 },
             },
         },
-        docker: {
-            command: dockerCommand,
-            description: dockerDescription,
-            argument: dockerArgument,
+        dockerize: {
+            command: dockerizeCommand,
+            description: dockerizeDescription,
         },
     },
 } = constants;
@@ -74,6 +72,14 @@ export default function InitAction() {
         .action(async () => {
             isNodeProject();
             await installAction();
+        });
+
+    program
+        .command(dockerizeCommand)
+        .description(dockerizeDescription)
+        .action(async () => {
+            isNodeProject();
+            await dockerizeAction();
         });
 
     program
@@ -99,19 +105,6 @@ export default function InitAction() {
                 await createAction(filesSet, options);
             }
         );
-
-    program
-        .command(dockerCommand)
-        .description(dockerDescription)
-        .addArgument(
-            new Argument(dockerArgument).choices(
-                Object.values(DockerFileSetArgument)
-            )
-        )
-        .action(async (filesSet: DockerFileSetArgument) => {
-            isNodeProject();
-            await dockerAction(filesSet);
-        });
 
     program.action(() => {
         defaultAction(program, options);

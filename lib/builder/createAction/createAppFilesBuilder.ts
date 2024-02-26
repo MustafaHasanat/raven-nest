@@ -59,6 +59,7 @@ const createAppFilesBuilder = async (
         ])
         .then(async ({ overwrite, mainDest, rootDir, projectName }) => {
             await manipulator({
+                actionTag: "create-app",
                 cloningCommands: createAppFilesCloning({
                     mainDest,
                     rootDir,

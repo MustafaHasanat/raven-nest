@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { specialLog } from "../utils/helpers/logHelpers.js";
 import { MemoCategory } from "../enums/actions.js";
 import { readFile, writeFile } from "fs/promises";
-import { MemoValues, QuestionQuery } from "../types/actions.js";
+import { ActionTag, MemoValues, QuestionQuery } from "../types/actions.js";
 import { QuestionCollection } from "inquirer";
 import { join } from "path";
 
@@ -53,7 +54,7 @@ const checkMemo = async ({
 const memosToQuestions = (
     memoValues: MemoValues,
     questions: QuestionQuery[]
-): QuestionCollection<any>[]=> {
+): QuestionCollection<any>[] => {
     try {
         return questions.map((question) => {
             const modifiedQues = { ...question };
@@ -99,4 +100,6 @@ const memorizer = async ({ pairs, category }: MemorizerProps) => {
     }
 };
 
-export { checkMemo, memorizer, memosToQuestions };
+const memorizeAction = async (actionTag: ActionTag) => {};
+
+export { memorizeAction, checkMemo, memorizer, memosToQuestions };

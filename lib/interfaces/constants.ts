@@ -3,6 +3,10 @@ import { QuestionCollection } from "inquirer";
 // builder constants' interfaces ----------------------------------------------------
 
 export interface BuilderConstantsProps {
+    dockerInit: {
+        projectName: QuestionCollection<any>;
+        rootDir: QuestionCollection<any>;
+    };
     createMain: {
         projectName: QuestionCollection<any>;
         mainDest: QuestionCollection<any>;

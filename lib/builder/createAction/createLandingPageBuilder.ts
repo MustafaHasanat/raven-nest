@@ -23,6 +23,7 @@ const createLandingPageBuilder = async (memoValues: MemoValues) => {
         ])
         .then(async ({ projectName, publicDir, overwrite }) => {
             await manipulator({
+                actionTag: "create-landing-page",
                 cloningCommands: createLandingPageCloning(
                     publicDir,
                     projectName
