@@ -95,5 +95,5 @@ export class User {
     })
     token?: string;
 
-    // relations
+    // --- relations ---
 }

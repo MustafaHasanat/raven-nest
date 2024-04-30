@@ -1,19 +1,31 @@
+/**
+ * This will map the properties selections (keys) from the prompt with the corresponding pairs (ke: value)
+ * inside the @Column({}) scope in the entity file
+ */
 const propertiesEntityMapObject: {
     [property: string]: string;
 } = {
     isUnique: "unique: true",
     isRequired: "nullable: false",
-    enum: "type: 'enum',\nenum: ENUM_OBJECT",
 };
 
+/**
+ * This will map the properties selections (keys) from the prompt with the corresponding pairs (ke: value)
+ * inside the @ApiProperty({}) scope in the create-DTO file
+ */
 const propertiesDtoMapObject: {
     [property: string]: string | null;
 } = {
     isUnique: null,
     isRequired: "required: true",
-    enum: "enum: ENUM_OBJECT",
 };
 
+/**
+ * This will map the validation selections (keys) from the prompt with the corresponding 
+ * validators to be placed as decorators for both @ApiProperty() in the create-DTO file,
+ * and @Column() in the entity file. The (name) will be placed in the (import) statement, 
+ * where the (usage) will be the actual decorator
+ */
 const decoratorsMapObject: {
     [decorator: string]: {
         name: string;
@@ -31,8 +43,20 @@ const decoratorsMapObject: {
     isDecimal: { name: "IsDecimal", usage: "@IsDecimal()" },
     isInt: { name: "IsInt", usage: "@IsInt()" },
     isDate: { name: "IsDate", usage: "@IsDate()" },
+    isEnum: { name: "IsEnum", usage: "@IsEnum(ENUM_OBJECT)" },
 };
 
+/**
+ * This will populate the selected column type to be used as:
+ * - (dtoCreate): The corresponding fields used in the create DTO file inside @ApiProperty({}) scope
+ * - (dtoUpdate): The corresponding fields used in the update DTO file inside @ApiProperty({}) scope
+ * - (entityType):  The type used in the entity file for the column (columnName: type)
+ * - (dtoType): The type used in the DTO file for the column (columnName: type)
+ * 
+ * @param isRequired is the column required 
+ * @param description the description of the column 
+ * @returns a mapping object to filter the selected type
+ */
 const columnTypeDefaultMap = (
     isRequired: boolean,
     description: string
@@ -76,6 +100,16 @@ const columnTypeDefaultMap = (
                 "required: false,\nexample: new Date().toLocaleDateString()",
             entityType: "Date",
             dtoType: "Date",
+        },
+        enum: {
+            dtoCreate:
+                dtoCreateExtra +
+                "default: ENUM_OBJECT.SELECT_OPTION,\nexample: ENUM_OBJECT.SELECT_OPTION",
+            dtoUpdate:
+                dtoUpdateExtra +
+                "required: false,\nexample: ENUM_OBJECT.SELECT_OPTION",
+            entityType: "ENUM_OBJECT",
+            dtoType: "ENUM_OBJECT",
         },
         time: {
             dtoCreate:

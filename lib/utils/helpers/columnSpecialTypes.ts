@@ -50,20 +50,44 @@ const addSpecialItems = async ({
     description,
     decorators: { decoratorsValues, decoratorsImports },
 }: AddSpecialItemsProps): Promise<AddSpecialItemsReturn> => {
-    const fullEntityProperties = entityProperties;
-    const fullDtoProperties = dtoProperties;
     let specialDescription = null;
-    let modifiedDecoratorsValues = decoratorsValues;
-    let modifiedDecoratorsImports = decoratorsImports;
+    let modifiedEntityProperties = entityProperties || "";
+    let modifiedDtoProperties = dtoProperties || "";
+    let modifiedDecoratorsValues = decoratorsValues || "";
+    let modifiedDecoratorsImports = decoratorsImports || "";
 
-    if (decoratorsValues) {
-        if (decoratorsValues.indexOf("MIN_LENGTH") !== -1) {
+    // add the special types' properties to the entity and DTO objects
+    switch (columnType) {
+        case ColumnTypeChoice.DATE:
+            appendItem(modifiedEntityProperties, "type: 'date'");
+            break;
+        case ColumnTypeChoice.TIME:
+            appendItem(
+                modifiedEntityProperties,
+                "type: 'time', default: new Date().toLocaleTimeString()"
+            );
+            break;
+        case ColumnTypeChoice.ENUM:
+            appendItem(
+                modifiedEntityProperties,
+                "type: 'enum',\nenum: ENUM_OBJECT,\ndefault: ENUM_OBJECT.SELECT_OPTION"
+            );
+            appendItem(modifiedDtoProperties, "enum: ENUM_OBJECT");
+            break;
+
+        default:
+            break;
+    }
+
+    // add the necessary parts for the decorators object
+    if (modifiedDecoratorsValues) {
+        if (modifiedDecoratorsValues.indexOf("MIN_LENGTH") !== -1) {
             await inquirer
                 .prompt([constants.createColumn.stringLength])
                 .then(async ({ stringLength }) => {
                     const [minimum, maximum] = stringLength.trim().split(",");
                     modifiedDecoratorsValues = await replaceStrings({
-                        contents: decoratorsValues,
+                        contents: modifiedDecoratorsValues,
                         items: [
                             {
                                 oldString: "MIN_LENGTH",
@@ -77,25 +101,27 @@ const addSpecialItems = async ({
                     });
                 });
         }
-        if (decoratorsValues.indexOf("IsPhoneNumber") !== -1) {
+        if (modifiedDecoratorsValues.indexOf("IsPhoneNumber") !== -1) {
             specialDescription =
                 "Phone number must start with a plus sign, followed by country code, then the number";
         }
-    }
-
-    switch (columnType) {
-        case ColumnTypeChoice.DATE:
-            appendItem(fullEntityProperties, "type: 'date'");
-            break;
-        case ColumnTypeChoice.TIME:
-            appendItem(
-                fullEntityProperties,
-                "type: 'time', default: new Date().toLocaleTimeString()"
-            );
-            break;
-
-        default:
-            break;
+        if (modifiedDecoratorsValues.indexOf("ENUM_OBJECT") !== -1) {
+            await inquirer
+                .prompt([
+                    constants.createColumn.enumName,
+                ])
+                .then(async ({ enumName }) => {
+                    modifiedDecoratorsValues = await replaceStrings({
+                        contents: modifiedDecoratorsValues,
+                        items: [
+                            {
+                                oldString: "ENUM_OBJECT",
+                                newString: enumName,
+                            },
+                        ],
+                    });
+                });
+        }
     }
 
     return {
@@ -105,8 +131,8 @@ const addSpecialItems = async ({
             isRequired,
             description || `${specialDescription || ""}`
         )[columnType],
-        entityProperties: fullEntityProperties,
-        dtoProperties: fullDtoProperties,
+        entityProperties: modifiedEntityProperties,
+        dtoProperties: modifiedDtoProperties,
         decorators: {
             decoratorsValues: modifiedDecoratorsValues,
             decoratorsImports: modifiedDecoratorsImports,

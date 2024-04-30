@@ -41,6 +41,17 @@ const stringLengthValidator = (input: string): boolean | string => {
     return true;
 };
 
+const enumValuesValidator = (input: string): boolean | string => {
+    // 'status1,status2,status3'
+    if (input.indexOf(",") === -1)
+        return "You must have a comma-separated values!";
+    if (input.indexOf(" ") !== -1) return "You shouldn't have any space!";
+    if (!input.match(/^[a-zA-Z0-9]+$/))
+        return "The input must only contains alphanumeric characters (except for the commas)";
+
+    return true;
+};
+
 const checkboxValidator = ({
     options,
     isOne = false,
@@ -67,4 +78,5 @@ export {
     stringLengthValidator,
     checkboxValidator,
     tableNamesValidator,
+    enumValuesValidator,
 };

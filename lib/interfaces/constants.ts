@@ -39,6 +39,8 @@ export interface BuilderConstantsProps {
         columnProperties: QuestionCollection<any>;
         columnDecorators: QuestionCollection<any>;
         stringLength: QuestionCollection<any>;
+        enumValues: QuestionCollection<any>;
+        enumName: QuestionCollection<any>;
     };
     createRelation: {
         newRelation: QuestionCollection<any>;

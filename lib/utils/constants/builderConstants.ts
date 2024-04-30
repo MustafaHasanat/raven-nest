@@ -7,6 +7,7 @@ import {
 import { BuilderConstantsProps } from "../../interfaces/constants.js";
 import {
     checkboxValidator,
+    enumValuesValidator,
     inputValidator,
     stringLengthValidator,
     tableNamesValidator,
@@ -225,8 +226,23 @@ const builderConstants: BuilderConstantsProps = {
             type: "input",
             name: "stringLength",
             message:
-                "Specify the 'min' and 'max' lengths for your string separated by a comma with no spaces (e.g: 3,25): ",
+                "Specify the 'min' and 'max' lengths for your string separated by a comma with no spaces (e.g: '3,25'): ",
             validate: stringLengthValidator,
+        },
+        enumName: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "enumName",
+            message:
+                "What is the name of your enum variable, use PascalCase (e.g. 'UserRole')",
+        },
+        enumValues: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "enumValues",
+            message:
+                "List the enum values separated by commas with no spaces, only use alphanumerics (e.g: 'status1,status2,status3'): ",
+            validate: enumValuesValidator,
         },
     },
     // constants for the "relation" choice
