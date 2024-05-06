@@ -1,29 +1,31 @@
 {
   "name": "@mustafa-alhasanat/raven-nest",
-  "version": "0.0.2-development",
+  "version": "0.0.392development",
   "description": "Build Nest.js common blocks and files insanely faster!",
   "author": "Mustafa Alhasanat",
   "license": "ISC",
-  "main": "./dist/index.js",
-  "exports": "./dist/index.js",
+  "main": "./bin/index.js",
+  "exports": "./bin/index.js",
   "type": "module",
   "bin": {
-    "ravennest": "dist/index.js"
+    "ravennest": "bin/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "jest",
     "commit": "git-cz",
-    "start": "npm run build && node dist/index.js",
-    "copy-files": "cp -R templates dist/",
-    "build": "rimraf ./dist && tsc && npm run copy-files",
+    "start": "node bin/index.js",
+    "build": "rimraf ./bin && tsc",
     "install-g": "npm install -g .",
     "globalize": "npm run build && npm run install-g",
-    "prepublishOnly": "npm run build",
     "acp": "git add . && npm run commit && git push",
     "semantic-release": "semantic-release",
-    "raven": "node ./dist/index.js",
+    "raven": "node ./bin/index.js",
     "dev": "npm run globalize && npm run raven",
     "format": "prettier --write .",
+    "prerelease": "npm run build",
     "lint": "eslint ."
   },
   "repository": {
@@ -53,9 +55,14 @@
     ]
   },
   "files": [
-    "templates/**/*.txt",
-    "lib/**/*.(ts|js)",
-    "index.js"
+    "index.js",
+    "lib",
+    "lib/**/*.(ts|js|txt)",
+    "bin/lib/",
+    "templates",
+    "templates/**/*.(ts|js|txt)",
+    "bin/templates/",
+    "bin/lib/templates/"
   ],
   "dependencies": {
     "commander": "^11.1.0",

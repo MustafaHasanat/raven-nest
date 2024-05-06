@@ -1,3 +1,5 @@
+import { join } from "path";
+
 type OptionType = {
     flags: string;
     description: string;
@@ -90,5 +92,7 @@ const appConstants: AppProps = {
         },
     },
 };
+
+export const getTemplatesDir = () => join("..", "templates");
 
 export default appConstants;

@@ -4,7 +4,7 @@ const config: Config.InitialOptions = {
     rootDir: "./__tests__",
     verbose: true,
     // collectCoverage: true,
-    collectCoverageFrom: ["lib/**/*.(ts|js)"],
+    collectCoverageFrom: ["lib/**/*.(ts|js|txt)"],
     testMatch: ["**/**/?(*.)+(test).+(ts|js)"],
     moduleFileExtensions: ["ts", "js", "tsx", "jsx", "json", "node"],
     moduleNameMapper: {
@@ -16,6 +16,6 @@ const config: Config.InitialOptions = {
         // "^.+\\.tsx?$": "ts-jest",
         // "^.+\\.ts?$": "ts-jest",
     },
-    testPathIgnorePatterns: ["/node_modules/", "/dist/"],
+    testPathIgnorePatterns: ["/node_modules/", "/bin/"],
 };
 export default config;

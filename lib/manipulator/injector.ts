@@ -11,6 +11,7 @@ import {
 } from "../utils/helpers/stringsHelpers.js";
 import { specialLog } from "../utils/helpers/logHelpers.js";
 import { getCurrentRelativePath } from "../utils/helpers/pathHelpers.js";
+import { getTemplatesDir } from "../utils/constants/appConstants.js";
 
 /**
  * Injects the 'addition' string at the 'keyword' index inside the 'original' string
@@ -142,7 +143,7 @@ const additionAction = async (props: {
             ? await readFile(
                   join(
                       getCurrentRelativePath("../../.."),
-                      join("templates", base)
+                      join(getTemplatesDir(), base)
                   ),
                   "utf8"
               )
@@ -250,7 +251,7 @@ const deletionAction = async (props: {
             scope: "deletionAction",
         });
         return null;
-    }    
+    }
 
     if (isWholeLine) {
         newString = getStrInBetween(

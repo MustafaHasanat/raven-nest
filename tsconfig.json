@@ -3,7 +3,7 @@
         "target": "es6",
         "module": "ESNext",
         "allowJs": true,
-        "outDir": "./dist",
+        "outDir": "./bin",
         "strict": true,
         "noImplicitAny": true,
         "esModuleInterop": true,
@@ -13,12 +13,11 @@
         "declaration": true,
         "baseUrl": ".",
         "paths": {
-            "templates/*": ["./templates/*"],
             "__tests__/*": ["__tests__/*"],
             "*": ["*"]
         }
     },
-    "include": ["**/*.ts", "lib/**/*.(ts|js)", "templates/**/*.txt"],
-    "exclude": ["node_modules", "dist"],
+    "include": ["**/*.ts", "lib/**/*.(ts|js)"],
+    "exclude": ["node_modules", "bin"],
     "files": ["index.ts"]
 }

@@ -6,6 +6,7 @@ import { replaceStrings } from "../utils/helpers/stringsHelpers.js";
 import { readFile } from "fs/promises";
 import { getCurrentRelativePath } from "../utils/helpers/pathHelpers.js";
 import { specialLog } from "../utils/helpers/logHelpers.js";
+import { getTemplatesDir } from "../utils/constants/appConstants.js";
 
 /**
  * Create a copy of a template file with replacing the placeholders by a specific text
@@ -55,7 +56,7 @@ const cloneTemplates = async (files: CloneTemplate[]): Promise<boolean> => {
                     const contents = await readFile(
                         join(
                             getCurrentRelativePath("../../.."),
-                            join("templates", target)
+                            join(getTemplatesDir(), target)
                         ),
                         "utf8"
                     );
