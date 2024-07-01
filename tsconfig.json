@@ -19,5 +19,5 @@
     },
     "include": ["**/*.ts", "lib/**/*.(ts|js)"],
     "exclude": ["node_modules", "bin"],
-    "files": ["index.ts"]
+    "files": ["main.ts"]
 }

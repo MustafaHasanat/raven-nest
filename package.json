@@ -1,14 +1,14 @@
 {
   "name": "@mustafa-alhasanat/raven-nest",
-  "version": "0.0.392development",
+  "version": "0.0.397development",
   "description": "Build Nest.js common blocks and files insanely faster!",
   "author": "Mustafa Alhasanat",
   "license": "ISC",
-  "main": "./bin/index.js",
-  "exports": "./bin/index.js",
+  "main": "./bin/main.js",
+  "exports": "./bin/main.js",
   "type": "module",
   "bin": {
-    "ravennest": "bin/index.js"
+    "ravennest": "bin/main.js"
   },
   "publishConfig": {
     "access": "public"
@@ -16,13 +16,13 @@
   "scripts": {
     "test": "jest",
     "commit": "git-cz",
-    "start": "node bin/index.js",
+    "start": "node bin/main.js",
     "build": "rimraf ./bin && tsc",
     "install-g": "npm install -g .",
     "globalize": "npm run build && npm run install-g",
     "acp": "git add . && npm run commit && git push",
     "semantic-release": "semantic-release",
-    "raven": "node ./bin/index.js",
+    "raven": "node ./bin/main.js",
     "dev": "npm run globalize && npm run raven",
     "format": "prettier --write .",
     "prerelease": "npm run build",
@@ -55,14 +55,9 @@
     ]
   },
   "files": [
-    "index.js",
-    "lib",
-    "lib/**/*.(ts|js|txt)",
+    "main.js",
     "bin/lib/",
-    "templates",
-    "templates/**/*.(ts|js|txt)",
-    "bin/templates/",
-    "bin/lib/templates/"
+    "templates/**/*.txt"
   ],
   "dependencies": {
     "commander": "^11.1.0",

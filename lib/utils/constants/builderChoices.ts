@@ -1,4 +1,4 @@
-const columnTypeChoices = [
+export const columnTypeChoices = [
     {
         name: "string",
         value: "string",
@@ -46,7 +46,7 @@ const columnTypeChoices = [
     },
 ];
 
-const columnPropertiesChoices = [
+export const columnPropertiesChoices = [
     {
         name: "isUnique",
         value: "isUnique",
@@ -64,7 +64,7 @@ const columnPropertiesChoices = [
     },
 ];
 
-const columnDecoratorsChoices = [
+export const columnDecoratorsChoices = [
     {
         name: "isUUID",
         value: "isUUID",
@@ -109,7 +109,7 @@ const columnDecoratorsChoices = [
     },
 ];
 
-const relationChoices = [
+export const relationChoices = [
     {
         name: "OneToOne",
         value: "OneToOne",
@@ -129,10 +129,3 @@ const relationChoices = [
             "'many-to-many' relation:  multiple records of this table may have a link to only one record from the foreign one",
     },
 ];
-
-export {
-    columnTypeChoices,
-    columnPropertiesChoices,
-    relationChoices,
-    columnDecoratorsChoices,
-};

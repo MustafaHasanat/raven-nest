@@ -11,8 +11,8 @@ import {
     inputValidator,
     stringLengthValidator,
     tableNamesValidator,
-} from "../../utils/validators/stringValidators.js";
-import { dirFilter, inputTrimmer } from "../../utils/filters/stringFilters.js";
+} from "../validators/stringValidators.js";
+import { dirFilter, inputTrimmer } from "../filters/stringFilters.js";
 
 const sharedAttrs = {
     input: {

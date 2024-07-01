@@ -4,7 +4,7 @@ import { ColumnTypeChoice } from "../../enums/createAction.js";
 import inquirer from "inquirer";
 import { replaceStrings } from "./stringsHelpers.js";
 import constants from "../../utils/constants/builderConstants.js";
-import { columnTypeDefaultMap } from "../constants/builderMaps.js";
+import { columnTypeDefaultMap } from "../constants/builderMapping.js";
 
 // --- interfaces ---
 

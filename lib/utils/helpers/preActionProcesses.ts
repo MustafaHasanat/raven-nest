@@ -1,7 +1,7 @@
 import { MemoValues } from "../../types/actions.js";
 import { FullDependencies } from "../../interfaces/constants.js";
-import { checkMemo } from "../../manipulator/memorizer.js";
-import installPackages from "../../manipulator/installer.js";
+import { checkMemo } from "../../engines/memorizer.js";
+import installPackages from "../../engines/installer.js";
 import { MemoCategory } from "../../enums/actions.js";
 
 interface PreActionProps {

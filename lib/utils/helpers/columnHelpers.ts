@@ -7,7 +7,7 @@ import {
     propertiesEntityMapObject,
     decoratorsMapObject,
     propertiesDtoMapObject,
-} from "../../utils/constants/builderMaps.js";
+} from "../constants/builderMapping.js";
 
 const propertiesEntityMap = (properties: string[]): string | null => {
     if (properties.length === 0) return null;
