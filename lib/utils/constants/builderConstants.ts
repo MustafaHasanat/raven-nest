@@ -73,17 +73,6 @@ const builderConstants: BuilderConstantsProps = {
             default: "src",
             message: "What is the destination of your 'main.ts' file?",
         },
-    },
-    // constants for the "main" choice
-    createLandingPage: {
-        projectName: {
-            ...sharedAttrs.input.name,
-            type: "input",
-            name: "projectName",
-            message: "What's the name of your project?",
-            validate: (input: string) =>
-                inputValidator({ input, allowSpaces: true }),
-        },
         publicDir: {
             ...sharedAttrs.input.dest,
             type: "input",
@@ -92,25 +81,6 @@ const builderConstants: BuilderConstantsProps = {
             message: "What is the destination to your 'public' folder?",
             when: () => dirFilter("public"),
             transformer: (answer: string) => (answer === "." ? "" : answer),
-        },
-    },
-    // constants for the "landing-page" choice
-    createAppFiles: {
-        mainDest: {
-            ...sharedAttrs.input.dest,
-            type: "input",
-            name: "mainDest",
-            default: "src",
-            message:
-                "What is the destination of your app files (module, controller, service)?",
-        },
-        projectName: {
-            ...sharedAttrs.input.name,
-            type: "input",
-            name: "projectName",
-            message: "What's the name of your project?",
-            validate: (input: string) =>
-                inputValidator({ input, allowSpaces: true }),
         },
         rootDir: {
             ...sharedAttrs.input.dest,

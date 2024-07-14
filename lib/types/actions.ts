@@ -10,8 +10,6 @@ export type ActionTag =
     | "init-install"
     | "init-docker"
     | "create-main"
-    | "create-landing-page"
-    | "create-app"
     | "create-database"
     | "create-table"
     | "create-column"

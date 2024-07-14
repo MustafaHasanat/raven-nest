@@ -8,8 +8,6 @@ export enum ProjectType {
 
 export enum CreateFileSetArgument {
     MAIN = "main",
-    LANDING_PAGE = "landing-page",
-    APP = "app",
     DATABASE = "database",
     TABLE = "table",
     COLUMN = "column",

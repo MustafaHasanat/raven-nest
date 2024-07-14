@@ -24,6 +24,7 @@ type InjectionDeletionAction = {
         conditional?: {
             type: "REPLACED_WITH" | "NONE";
             data: string | null;
+            special?: "INDEX_CUT" | undefined;
         };
     };
 };

@@ -21,8 +21,6 @@ const creatorConstants: CreatorConstantsPros = {
                 commandType: "--save",
             },
             { packageName: "@nestjs/swagger", commandType: "--save" },
-        ],
-        app: [
             { packageName: "@nestjs/common", commandType: "--save" },
             { packageName: "@nestjs/core", commandType: "--save" },
             { packageName: "@nestjs/jwt", commandType: "--save" },

@@ -18,7 +18,7 @@ export interface MemorizerProps {
     category: MemoCategory;
 }
 
-const checkMemo = async ({
+export const checkMemo = async ({
     keys,
     category,
 }: CheckMemoProps): Promise<MemoValues | null> => {
@@ -51,7 +51,7 @@ const checkMemo = async ({
     }
 };
 
-const memosToQuestions = (
+export const memosToQuestions = (
     memoValues: MemoValues,
     questions: QuestionQuery[]
 ): QuestionCollection<any>[] => {
@@ -74,7 +74,7 @@ const memosToQuestions = (
     }
 };
 
-const memorizer = async ({ pairs, category }: MemorizerProps) => {
+export const memorizer = async ({ pairs, category }: MemorizerProps) => {
     try {
         const memoFileContent: { [key: string]: any } = JSON.parse(
             await readFile("memo.json", "utf8")
@@ -100,6 +100,4 @@ const memorizer = async ({ pairs, category }: MemorizerProps) => {
     }
 };
 
-const memorizeAction = async (actionTag: ActionTag) => {};
-
-export { memorizeAction, checkMemo, memorizer, memosToQuestions };
+export const memorizeAction = async (actionTag: ActionTag) => {};

@@ -3,8 +3,6 @@ import { CreateFileSetArgument } from "../enums/actions.js";
 import { execSync } from "child_process";
 import createMainBuilder from "../builder/create/createMainBuilder.js";
 import constants from "../utils/constants/creator.js";
-import createLandingPageBuilder from "../builder/create/createLandingPageBuilder.js";
-import createAppFilesBuilder from "../builder/create/createAppFilesBuilder.js";
 import createDatabaseBuilder from "../builder/create/createDatabaseBuilder.js";
 import createTableBuilder from "../builder/create/createTableBuilder.js";
 import createColumnBuilder from "../builder/create/createColumnBuilder.js";
@@ -29,24 +27,20 @@ export default async function createAction(
         return;
     }
 
-    const isNeedDeps = !["landing-page"].includes(filesSet);
     const installedDeps: string[] = [];
 
     // get a copy from the installed dependencies of the project
-    // (only if the option needs some dependencies)
-    if (isNeedDeps) {
-        specialLog({
-            message: "Checking your dependencies",
-            situation: "PROCESS",
-        });
-        installedDeps.push(
-            ...execSync("npm ls --depth=0")
-                .toString()
-                .split(" ")
-                .slice(2)
-                .map((item) => item.slice(0, item.lastIndexOf("@")))
-        );
-    }
+    specialLog({
+        message: "Checking your dependencies",
+        situation: "PROCESS",
+    });
+    installedDeps.push(
+        ...execSync("npm ls --depth=0")
+            .toString()
+            .split(" ")
+            .slice(2)
+            .map((item) => item.slice(0, item.lastIndexOf("@")))
+    );
 
     switch (filesSet) {
         case CreateFileSetArgument.MAIN:
@@ -55,27 +49,9 @@ export default async function createAction(
                     installedDeps,
                     neededDeps: constants.neededDeps.main,
                 },
-                memos: ["projectName", "mainDest"],
+                memos: ["projectName", "mainDest", "publicDir", "rootDir"],
                 builder: (memoValues: MemoValues) =>
-                    createMainBuilder(memoValues),
-            });
-            break;
-        case CreateFileSetArgument.LANDING_PAGE:
-            await preAction({
-                memos: ["projectName", "publicDir"],
-                builder: (memoValues: MemoValues) =>
-                    createLandingPageBuilder(memoValues),
-            });
-            break;
-        case CreateFileSetArgument.APP:
-            await preAction({
-                deps: {
-                    installedDeps,
-                    neededDeps: constants.neededDeps.app,
-                },
-                memos: ["projectName", "mainDest", "rootDir"],
-                builder: (memoValues: MemoValues) =>
-                    createAppFilesBuilder(memoValues, options),
+                    createMainBuilder(memoValues, options),
             });
             break;
         case CreateFileSetArgument.DATABASE:

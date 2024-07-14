@@ -7,7 +7,7 @@ import createAction from "./lib/actions/create.js";
 import dockerizeAction from "./lib/actions/dockerize.js";
 import { isNodeProject } from "./lib/middlewares/isNodeProject.js";
 import defaultAction from "./lib/actions/default.js";
-import installAction from "./lib/actions/install.js";
+import initAction from "./lib/actions/init.js";
 import {
     CreateFileSetArgument,
     CreateSpecialArgument,
@@ -28,13 +28,13 @@ export default function InitAction() {
         )
         .description(constants.program.description);
 
-    // configure the install command
+    // configure the init command
     program
-        .command(constants.commands.install.command)
-        .description(constants.commands.install.description)
+        .command(constants.commands.init.command)
+        .description(constants.commands.init.description)
         .action(async () => {
             isNodeProject();
-            await installAction();
+            await initAction();
         });
 
     // configure the docker command
@@ -53,18 +53,6 @@ export default function InitAction() {
         .addArgument(
             new Argument(constants.commands.create.argument).choices(
                 Object.values(CreateFileSetArgument)
-            )
-        )
-        .addOption(
-            new Option(
-                constants.commands.create.options.auth.flags,
-                constants.commands.create.options.auth.description
-            )
-        )
-        .addOption(
-            new Option(
-                constants.commands.create.options.format.flags,
-                constants.commands.create.options.format.description
             )
         )
         .addOption(

@@ -1,23 +1,23 @@
 import inquirer from "inquirer";
 import {
-    installInitCloning,
-    installInitInjection,
-} from "../../commands/install/initialPack.js";
+    initCloning,
+    initInjection,
+} from "../../commands/init/initialPack.js";
 import manipulator from "../../engines/manipulator.js";
 import constants from "../../utils/constants/builderConstants.js";
 import { pathCreator } from "../../utils/helpers/pathCreator.js";
 import { specialLog } from "../../utils/helpers/logHelpers.js";
 
-export default async function installInitBuilder() {
+export default async function initBuilder() {
     inquirer
         .prompt([constants.shared.overwrite(["memo.json", ".gitignore"])])
         .then(async ({ overwrite }) => {
-            pathCreator(["src/ravennest"]);
+            pathCreator(["src/common"]);
 
             await manipulator({
                 actionTag: "init-install",
-                cloningCommands: installInitCloning(),
-                injectionCommands: installInitInjection(),
+                cloningCommands: initCloning(),
+                injectionCommands: initInjection(),
                 overwrite,
                 skipOverwrite: true,
             });

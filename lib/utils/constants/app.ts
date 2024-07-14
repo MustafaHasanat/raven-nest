@@ -12,10 +12,10 @@ const appConstants: AppProps = {
         },
     },
     commands: {
-        install: {
-            command: "install",
+        init: {
+            command: "init",
             description:
-                "Install the recommended dependencies if they're not installed.",
+                "Install the recommended dependencies and add the raven dev-kit.",
         },
         create: {
             command: "create",
@@ -23,15 +23,6 @@ const appConstants: AppProps = {
                 "Create the necessary files and directories for the selected 'files-set'.",
             argument: "<files-set>",
             options: {
-                auth: {
-                    flags: "--auth",
-                    description: "Add a user-role auth to the app.",
-                },
-                format: {
-                    flags: "--format",
-                    description:
-                        "Add the '.prettierrc' and '.eslintrc.js' files to the app.",
-                },
                 aws: {
                     flags: "--aws",
                     description: "Add the AWS service to the app.",

@@ -36,8 +36,8 @@ You might also notice some placeholder variables or values written in an upperca
      `nest new project-name`  
      `cd project-name`
 
--   Install the recommended dependencies:  
-     `ravennest install`
+-   Install the recommended dependencies and get the initial dev-kit:  
+     `ravennest init`
 
 > Now you're ready to go!
 
@@ -61,11 +61,11 @@ You might also notice some placeholder variables or values written in an upperca
 
 # Commands API
 
-## The `install` command
+## The `init` command
 
 Install the recommended dependencies in your project if they're not yet installed. These are different from the ones installed using `nest new` command by default.
 
-> Usage: `ravennest install`
+> Usage: `ravennest init`
 
 ### The list of dependencies:
 
@@ -114,15 +114,13 @@ Create the necessary files and directories for the selected 'files-set'.
 
 ### Argument choices
 
-| Files Set    | Description                                                                          |
-| :----------- | :----------------------------------------------------------------------------------- |
-| main         | Create the main.ts file with Swagger enabled.                                        |
-| landing-page | Create the HTML and CSS files of the landing page for the root dir.                  |
-| app          | Create the 'app.module.ts', 'app.controller.ts', and 'app.service.ts' files.         |
-| database     | Made the necessary changes for the database configuration.                           |
-| table        | Create the necessary files for the table (module, controller, service, dto, entity). |
-| column       | Perform the necessary file changes to add a new column to a table.                   |
-| relation     | Perform the necessary file changes to establish a relation between two tables.       |
+| Files Set | Description                                                                          |
+| :-------- | :----------------------------------------------------------------------------------- |
+| main      | Create the main files and enable Swagger page.                                       |
+| database  | Made the necessary changes for the database configuration.                           |
+| table     | Create the necessary files for the table (module, controller, service, dto, entity). |
+| column    | Perform the necessary file changes to add a new column to a table.                   |
+| relation  | Perform the necessary file changes to establish a relation between two tables.       |
 
 ### Available options
 

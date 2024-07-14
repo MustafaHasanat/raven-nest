@@ -24,7 +24,7 @@ const replaceOne = ({
  * @param items An array of items to be replaced in the contents, each of them has 'oldString' and 'newString'
  * @returns
  */
-const replaceStrings = async ({
+export const replaceStrings = async ({
     contents,
     items,
 }: ReplaceStringsProps): Promise<string> => {
@@ -40,7 +40,19 @@ const replaceStrings = async ({
     });
 };
 
-const getStrInBetween = (
+export const indexStringCutter = ({
+    content,
+    startIndex,
+    endIndex,
+}: {
+    content: string;
+    startIndex: number;
+    endIndex: number;
+}): string => {
+    return content;
+};
+
+export const getStrInBetween = (
     searchTerm: string,
     start: number,
     end: number
@@ -56,5 +68,3 @@ const getStrInBetween = (
 
     return searchTerm.substring(start, end + 1);
 };
-
-export { replaceStrings, getStrInBetween };

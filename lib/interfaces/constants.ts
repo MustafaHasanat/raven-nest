@@ -10,14 +10,7 @@ export interface BuilderConstantsProps {
     createMain: {
         projectName: QuestionCollection<any>;
         mainDest: QuestionCollection<any>;
-    };
-    createLandingPage: {
-        projectName: QuestionCollection<any>;
         publicDir: QuestionCollection<any>;
-    };
-    createAppFiles: {
-        mainDest: QuestionCollection<any>;
-        projectName: QuestionCollection<any>;
         rootDir: QuestionCollection<any>;
     };
     createDatabase: {

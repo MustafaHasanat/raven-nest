@@ -29,7 +29,7 @@ export type AppProps = {
         };
     };
     commands: {
-        install: CommandType;
+        init: CommandType;
         create: CommandTypeArgument & CommandTypeOption;
         dockerize: CommandType;
     };

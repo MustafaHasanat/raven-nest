@@ -7,6 +7,7 @@ import {
 import { readFile, writeFile } from "fs/promises";
 import {
     getStrInBetween,
+    indexStringCutter,
     replaceStrings,
 } from "../utils/helpers/stringsHelpers.js";
 import { specialLog } from "../utils/helpers/logHelpers.js";
@@ -222,9 +223,10 @@ const deletionAction = async (props: {
             isWholeLine = false,
             mayNotBeThere = false,
             onlyFirstOccurrence = false,
-            conditional: { type, data } = {
+            conditional: { type, data, special } = {
                 type: "NONE",
                 data: null,
+                special: undefined,
             },
         } = {},
     } = deletions[0];
@@ -261,24 +263,33 @@ const deletionAction = async (props: {
         ) as string;
     }
 
-    const modifiedInjectable = onlyFirstOccurrence
-        ? injectableContents.replace(keyword, "")
-        : await replaceStrings({
-              contents: injectableContents,
-              items:
-                  !isItThere && mayNotBeThere
-                      ? []
-                      : [
-                            {
-                                oldString: isWholeLine ? newString : keyword,
-                                newString:
-                                    type === "REPLACED_WITH"
-                                        ? `${data}`
-                                        : newString,
-                            },
-                        ],
-          });
+    let modifiedInjectable = "";
 
+    if (onlyFirstOccurrence)
+        modifiedInjectable = injectableContents.replace(keyword, "");
+    else if (special) {
+        modifiedInjectable = indexStringCutter({
+            content: injectableContents,
+            startIndex,
+            endIndex
+        });
+    } else {
+        await replaceStrings({
+            contents: injectableContents,
+            items:
+                !isItThere && mayNotBeThere
+                    ? []
+                    : [
+                          {
+                              oldString: isWholeLine ? newString : keyword,
+                              newString:
+                                  type === "REPLACED_WITH"
+                                      ? `${data}`
+                                      : newString,
+                          },
+                      ],
+        });
+    }
     // recursively apply all the actions on teh original file
     return await deletionAction({
         deletions: deletions.slice(1),
