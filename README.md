@@ -126,17 +126,14 @@ Create the necessary files and directories for the selected 'files-set'.
 
 | Option  | Files Set | Description                        | Details                      |
 | :------ | :-------- | :--------------------------------- | :--------------------------- |
-| auth    | app       | Add an auth service to the app.    | member, admin, plus          |
-| format  | app       | Add the format files to the app.   | .prettierrc and .eslintrc.js |
 | aws     | app       | Add the AWS service to the app.    | s3 bucket                    |
 | mailer  | app       | Add the mailer service to the app. | outlook, gmail               |
-| special | table     | Create a special type of tables.   | user, product, notification  |
+| special | table     | Create a special type of tables.   | product, notification  |
 
 ### Examples
 
--   `ravennest create main`
--   `ravennest create --auth --format --aws --mailer app`
--   `ravennest create --special user table`
+-   `ravennest create --aws --mailer main`
+-   `ravennest create --special product table`
 
 # Specifications
 

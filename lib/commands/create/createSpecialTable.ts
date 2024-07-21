@@ -8,7 +8,7 @@ import { SpecialTableType } from "../../enums/createAction.js";
 
 const createSpecialTableCloning = ({
     nameVariant: { camelCaseName, pluralLowerCaseName },
-    paths: { entitiesPath, dtoPath, enumsPath, schemasPath, typesPath },
+    paths: { entitiesPath, dtoPath, schemasPath },
     tableName,
 }: CreateTableProps & {
     tableName: CreateSpecialArgument;
@@ -52,29 +52,7 @@ const createSpecialTableCloning = ({
         },
     ];
 
-    if (tableName === CreateSpecialArgument.USER)
-        return [
-            ...sharedClones(SpecialTableType.USER),
-            {
-                signature: "login-user.dto.ts",
-                target: "base/typescript/table/specialUser/loginDto.txt",
-                destination: dtoPath,
-                newFileName: "login-user.dto.ts",
-            },
-            {
-                signature: "users.enum.ts",
-                target: "base/typescript/table/specialUser/enums.txt",
-                destination: enumsPath,
-                newFileName: "users.enum.ts",
-            },
-            {
-                signature: "token-payload.type.ts",
-                target: "base/typescript/table/specialUser/token-payload.txt",
-                destination: typesPath,
-                newFileName: "token-payload.type.ts",
-            },
-        ] as CloneTemplate[];
-    else if (tableName === CreateSpecialArgument.PRODUCT)
+    if (tableName === CreateSpecialArgument.PRODUCT)
         return sharedClones(SpecialTableType.PRODUCT);
     else if (tableName === CreateSpecialArgument.NOTIFICATION)
         return sharedClones(SpecialTableType.NOTIFICATION);
@@ -177,9 +155,7 @@ const createSpecialTableInjection = ({
         },
     ];
 
-    if (tableName === CreateSpecialArgument.USER)
-        return sharedInjects(SpecialTableType.USER);
-    else if (tableName === CreateSpecialArgument.PRODUCT)
+    if (tableName === CreateSpecialArgument.PRODUCT)
         return sharedInjects(SpecialTableType.PRODUCT);
     else if (tableName === CreateSpecialArgument.NOTIFICATION)
         return sharedInjects(SpecialTableType.NOTIFICATION);

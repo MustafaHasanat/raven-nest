@@ -12,9 +12,10 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
 import { ApiBody, ApiConsumes, ApiQuery } from "@nestjs/swagger";
-import { TablesNames } from "src/enums/tables-data.enum";
-import { CustomResponseType, ControllerWrapper } from "src/ravennest";
+import { TablesNames } from "../../common/enums/tables.enum";
 import { S3 } from "aws-sdk";
+import { ControllerWrapper } from "../../common/decorators";
+import { CustomResponseType } from "../../common/types";
 
 @ControllerWrapper("aws")
 export class S3Controller {

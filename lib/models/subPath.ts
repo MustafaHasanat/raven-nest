@@ -5,10 +5,11 @@ import NameVariant from "./nameVariant.js";
 interface NewPathProps {
     mainDir: string;
     nameVariant: NameVariant;
+    disablePlural?: boolean;
 }
 
 class SubPath {
-    constructor({ mainDir, nameVariant }: NewPathProps) {
+    constructor({ mainDir, nameVariant, disablePlural = false }: NewPathProps) {
         const {
             entitiesPath,
             schemasPath,
@@ -17,6 +18,8 @@ class SubPath {
             typesPath,
             middlewaresPath,
         } = this.getPaths({ mainDir, nameVariant });
+
+        this.disablePlural = disablePlural;
 
         this.mainPath = mainDir;
         this.enumsPath = enumsPath;
@@ -33,9 +36,10 @@ class SubPath {
     dtoPath = "";
     typesPath = "";
     middlewaresPath = "";
+    disablePlural = false;
 
     private getPaths = ({ mainDir, nameVariant }: NewPathProps) => {
-        const { pluralLowerCaseName } = nameVariant;
+        const { pluralLowerCaseName, camelCaseName } = nameVariant;
 
         // get the paths
         const [
@@ -47,11 +51,17 @@ class SubPath {
             middlewaresPath,
         ] = [
             pathConvertor(mainDir, "entities"),
-            pathConvertor(mainDir, "enums"),
-            pathConvertor(mainDir, `schemas/${pluralLowerCaseName}`),
-            pathConvertor(mainDir, `dto/${pluralLowerCaseName}`),
-            pathConvertor(mainDir, `types`),
-            pathConvertor(mainDir, `middlewares`),
+            pathConvertor(mainDir, "common/enums"),
+            pathConvertor(
+                mainDir,
+                `schemas/${this.disablePlural ? camelCaseName : pluralLowerCaseName}`
+            ),
+            pathConvertor(
+                mainDir,
+                `common/dto/${this.disablePlural ? camelCaseName : pluralLowerCaseName}`
+            ),
+            pathConvertor(mainDir, `common/types`),
+            pathConvertor(mainDir, `common/middlewares`),
         ];
 
         // create the paths if they don't exist

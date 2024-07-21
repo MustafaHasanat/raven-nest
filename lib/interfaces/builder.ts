@@ -3,8 +3,24 @@ import NameVariant from "../models/nameVariant.js";
 import SubPath from "../models/subPath.js";
 import { InjectTemplate } from "../types/injectTemplate.js";
 
+// create main
+export interface CreateMainProps {
+    projectName: any;
+    rootDir: any;
+    isAWS: any;
+    isMailer: any;
+    publicDir: any;
+    mainDest: any;
+    schemasPath: any;
+}
+
 // create database
-export interface DatabaseProps {
+export interface CreateDatabaseProps {
+    paths: {
+        user: SubPath;
+        role: SubPath;
+        permission: SubPath;
+    };
     appModuleDest: string;
     envLocation: string;
 }
@@ -19,7 +35,7 @@ export interface CreateTableProps {
 export interface CreateColumnProps {
     columnData: {
         columnName: string;
-        columnType: ColumnTypeChoice,
+        columnType: ColumnTypeChoice;
         mapsData: {
             dtoCreate: string | null;
             dtoUpdate: string | null;

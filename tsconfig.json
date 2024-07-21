@@ -17,7 +17,7 @@
             "*": ["*"]
         }
     },
-    "include": ["**/*.ts", "lib/**/*.(ts|js)"],
+    "include": ["**/*.ts", "lib/**/*.(ts|js)", "templates/base/typescript/table/role/createDto.tsx"],
     "exclude": ["node_modules", "bin"],
     "files": ["main.ts"]
 }

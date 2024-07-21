@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { config, S3 } from "aws-sdk";
-import { CustomResponseType } from "src/ravennest";
-import { TablesNames } from "src/enums/tables-data.enum";
+import { TablesNames } from "../../common/enums/tables.enum";
+import { CustomResponseType } from "../../common/types";
 
 @Injectable()
 export class S3Service {
@@ -17,7 +17,7 @@ export class S3Service {
             });
             this.s3 = new S3();
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
     private readonly s3: S3;
@@ -33,11 +33,11 @@ export class S3Service {
             const imageURL = `https://${this.bucketName}.s3.amazonaws.com/${folder}/${imageName}`;
             return {
                 message: "Image is retrieved successfully!",
-                data: imageURL,
+                payload: imageURL,
                 status: 201,
             };
         } catch (error) {
-            return { message: "Error occurred", data: error, status: 500 };
+            return { message: "Error occurred", payload: error, status: 500 };
         }
     }
 
@@ -56,13 +56,13 @@ export class S3Service {
                 message: response?.Contents
                     ? "Images are retrieved successfully!"
                     : "No images have been found.",
-                data: response?.Contents
+                payload: response?.Contents
                     ? response.Contents.map((object) => object.Key || "")
                     : [],
                 status: response?.Contents ? 201 : 400,
             };
         } catch (error) {
-            return { message: "Error occurred", data: error, status: 500 };
+            return { message: "Error occurred", payload: error, status: 500 };
         }
     }
 
@@ -84,11 +84,11 @@ export class S3Service {
 
             return {
                 message: "Image is uploaded successfully!",
-                data: response,
+                payload: response,
                 status: 201,
             };
         } catch (error) {
-            return { message: "Error occurred", data: error, status: 500 };
+            return { message: "Error occurred", payload: error, status: 500 };
         }
     }
 
@@ -115,11 +115,11 @@ export class S3Service {
             const response = await this.s3.deleteObject(params).promise();
             return {
                 message: "Image is deleted successfully!",
-                data: response,
+                payload: response,
                 status: 201,
             };
         } catch (error) {
-            return { message: "Error occurred", data: error, status: 500 };
+            return { message: "Error occurred", payload: error, status: 500 };
         }
     }
 

@@ -14,8 +14,8 @@ async function bootstrap() {
 
     // configure swagger
     const config = new DocumentBuilder()
-        .setTitle("Training Partner DB")
-        .setDescription("The API of the Training Partner DB website")
+        .setTitle("PROJECT_NAME DB")
+        .setDescription("The API of the PROJECT_NAME DB website")
         .setVersion("1.0")
         .addBearerAuth()
         .build();

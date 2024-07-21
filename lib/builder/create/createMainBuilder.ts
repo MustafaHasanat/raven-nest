@@ -11,6 +11,7 @@ import { memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 import { pathCreator } from "../../utils/helpers/pathCreator.js";
 import { existsSync, writeFileSync } from "fs";
+import { join } from "path";
 
 /**
  * This function will be fired by the --create-main option
@@ -50,6 +51,7 @@ const createMainBuilder = async (
                 "validation.js",
                 ".prettierrc",
                 ".eslintrc.js",
+                "Makefile",
                 "package.json",
                 ...(isAWS
                     ? ["aws.module.ts", "aws.controller.ts", "aws.service.ts"]
@@ -65,19 +67,21 @@ const createMainBuilder = async (
                 projectName,
                 publicDir,
             }) => {
-                const props = {
-                    mainDest,
+                // get the names variants and the paths
+                const createMainObj = {
+                    projectName,
                     rootDir,
                     isAWS,
                     isMailer,
-                    projectName,
                     publicDir,
+                    mainDest,
+                    schemasPath: join(mainDest, "schemas"),
                 };
 
                 await manipulator({
                     actionTag: "create-main",
-                    cloningCommands: createMainCloning(props),
-                    injectionCommands: createMainInjection(props),
+                    cloningCommands: createMainCloning(createMainObj),
+                    injectionCommands: createMainInjection(createMainObj),
                     memo: {
                         pairs: { mainDest, rootDir, projectName, publicDir },
                         category: MemoCategory.RAVEN_NEST,

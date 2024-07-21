@@ -43,13 +43,6 @@ const createTableBuilder = async (
             "TABLE.service.ts",
             "TABLE-fields.enum.ts",
             "transformers.ts",
-            ...(isSpecialTable && special === "user"
-                ? [
-                      "login-user.dto.ts",
-                      "users.enum.ts",
-                      "token-payload.type.ts",
-                  ]
-                : []),
         ]),
     ];
 

@@ -1,8 +1,8 @@
-export { emailValidator, validateGetConditions } from "./validators";
+export { emailValidator, validateGetConditions } from "./validators.middleware";
 export {
     filteredGetQuery,
     filterNullsObject,
     filterNullsArray,
     mappedOperators,
     mappingMethod,
-} from "./filters";
+} from "./filters.middleware";

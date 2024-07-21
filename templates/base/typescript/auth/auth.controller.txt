@@ -11,10 +11,11 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiOperation } from "@nestjs/swagger";
 import { Request, Response } from "express";
-import { LoginUserDto } from "src/dto/users/login-user.dto";
-import { ControllerWrapper } from "src/ravennest";
-import { UsersService } from "src/schemas/users/users.service";
+import { LoginUserDto } from "../../common/dto/users/login-user.dto";
+import { UsersService } from "../users/users.service";
 import { AuthService } from "./auth.service";
+import { ControllerWrapper } from "../../common/decorators";
+import { getUserTokenData } from "../../common/helpers";
 
 @ControllerWrapper("auth")
 export class AuthController {
@@ -26,7 +27,7 @@ export class AuthController {
     @Get("isAuth")
     @ApiOperation({ summary: "check if you are authenticated or not" })
     getProfile(@Req() req: Request, @Res() res: Response) {
-        const token = this.usersService.getUserTokenData(req);
+        const token = getUserTokenData(req);
         return res.status(200).json({
             message: `User is ${token ? "authenticated" : "not authenticated"}`,
             data: token,

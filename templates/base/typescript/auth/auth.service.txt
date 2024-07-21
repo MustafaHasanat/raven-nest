@@ -1,18 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { MailerService } from "@nestjs-modules/mailer";
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import {
-    CustomResponseType,
-    emailValidator,
-    errorRes,
-    invalidRes,
-    mailing,
-    sendEmail,
-    validRes,
-} from "src/ravennest";
-import { UsersService } from "src/schemas/users/users.service";
-import { TokenPayload } from "src/types/token-payload.type";
+import { mailing } from "../../common/constants/services";
+import { sendEmail } from "../../common/helpers";
+import { errorRes, invalidRes, validRes } from "../../common/responses";
+import { emailValidator } from "../../common/middlewares";
+import { UsersService } from "../users/users.service";
+import { CustomResponseType, TokenPayload } from "../../common/types";
 
 @Injectable()
 export class AuthService {
@@ -24,15 +19,15 @@ export class AuthService {
 
     async validateToken(token: string): Promise<CustomResponseType<string>> {
         try {
-            const decoded = this.jwtService.verify(token);            
+            const decoded = this.jwtService.verify(token);
             if (!decoded) return invalidRes("Invalid token", token);
-            
+
             const { exp, iat, userId } = decoded;
 
             if (exp - iat < 0) return invalidRes("Token has expired!", token);
 
             const userToken = await this.usersService.getTokenById(userId);
-            if (userToken.data !== token) {
+            if (userToken.payload !== token) {
                 return invalidRes("Invalid token", token);
             }
 
@@ -43,23 +38,20 @@ export class AuthService {
     }
 
     async logIn(
-        identifier: string,
+        email: string,
         password: string
     ): Promise<CustomResponseType<string>> {
         try {
             const user = await this.usersService.checkUserCredentials({
-                identifier: {
-                    type: emailValidator(identifier) ? "email" : "username",
-                    value: identifier,
-                },
+                email,
                 password,
             });
 
             if (user.status !== 200) {
-                return { ...user, data: null };
+                return { ...user, payload: null };
             }
 
-            const { password: userPass, id, token, ...rest } = user.data;
+            const { password: userPass, id, token, ...rest } = user.payload;
 
             const payload: TokenPayload = {
                 userId: id,
@@ -76,28 +68,25 @@ export class AuthService {
     }
 
     async requestPasswordReset(
-        identifier: string
+        email: string
     ): Promise<CustomResponseType<string>> {
         try {
             const user = await this.usersService.checkUserCredentials({
-                identifier: {
-                    type: emailValidator(identifier) ? "email" : "username",
-                    value: identifier,
-                },
+                email,
                 isOnlyEmail: true,
             });
 
             if (user.status !== 200) {
-                return { ...user, data: null };
+                return { ...user, payload: null };
             }
 
             const token = await this.jwtService.signAsync({
-                userId: user.data.id,
-                email: user.data.email,
+                userId: user.payload.id,
+                email: user.payload.email,
             });
 
             const updateResponse = await this.usersService.updateToken(
-                identifier,
+                email,
                 token
             );
             if (updateResponse.status === 500)
@@ -105,7 +94,7 @@ export class AuthService {
 
             const response = await sendEmail(
                 mailing.passwordRequest(
-                    user.data.email,
+                    user.payload.email,
                     process.env.ENVIRONMENT,
                     token
                 ),
@@ -126,7 +115,7 @@ export class AuthService {
         try {
             const response = await this.validateToken(token);
             if (response.status !== 200)
-                return invalidRes(response.message, response.data);
+                return invalidRes(response.message, response.payload);
 
             return await this.usersService.updatePassword(
                 identifier,

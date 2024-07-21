@@ -207,7 +207,13 @@ export const initCloning = (): CloneTemplate[] => [
         signature: "",
         target: "common/types/token-payload.txt",
         destination: "src/common/types",
-        newFileName: "token-payload.type.ts",
+        newFileName: "token-payload.ts",
+    },
+    {
+        signature: "",
+        target: "common/types/index.txt",
+        destination: "src/common/types",
+        newFileName: "index.ts",
     },
 ];
 

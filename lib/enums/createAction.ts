@@ -1,7 +1,6 @@
 export enum SpecialTableType {
-    USER = "specialUser",
-    PRODUCT = "specialProduct",
-    NOTIFICATION = "specialNotification",
+    PRODUCT = "product",
+    NOTIFICATION = "notification",
 }
 
 export enum ColumnTypeChoice {

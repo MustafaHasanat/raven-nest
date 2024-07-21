@@ -40,6 +40,13 @@ export const replaceStrings = async ({
     });
 };
 
+/**
+ * Delete the portion of the string from "startIndex" to "endIndex" inclusively
+ * @param content
+ * @param startIndex
+ * @param endIndex
+ * @returns
+ */
 export const indexStringCutter = ({
     content,
     startIndex,
@@ -49,7 +56,7 @@ export const indexStringCutter = ({
     startIndex: number;
     endIndex: number;
 }): string => {
-    return content;
+    return content.slice(0, startIndex) + content.slice(endIndex);
 };
 
 export const getStrInBetween = (

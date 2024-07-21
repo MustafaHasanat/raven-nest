@@ -15,7 +15,6 @@ export enum CreateFileSetArgument {
 }
 
 export enum CreateSpecialArgument {
-    USER = "user",
     PRODUCT = "product",
     NOTIFICATION = "notification",
 }
