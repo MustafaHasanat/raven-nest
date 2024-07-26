@@ -21,6 +21,11 @@ const createDatabaseBuilder = async (memoValues: MemoValues) => {
             ...memosToQuestions(memoValues, [
                 constants.createDatabase.rootDir,
                 constants.createDatabase.mainDest,
+                constants.createDatabase.dbHost,
+                constants.createDatabase.dbName,
+                constants.createDatabase.dbUsername,
+                constants.createDatabase.dbPassword,
+                constants.createDatabase.dbPort,
             ] as QuestionQuery[]),
             constants.shared.overwrite([
                 "app.module.ts",
@@ -51,45 +56,63 @@ const createDatabaseBuilder = async (memoValues: MemoValues) => {
                 "token-payload.ts",
             ]),
         ])
-        .then(async ({ overwrite, rootDir, mainDest }) => {
-            // get the names variants and the paths
-            const userVariantObj = new NameVariant("user");
-            const roleVariantObj = new NameVariant("role");
-            const permissionVariantObj = new NameVariant("permission");
-
-            const userPathObj = new SubPath({
-                mainDir: mainDest,
-                nameVariant: userVariantObj,
-            });
-            const rolePathObj = new SubPath({
-                mainDir: mainDest,
-                nameVariant: roleVariantObj,
-            });
-            const permissionPathObj = new SubPath({
-                mainDir: mainDest,
-                nameVariant: permissionVariantObj,
-            });
-
-            const props = {
-                paths: {
-                    user: userPathObj,
-                    role: rolePathObj,
-                    permission: permissionPathObj,
-                },
-                appModuleDest: pathConvertor(mainDest, "app.module.ts"),
-                envLocation: pathConvertor(rootDir, ".env"),
-            };
-
-            await manipulator({
-                actionTag: "create-database",
-                cloningCommands: createDatabaseCloning(props),
-                injectionCommands: createDatabaseInjection(props),
-                memo: {
-                    pairs: { rootDir, mainDest },
-                    category: MemoCategory.RAVEN_NEST,
-                },
+        .then(
+            async ({
                 overwrite,
-            });
-        });
+                rootDir,
+                mainDest,
+                dbHost,
+                dbUsername,
+                dbPassword,
+                dbName,
+                dbPort,
+            }) => {
+                // get the names variants and the paths
+                const userVariantObj = new NameVariant("user");
+                const roleVariantObj = new NameVariant("role");
+                const permissionVariantObj = new NameVariant("permission");
+
+                const userPathObj = new SubPath({
+                    mainDir: mainDest,
+                    nameVariant: userVariantObj,
+                });
+                const rolePathObj = new SubPath({
+                    mainDir: mainDest,
+                    nameVariant: roleVariantObj,
+                });
+                const permissionPathObj = new SubPath({
+                    mainDir: mainDest,
+                    nameVariant: permissionVariantObj,
+                });
+
+                const props = {
+                    paths: {
+                        user: userPathObj,
+                        role: rolePathObj,
+                        permission: permissionPathObj,
+                    },
+                    appModuleDest: pathConvertor(mainDest, "app.module.ts"),
+                    envLocation: pathConvertor(rootDir, ".env"),
+                    db: {
+                        host: dbHost,
+                        username: dbUsername,
+                        password: dbPassword,
+                        name: dbName,
+                        port: dbPort,
+                    },
+                };
+
+                await manipulator({
+                    actionTag: "create-database",
+                    cloningCommands: createDatabaseCloning(props),
+                    injectionCommands: createDatabaseInjection(props),
+                    memo: {
+                        pairs: { rootDir, mainDest },
+                        category: MemoCategory.RAVEN_NEST,
+                    },
+                    overwrite,
+                });
+            }
+        );
 };
 export default createDatabaseBuilder;

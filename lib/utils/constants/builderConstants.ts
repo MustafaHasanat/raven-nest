@@ -90,7 +90,7 @@ const builderConstants: BuilderConstantsProps = {
             message: "What is the destination of your '.env' file?",
         },
     },
-    // constants for the "app" choice
+    // constants for the "database" choice
     createDatabase: {
         rootDir: {
             ...sharedAttrs.input.dest,
@@ -108,8 +108,43 @@ const builderConstants: BuilderConstantsProps = {
             message:
                 "What is the destination of your app files (module, controller, service)?",
         },
+        dbHost: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "dbHost",
+            message: "What's the name of your database host?",
+            default: "localhost",
+        },
+        dbUsername: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "dbUsername",
+            message: "What's the username of your database?",
+            default: "postgres",
+        },
+        dbPassword: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "dbHost",
+            message: "What's the password of your database?",
+            default: "postgres",
+        },
+        dbName: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "dbName",
+            message: "What's the name of your database?",
+            default: "postgres",
+        },
+        dbPort: {
+            ...sharedAttrs.input.name,
+            type: "input",
+            name: "dbPort",
+            message: "What's the port you're using for your database?",
+            default: "5432",
+        },
     },
-    // constants for the "database" choice
+    // constants for the "table" choice
     createTable: {
         tableName: {
             ...sharedAttrs.input.name,

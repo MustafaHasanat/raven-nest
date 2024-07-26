@@ -11,73 +11,146 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Response } from "express";
-import { ApiBody, ApiConsumes, ApiQuery } from "@nestjs/swagger";
-import { TablesNames } from "../../common/enums/tables.enum";
-import { S3 } from "aws-sdk";
+import { ApiBody, ApiConsumes, ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { ControllerWrapper } from "../../common/decorators";
 import { CustomResponseType } from "../../common/types";
+import {
+    DeleteObjectCommandOutput,
+    GetObjectCommandOutput,
+} from "@aws-sdk/client-s3";
 
 @ControllerWrapper("aws")
 export class S3Controller {
     constructor(private readonly s3Service: S3Service) {}
 
     @Get("image")
+    @ApiOperation({ summary: "Get the image as a string" })
     @ApiConsumes("multipart/form-data")
-    @ApiQuery({ name: "image" })
-    @ApiQuery({ name: "tableName", enum: TablesNames })
+    @ApiQuery({ name: "imagePath", required: true })
+    @ApiQuery({ name: "imageName", required: true })
+    @ApiQuery({ name: "bucketName", required: false })
     async getImage(
-        @Query() query: { image: string; tableName: TablesNames },
+        @Query()
+        query: {
+            imagePath: string;
+            imageName: string;
+            bucketName?: string;
+        },
         @Res() res: Response
     ) {
-        const { image, tableName } = query;
         const response: CustomResponseType<string> =
-            await this.s3Service.getImage(image, tableName);
+            await this.s3Service.getImage(query);
 
         return res.status(response.status).json(response);
     }
 
-    @Post("upload")
+    @Get("image/url")
+    @ApiOperation({ summary: "Get the URL of the image" })
+    @ApiConsumes("multipart/form-data")
+    @ApiQuery({ name: "imagePath", required: true })
+    @ApiQuery({ name: "imageName", required: true })
+    @ApiQuery({ name: "bucketName", required: false })
+    async getImageURL(
+        @Query()
+        query: {
+            imagePath: string;
+            imageName: string;
+            bucketName?: string;
+        },
+        @Res() res: Response
+    ) {
+        const response: CustomResponseType<string> =
+            await this.s3Service.getImageURL(query);
+
+        return res.status(response.status).json(response);
+    }
+
+    @Get("images")
+    @ApiConsumes("multipart/form-data")
+    @ApiQuery({ name: "imagesPath", required: true })
+    @ApiQuery({ name: "bucketName", required: false })
+    async getAllImages(
+        @Query()
+        query: {
+            imagesPath: string;
+            bucketName?: string;
+        },
+        @Res() res: Response
+    ) {
+        const response: CustomResponseType<GetObjectCommandOutput> =
+            await this.s3Service.getAllImages(query);
+
+        return res.status(response.status).json(response);
+    }
+
+    @Post("bucket")
+    @ApiQuery({ name: "bucketName", required: true })
+    async createBucket(
+        @Query() query: { bucketName: string },
+        @Res() res: Response
+    ) {
+        const response: CustomResponseType<any> =
+            await this.s3Service.createBucket({
+                bucketName: query?.bucketName,
+            });
+
+        return res.status(response.status).json(response);
+    }
+
+    @Post("image")
     @ApiConsumes("multipart/form-data")
     @UseInterceptors(FileInterceptor("image"))
     @ApiBody({
         schema: {
             type: "object",
-            required: ["image", "tableName"],
+            required: ["image", "filePath"],
             properties: {
                 image: {
                     type: "string",
                     format: "binary",
                 },
-                tableName: {
+                filePath: {
                     type: "string",
-                    enum: Object.values(TablesNames),
+                },
+                fileName: {
+                    type: "string",
+                    default: "",
+                },
+                bucketName: {
+                    type: "string",
+                    nullable: true,
                 },
             },
         },
     })
     async uploadImage(
         @UploadedFile() image: Express.Multer.File,
-        @Body() body: { tableName: TablesNames },
+        @Body()
+        body: {
+            filePath: string;
+            fileName?: string;
+            bucketName?: string;
+        },
         @Res() res: Response
     ) {
-        const { tableName } = body;
-        const response: CustomResponseType<S3.ManagedUpload.SendData> =
-            await this.s3Service.uploadImage(image, tableName);
+        const response: CustomResponseType<any> =
+            await this.s3Service.uploadImage({ ...body, file: image });
 
         return res.status(response.status).json(response);
     }
 
     @Delete("image")
     @ApiConsumes("multipart/form-data")
-    @ApiQuery({ name: "image" })
-    @ApiQuery({ name: "tableName", enum: TablesNames })
-    async deleteImage(
-        @Query() query: { image: string; tableName: TablesNames },
+    @ApiQuery({ name: "filePath", required: true })
+    @ApiQuery({ name: "fileName", required: true })
+    @ApiQuery({ name: "bucketName", required: false })
+    async deleteFile(
+        @Query()
+        query: { filePath: string; fileName: string; bucketName?: string },
         @Res() res: Response
     ) {
-        const { image, tableName } = query;
-        const response: CustomResponseType<S3.DeleteObjectOutput> =
-            await this.s3Service.deleteImage(image, tableName);
+        const response: CustomResponseType<DeleteObjectCommandOutput> =
+            await this.s3Service.deleteFile(query);
 
         return res.status(response.status).json(response);
     }

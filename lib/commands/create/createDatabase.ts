@@ -17,12 +17,6 @@ const createDatabaseCloning = ({
         destination: user.entitiesPath,
         newFileName: "index.ts",
     },
-    {
-        signature: "tables-data.enum.ts",
-        target: "base/typescript/enum/tables-data.txt",
-        destination: user.enumsPath,
-        newFileName: "tables-data.enum.ts",
-    },
     // role files
     {
         signature: "role.entity.ts",
@@ -157,6 +151,7 @@ const createDatabaseCloning = ({
 const createDatabaseInjection = ({
     appModuleDest,
     envLocation,
+    db: { host, name, password, port, username },
 }: CreateDatabaseProps): InjectTemplate[] => [
     {
         signature: "app.module.ts",
@@ -189,14 +184,36 @@ const createDatabaseInjection = ({
         injectable: envLocation,
         additions: [
             {
+                keyword: "*",
                 addition: {
                     base: "components/others/db-env.txt",
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: "DB_HOST",
+                        data: "DATABASE_HOST",
                     },
                 },
-                keyword: "*",
+                replacements: [
+                    {
+                        oldString: "DB_HOST",
+                        newString: host,
+                    },
+                    {
+                        oldString: "DB_NAME",
+                        newString: name,
+                    },
+                    {
+                        oldString: "DB_USERNAME",
+                        newString: username,
+                    },
+                    {
+                        oldString: "DB_PASSWORD",
+                        newString: password,
+                    },
+                    {
+                        oldString: "DB_PORT",
+                        newString: port,
+                    },
+                ],
             },
         ],
     },

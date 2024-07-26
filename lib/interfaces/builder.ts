@@ -23,6 +23,13 @@ export interface CreateDatabaseProps {
     };
     appModuleDest: string;
     envLocation: string;
+    db: {
+        host: string;
+        username: string;
+        password: string;
+        name: string;
+        port: string;
+    };
 }
 
 // create table

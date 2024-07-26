@@ -16,6 +16,11 @@ export interface BuilderConstantsProps {
     createDatabase: {
         rootDir: QuestionCollection<any>;
         mainDest: QuestionCollection<any>;
+        dbHost: QuestionCollection<any>;
+        dbUsername: QuestionCollection<any>;
+        dbPassword: QuestionCollection<any>;
+        dbName: QuestionCollection<any>;
+        dbPort: QuestionCollection<any>;
     };
     createTable: {
         tableName: QuestionCollection<any>;

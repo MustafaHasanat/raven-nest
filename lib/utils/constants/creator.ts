@@ -27,7 +27,8 @@ const creatorConstants: CreatorConstantsPros = {
             { packageName: "@nestjs-modules/mailer", commandType: "--save" },
             { packageName: "@nestjs/config", commandType: "--save" },
             { packageName: "@nestjs-modules/mailer", commandType: "--save" },
-            { packageName: "aws-sdk", commandType: "--save" },
+            { packageName: "@aws-sdk/client-s3", commandType: "--save" },
+            { packageName: "@aws-sdk/s3-request-presigner", commandType: "--save" },
         ],
         database: [
             { packageName: "@nestjs/config", commandType: "--save" },

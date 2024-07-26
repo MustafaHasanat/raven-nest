@@ -30,32 +30,32 @@ export class PermissionGuard implements CanActivate {
         return PermissionAction.GET_ALL;
     }
 
-    private async getRole(roleName: string) {
-        const role = await this.roleRepository.find({
+    private async getRole(roleName?: string): Promise<Role[]> {
+        const roles = await this.roleRepository.find({
             where: {
                 name: roleName,
             },
         });
 
-        if (!role)
+        if (!roles)
             throw new InternalServerErrorException(
-                "Internal server error occurred"
+                "Error while fetching the roles in the guard"
             );
 
-        return role;
+        return roles;
     }
 
     private async checkPermissions(
         action: PermissionAction,
         path: TablesNames,
-        role: Role[]
+        roles: Role[]
     ) {
         const permissions = await this.permissionRepository.find({
             relations: ["role"],
             where: {
                 action,
                 table: path,
-                role,
+                role: roles,
             },
         });
 
@@ -69,23 +69,35 @@ export class PermissionGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
 
         // get the pathname for the request
-        const pathname = request._parsedOriginalUrl?.pathname.slice(1);
+        const initialPathname = request.path;
+        if (!initialPathname)
+            throw new InternalServerErrorException("Pathname was not found");
+        const pathname = initialPathname.slice(1);
         const slashIndex = pathname.indexOf("/");
         const path =
             slashIndex !== -1 ? pathname.slice(0, slashIndex) : pathname;
 
         // check the user's role
-        const roleName = request.user?.role;
+        const roleName: string | undefined = request.user?.role;
+
+        // provide admins with full access
         if (roleName === "admin") return true;
 
         // get the current action
         const action = this.getAction(request.method, pathname);
 
+        // make the "create user" and "auth" endpoints public ones
+        if (
+            (path === "users" && action === PermissionAction.CREATE) ||
+            path === "auth"
+        )
+            return true;
+
         // get the existing roles
-        const role = await this.getRole(roleName);
+        const roles = await this.getRole(roleName);
 
         // check the permissions
-        await this.checkPermissions(action, path, role);
+        await this.checkPermissions(action, path, roles);
 
         return true;
     }
