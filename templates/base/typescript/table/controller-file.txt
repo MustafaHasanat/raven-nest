@@ -1,152 +1,102 @@
 import {
-  Body,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  Res,
-} from '@nestjs/common';
+    Body,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Query,
+    Req,
+    Res,
+} from "@nestjs/common";
 import { ApiOperation } from "@nestjs/swagger";
-import { DeleteResult, UpdateResult } from "typeorm";
-import { Response } from "express";
-
-import {
-  EditorsWrapper,
-  MembersOnly,
-  GetAllWrapper,
-  AdminsOnly,
-  GetConditionsProps,
-  GetQueryProps,
-  CustomResponseType,
-  ControllerWrapper,
-  validateGetConditions,
-} from 'src/ravennest';
-
+import { DeleteResult, FindManyOptions, UpdateResult } from "typeorm";
+import { Request, Response } from "express";
 import { TABLE_PLURAL_UPPER_NAMEService } from "./TABLE_PLURAL_LOWER_NAME.service";
+import {
+    EditorsWrapper,
+    ControllerWrapper,
+    GetAllByQuery,
+} from "../../common/decorators";
+import { CustomResponseType, DeleteQueryProps } from "../../common/types";
+import { TABLE_UPPER_NAMEFields, TablesNames } from "../../common/enums/tables.enum";
+import { RELATIONS_OBJECT } from "../../common/constants/relations";
+import { DELETE_Pipe, GET_Pipe, POST_PATCH_Pipe } from "../../common/pipes";
 import { TABLE_UPPER_NAME } from "../../entities/TABLE_LOWER_NAME.entity";
-import { CreateTABLE_UPPER_NAMEDto } from "../../dto/TABLE_PLURAL_LOWER_NAME/create-TABLE_LOWER_NAME.dto";
-import { UpdateTABLE_UPPER_NAMEDto } from "../../dto/TABLE_PLURAL_LOWER_NAME/update-TABLE_LOWER_NAME.dto";
-import { TABLE_UPPER_NAMEFields, TablesNames } from '../../enums/tables-data.enum';
-import { newInstanceTransformer } from "src/middlewares/transformers";
+import { CreateTABLE_UPPER_NAMEDto } from "../../common/dto/TABLE_PLURAL_LOWER_NAME/create-TABLE_LOWER_NAME.dto";
+import { UpdateTABLE_UPPER_NAMEDto } from "../../common/dto/TABLE_PLURAL_LOWER_NAME/update-TABLE_LOWER_NAME.dto";
+import { DeletionQuery } from "src/common/decorators/delete.decorator";
+import { getUserTokenData } from "src/common/helpers";
 
-@ControllerWrapper("TABLE_PLURAL_UPPER_NAME")
+@ControllerWrapper("TABLE_PLURAL_LOWER_NAME")
 export class TABLE_PLURAL_UPPER_NAMEController {
-    constructor(
-        private readonly TABLE_PLURAL_LOWER_NAMEService: TABLE_PLURAL_UPPER_NAMEService
-    ) {}
+    constructor(private readonly TABLE_PLURAL_LOWER_NAMEService: TABLE_PLURAL_UPPER_NAMEService) {}
 
-    // --- Basic REST endpoints ---
+    // --- Basic CRUD endpoints ---
 
     @Get()
-    @GetAllWrapper({
+    @GetAllByQuery({
         fieldsEnum: TABLE_UPPER_NAMEFields,
+        descendants: RELATIONS_OBJECT.TABLE_LOWER_NAME.descendants,
     })
     async getTABLE_PLURAL_UPPER_NAME(
-        @Query()
-        query: GetQueryProps<TABLE_UPPER_NAMEFields>,
+        @Query(new GET_Pipe(TABLE_UPPER_NAMEFields, RELATIONS_OBJECT.TABLE_LOWER_NAME.ascendants))
+        query: FindManyOptions,
         @Res() res: Response
     ) {
-        const { sortBy, reverse, page, conditions } = query;
-        const parsed: GetConditionsProps<TABLE_UPPER_NAMEFields>[] =
-            validateGetConditions<TABLE_UPPER_NAMEFields>(conditions);
-
         const response: CustomResponseType<TABLE_UPPER_NAME[]> =
-            await this.TABLE_PLURAL_LOWER_NAMEService.getTABLE_PLURAL_UPPER_NAME(
-                {
-                    sortBy,
-                    reverse: reverse === "true",
-                    page: Number(page),
-                    conditions: parsed || [],
-                }
-            );
+            await this.TABLE_PLURAL_LOWER_NAMEService.getTABLE_PLURAL_UPPER_NAME(query);
         return res.status(response.status).json(response);
     }
 
     @Get(":id")
-    @MembersOnly()
     @ApiOperation({ summary: "get a single TABLE_LOWER_NAME using its ID" })
-    async getTABLE_UPPER_NAMEById(
-        @Param("id") id: string,
-        @Res() res: Response
-    ) {
+    async getTABLE_UPPER_NAMEById(@Param("id") id: string, @Res() res: Response) {
         const response: CustomResponseType<TABLE_UPPER_NAME> =
-            await this.TABLE_PLURAL_LOWER_NAMEService.getTABLE_UPPER_NAMEById(
-                id
-            );
+            await this.TABLE_PLURAL_LOWER_NAMEService.getTABLE_UPPER_NAMEById(id);
 
         return res.status(response.status).json(response);
     }
 
     @Post()
-    @MembersOnly()
-    @EditorsWrapper(
-        CreateTABLE_UPPER_NAMEDto,
-        "create a new TABLE_LOWER_NAME"
-    )
+    @EditorsWrapper(CreateTABLE_UPPER_NAMEDto, "create a new TABLE_LOWER_NAME")
     async createTABLE_UPPER_NAME(
-        @Body() createTABLE_UPPER_NAMEDto: CreateTABLE_UPPER_NAMEDto,
+        @Body(new POST_PATCH_Pipe(TablesNames.TABLE_UPPER_SNAKE_CASE_NAME))
+        createTABLE_UPPER_NAMEDto: CreateTABLE_UPPER_NAMEDto,
         @Res() res: Response
     ) {
         const response: CustomResponseType<TABLE_UPPER_NAME> =
             await this.TABLE_PLURAL_LOWER_NAMEService.createTABLE_UPPER_NAME(
-                newInstanceTransformer<CreateTABLE_UPPER_NAMEDto>(
-                    createTABLE_UPPER_NAMEDto,
-                    TablesNames.TABLE_UPPER_SNAKE_CASE_NAME
-                )
+                createTABLE_UPPER_NAMEDto,
             );
 
         return res.status(response.status).json(response);
     }
 
     @Patch(":id")
-    @MembersOnly()
-    @EditorsWrapper(
-        UpdateTABLE_UPPER_NAMEDto,
-        "update a TABLE_LOWER_NAME"
-    )
+    @EditorsWrapper(UpdateTABLE_UPPER_NAMEDto, "update a TABLE_LOWER_NAME")
     async updateTABLE_UPPER_NAME(
         @Param("id") id: string,
-        @Body() updateTABLE_UPPER_NAMEDto: UpdateTABLE_UPPER_NAMEDto,
+        @Body(new POST_PATCH_Pipe(TablesNames.TABLE_UPPER_SNAKE_CASE_NAME))
+        updateTABLE_UPPER_NAMEDto: UpdateTABLE_UPPER_NAMEDto,
         @Res() res: Response
     ) {
         const response: CustomResponseType<UpdateResult> =
-            await this.TABLE_PLURAL_LOWER_NAMEService.updateTABLE_UPPER_NAME(
-                id,
-                newInstanceTransformer<UpdateTABLE_UPPER_NAMEDto>(
-                    updateTABLE_UPPER_NAMEDto,
-                    TablesNames.TABLE_UPPER_SNAKE_CASE_NAME
-                )
-            );
+            await this.TABLE_PLURAL_LOWER_NAMEService.updateTABLE_UPPER_NAME(id, updateTABLE_UPPER_NAMEDto);
 
         return res.status(response.status).json(response);
     }
 
-    @Delete("wipe")
-    @AdminsOnly()
-    @ApiOperation({ summary: "delete all TABLE_PLURAL_LOWER_NAME" })
-    async deleteAllTABLE_PLURAL_UPPER_NAME(@Res() res: Response) {
-        const response: CustomResponseType<DeleteResult> =
-            await this.TABLE_PLURAL_LOWER_NAMEService.deleteAllTABLE_PLURAL_UPPER_NAME();
-
-        return res.status(response.status).json(response);
-    }
-
-    @Delete(":id")
-    @MembersOnly()
-    @ApiOperation({ summary: "delete a TABLE_LOWER_NAME" })
+    @Delete()
+    @DeletionQuery("delete TABLE_PLURAL_LOWER_NAME")
     async deleteTABLE_UPPER_NAME(
-        @Param("id") id: string,
+        @Query(new DELETE_Pipe()) query: DeleteQueryProps,
+        @Req() req: Request,
         @Res() res: Response
     ) {
         const response: CustomResponseType<DeleteResult> =
-            await this.TABLE_PLURAL_LOWER_NAMEService.deleteTABLE_UPPER_NAME(
-                id
-            );
+            await this.TABLE_PLURAL_LOWER_NAMEService.deleteTABLE_UPPER_NAME(query, getUserTokenData(req));
 
         return res.status(response.status).json(response);
     }
-
-    // --- Relational REST endpoints ---
 }

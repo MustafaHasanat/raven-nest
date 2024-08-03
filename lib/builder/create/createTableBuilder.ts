@@ -33,16 +33,19 @@ const createTableBuilder = async (
         ] as QuestionQuery[]),
         constants.shared.overwrite([
             "app.module.ts",
-            "tables-data.enum.ts",
+            "tables.enum.ts",
             "entities/entities.ts",
             "TABLE.entity.ts",
+            "entities/index.ts",
             "create-TABLE-dto.ts",
             "update-TABLE-dto.ts",
             "TABLE.module.ts",
             "TABLE.controller.ts",
             "TABLE.service.ts",
             "TABLE-fields.enum.ts",
-            "transformers.ts",
+            "relations.ts",
+            "relations.ts",
+            "post_patch.pipe.ts"
         ]),
     ];
 
@@ -73,21 +76,16 @@ const createTableBuilder = async (
             const createTableObj = {
                 paths: subPathObj,
                 nameVariant: nameVariantObj,
+                tableName: special || tableName,
             };
 
             await manipulator({
                 actionTag: "create-table",
                 cloningCommands: isSpecialTable
-                    ? createSpecialTableCloning({
-                          ...createTableObj,
-                          tableName: special || tableName,
-                      })
+                    ? createSpecialTableCloning(createTableObj)
                     : createTableCloning(createTableObj),
                 injectionCommands: isSpecialTable
-                    ? createSpecialTableInjection({
-                          ...createTableObj,
-                          tableName: special || tableName,
-                      })
+                    ? createSpecialTableInjection(createTableObj)
                     : createTableInjection(createTableObj),
                 memo: {
                     pairs: { mainDest },

@@ -1,4 +1,3 @@
-import { ColumnTypeChoice } from "../../enums/createAction.js";
 import { CreateColumnProps } from "../../interfaces/builder.js";
 import { InjectTemplate } from "../../types/injectTemplate.js";
 import { join } from "path";
@@ -6,14 +5,13 @@ import { join } from "path";
 const createColumnInjection = ({
     columnData: {
         columnName,
-        columnType,
         mapsData: { dtoCreate, dtoUpdate, entityType, dtoType },
         entityProperties,
         dtoProperties,
         decorators: { decoratorsValues, decoratorsImports },
         specialInjections,
     },
-    paths: { entitiesPath, dtoPath, enumsPath, middlewaresPath },
+    paths: { entitiesPath, dtoPath, enumsPath },
     tableNameVariants: { camelCaseName, upperCaseName },
     columNameVariants: { upperSnakeCaseName },
 }: CreateColumnProps): InjectTemplate[] =>
@@ -106,8 +104,8 @@ const createColumnInjection = ({
             ],
         },
         {
-            signature: "tables-data.enum.ts",
-            injectable: join(enumsPath, "tables-data.enum.ts"),
+            signature: "tables.enum.ts",
+            injectable: join(enumsPath, "tables.enum.ts"),
             additions: [
                 {
                     keyword: `${upperCaseName}Fields {`,
@@ -118,27 +116,6 @@ const createColumnInjection = ({
                 },
             ],
         },
-        ...(columnType !== ColumnTypeChoice.STRING
-            ? [
-                  {
-                      signature: "transformers.ts",
-                      injectable: join(middlewaresPath, "transformers.ts"),
-                      additions: [
-                          {
-                              keyword: `TablesNames.${upperSnakeCaseName}) {`,
-                              addition: {
-                                  base: `\nbody?.${columnName} && (modifiedBody.${columnName} = fieldMap(body?.${columnName}).${columnType});`,
-                                  additionIsFile: false,
-                                  conditional: {
-                                      type: "SUPPOSED_TO_BE_THERE",
-                                      data: upperSnakeCaseName,
-                                  },
-                              },
-                          },
-                      ],
-                  },
-              ]
-            : []),
         ...specialInjections,
     ] as InjectTemplate[];
 

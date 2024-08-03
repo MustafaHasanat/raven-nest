@@ -143,7 +143,8 @@ const createTableInjection = ({
         entitiesPath,
         mainPath: appModulePath,
         enumsPath,
-        middlewaresPath,
+        constantsPath,
+        pipesPath,
     },
     nameVariant: {
         camelCaseName,
@@ -182,6 +183,23 @@ const createTableInjection = ({
         ],
     },
     {
+        signature: "entities/index.ts",
+        injectable: join(entitiesPath, "index.ts"),
+        additions: [
+            {
+                keyword: "*",
+                addition: {
+                    base: `export { ${upperCaseName} } from "./${camelCaseName}.entity";\n`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: upperCaseName,
+                    },
+                },
+            },
+        ],
+    },
+    {
         signature: "app.module.ts",
         injectable: join(appModulePath, "app.module.ts"),
         additions: [
@@ -205,18 +223,18 @@ const createTableInjection = ({
                         data: `${pluralUpperCaseName}Module,`,
                     },
                 },
-                keyword: "// ===== tables =====",
+                keyword: "// --- app tables ---",
             },
         ],
     },
     {
-        signature: "tables-data.enum.ts",
-        injectable: join(enumsPath, "tables-data.enum.ts"),
+        signature: "tables.enum.ts",
+        injectable: join(enumsPath, "tables.enum.ts"),
         additions: [
             {
                 keyword: "AllTablesColumns =",
                 addition: {
-                    base: ` | ${upperCaseName}Fields`,
+                    base: ` ${upperCaseName}Fields |`,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
@@ -236,39 +254,86 @@ const createTableInjection = ({
                 keyword: "*",
             },
             {
+                keyword: "TablesNames {",
                 addition: {
                     base: `\n${upperSnakeCaseName} = '${camelCaseName}', `,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: `${upperSnakeCaseName} = '${camelCaseName}'`,
+                        data: `${upperSnakeCaseName} =`,
                     },
-                },
-                keyword: "TablesNames {",
-            },
-        ],
-        deletions: [
-            {
-                keyword: `| null`,
-                deletion: {
-                    mayNotBeThere: true,
-                    onlyFirstOccurrence: true,
                 },
             },
         ],
     },
     {
-        signature: "transformers.ts",
-        injectable: join(middlewaresPath, "transformers.ts"),
+        signature: "relations.ts",
+        injectable: join(constantsPath, "relations.ts"),
         additions: [
             {
-                keyword: "// ----- tables' transformers -----",
+                keyword: "Tables<T> = {",
                 addition: {
-                    base: `\nif (table === TablesNames.${upperSnakeCaseName}) {}\n`,
+                    base: `${camelCaseName}: T;`,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: `.${upperSnakeCaseName})`,
+                        data: `${camelCaseName}: T`,
+                    },
+                },
+            },
+            {
+                keyword: "RELATIONS: Tables<RelationsListing> = {",
+                addition: {
+                    base: `
+                     ${camelCaseName}: {
+                            oneToOne: [],
+                            oneToMany: [],
+                            manyToOne: [],
+                            manyToMany: [],
+                        },`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `${camelCaseName}: {`,
+                    },
+                },
+            },
+            {
+                keyword: "// --- app relations ---",
+                addition: {
+                    base: `
+                    ${camelCaseName}: {
+                            descendants: [
+                                ...RELATIONS.${camelCaseName}.oneToMany,
+                                ...RELATIONS.${camelCaseName}.manyToOne,
+                                ...RELATIONS.${camelCaseName}.manyToMany,
+                            ],
+                            ascendants: [
+                                ...RELATIONS.${camelCaseName}.manyToOne, 
+                                ...RELATIONS.${camelCaseName}.manyToMany
+                            ],
+                        },`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `RELATIONS.${camelCaseName}.oneToMany`,
+                    },
+                },
+            },
+        ],
+    },
+    {
+        signature: "post_patch.pipe.ts",
+        injectable: join(pipesPath, "post_patch.pipe.ts"),
+        additions: [
+            {
+                keyword: "NewInstanceTransformer } = {",
+                addition: {
+                    base: `${pluralLowerCaseName}: {},`,
+                    additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: `${pluralLowerCaseName}`,
                     },
                 },
             },

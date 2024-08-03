@@ -9,9 +9,6 @@ type Tables<T> = {
     role: T;
     permission: T;
     user: T;
-    product: T;
-    category: T;
-    profile: T;
 };
 
 const RELATIONS: Tables<RelationsListing> = {
@@ -28,25 +25,7 @@ const RELATIONS: Tables<RelationsListing> = {
         manyToMany: [],
     },
     user: {
-        oneToOne: ["profile"],
-        oneToMany: ["products"],
-        manyToOne: [],
-        manyToMany: [],
-    },
-    product: {
         oneToOne: [],
-        oneToMany: [],
-        manyToOne: ["user"],
-        manyToMany: ["categories"],
-    },
-    category: {
-        oneToOne: [],
-        oneToMany: [],
-        manyToOne: [],
-        manyToMany: ["products"],
-    },
-    profile: {
-        oneToOne: ["user"],
         oneToMany: [],
         manyToOne: [],
         manyToMany: [],
@@ -57,6 +36,8 @@ export const RELATIONS_OBJECT: Tables<{
     ascendants: string[];
     descendants: string[];
 }> = {
+    // --- app relations ---
+    // --- default relations ---
     role: {
         descendants: [
             ...RELATIONS.role.oneToMany,
@@ -83,38 +64,5 @@ export const RELATIONS_OBJECT: Tables<{
             ...RELATIONS.user.manyToMany,
         ],
         ascendants: [...RELATIONS.user.manyToOne, ...RELATIONS.user.manyToMany],
-    },
-    product: {
-        descendants: [
-            ...RELATIONS.product.oneToMany,
-            ...RELATIONS.product.manyToOne,
-            ...RELATIONS.product.manyToMany,
-        ],
-        ascendants: [
-            ...RELATIONS.product.manyToOne,
-            ...RELATIONS.product.manyToMany,
-        ],
-    },
-    category: {
-        descendants: [
-            ...RELATIONS.category.oneToMany,
-            ...RELATIONS.category.manyToOne,
-            ...RELATIONS.category.manyToMany,
-        ],
-        ascendants: [
-            ...RELATIONS.category.manyToOne,
-            ...RELATIONS.category.manyToMany,
-        ],
-    },
-    profile: {
-        descendants: [
-            ...RELATIONS.profile.oneToMany,
-            ...RELATIONS.profile.manyToOne,
-            ...RELATIONS.profile.manyToMany,
-        ],
-        ascendants: [
-            ...RELATIONS.profile.manyToOne,
-            ...RELATIONS.profile.manyToMany,
-        ],
     },
 };

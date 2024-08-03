@@ -40,7 +40,12 @@ export class PermissionsController {
         descendants: RELATIONS_OBJECT.permission.descendants,
     })
     async getPermissions(
-        @Query(new GET_Pipe(PermissionFields, RELATIONS_OBJECT.permission.ascendants))
+        @Query(
+            new GET_Pipe(
+                PermissionFields,
+                RELATIONS_OBJECT.permission.ascendants
+            )
+        )
         query: FindManyOptions,
         @Res() res: Response
     ) {
@@ -61,7 +66,7 @@ export class PermissionsController {
     @Post()
     @EditorsWrapper(CreatePermissionDto, "create a new permission")
     async createPermission(
-        @Body(new POST_PATCH_Pipe(TablesNames.PRODUCTS))
+        @Body(new POST_PATCH_Pipe(TablesNames.PERMISSION))
         createPermissionDto: CreatePermissionDto,
         @Res() res: Response
     ) {
@@ -75,12 +80,15 @@ export class PermissionsController {
     @EditorsWrapper(UpdatePermissionDto, "update a permission")
     async updatePermission(
         @Param("id") id: string,
-        @Body(new POST_PATCH_Pipe(TablesNames.PRODUCTS))
+        @Body(new POST_PATCH_Pipe(TablesNames.PERMISSION))
         updatePermissionDto: UpdatePermissionDto,
         @Res() res: Response
     ) {
         const response: CustomResponseType<UpdateResult> =
-            await this.permissionsService.updatePermission(id, updatePermissionDto);
+            await this.permissionsService.updatePermission(
+                id,
+                updatePermissionDto
+            );
 
         return res.status(response.status).json(response);
     }

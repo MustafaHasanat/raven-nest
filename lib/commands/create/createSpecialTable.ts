@@ -123,8 +123,8 @@ const createSpecialTableInjection = ({
             ],
         },
         {
-            signature: "tables-data.enum.ts",
-            injectable: join(enumsPath, "tables-data.enum.ts"),
+            signature: "tables.enum.ts",
+            injectable: join(enumsPath, "tables.enum.ts"),
             additions: [
                 {
                     addition: {

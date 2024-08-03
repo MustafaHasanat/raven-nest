@@ -31,7 +31,7 @@ const createDatabaseBuilder = async (memoValues: MemoValues) => {
                 "app.module.ts",
                 "entities/entities.ts",
                 "entities/index.ts",
-                "tables-data.enum.ts",
+                "tables.enum.ts",
                 ".env",
                 "role.entity.ts",
                 "create-role-dto.ts",

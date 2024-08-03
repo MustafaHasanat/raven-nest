@@ -61,7 +61,7 @@ export class RolesController {
     @Post()
     @EditorsWrapper(CreateRoleDto, "create a new role")
     async createRole(
-        @Body(new POST_PATCH_Pipe(TablesNames.PRODUCTS))
+        @Body(new POST_PATCH_Pipe(TablesNames.ROLE))
         createRoleDto: CreateRoleDto,
         @Req() req: Request,
         @Res() res: Response
@@ -79,7 +79,7 @@ export class RolesController {
     @EditorsWrapper(UpdateRoleDto, "update a role")
     async updateRole(
         @Param("id") id: string,
-        @Body(new POST_PATCH_Pipe(TablesNames.PRODUCTS))
+        @Body(new POST_PATCH_Pipe(TablesNames.ROLE))
         updateRoleDto: UpdateRoleDto,
         @Res() res: Response
     ) {

@@ -225,8 +225,12 @@ export const initInjection = (): InjectTemplate[] => [
             {
                 keyword: "*",
                 addition: {
-                    base: "memo.json\n\n",
+                    base: "memo.json\n.env\n\n",
                     additionIsFile: false,
+                    conditional: {
+                        type: "SUPPOSED_TO_BE_THERE",
+                        data: "memo"
+                    },
                 },
             },
         ],

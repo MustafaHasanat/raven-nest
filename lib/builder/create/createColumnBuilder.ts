@@ -113,9 +113,8 @@ const createColumnBuilder = async (memoValues: MemoValues) => {
                 "TABLE.entity.ts",
                 "create-TABLE.dto.ts",
                 "update-TABLE.dto.ts",
-                "tables-data.enum.ts",
+                "tables.enum.ts",
                 "TABLE.service.ts",
-                "transformers.ts",
             ]),
         ])
         .then(async ({ mainDest, overwrite }) => {

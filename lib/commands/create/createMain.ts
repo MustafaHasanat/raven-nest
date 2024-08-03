@@ -159,7 +159,7 @@ export const createMainInjection = ({
     rootDir,
     isAWS,
     isMailer,
-    mainDest
+    mainDest,
 }: CreateMainProps): InjectTemplate[] =>
     [
         // extra files
@@ -173,6 +173,10 @@ export const createMainInjection = ({
                               addition: {
                                   base: 'import { S3Module } from "./schemas/aws/aws.module";\n',
                                   additionIsFile: false,
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: "S3Module",
+                                  },
                               },
                               keyword: "*",
                           },
@@ -180,6 +184,10 @@ export const createMainInjection = ({
                               addition: {
                                   base: "\n// --- AWS-S3 ---\nS3Module,",
                                   additionIsFile: false,
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: "S3Module",
+                                  },
                               },
                               keyword: "// ===== services =====",
                           },
@@ -192,12 +200,20 @@ export const createMainInjection = ({
                               addition: {
                                   base: 'import { MailerModule } from "@nestjs-modules/mailer";\n',
                                   additionIsFile: false,
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: "MailerModule",
+                                  },
                               },
                           },
                           {
                               keyword: "// ===== services =====",
                               addition: {
                                   base: "components/typescript/service/mailer.txt",
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: "MailerModule",
+                                  },
                               },
                           },
                       ]
@@ -236,6 +252,10 @@ export const createMainInjection = ({
                               addition: {
                                   base: "\nAWS_ACCESS_KEY=***\nAWS_SECRET_ACCESS_KEY=***\nAWS_REGION=us-east-1\nS3_BUCKET_NAME=***\n",
                                   additionIsFile: false,
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: "AWS_ACCESS_KEY",
+                                  },
                               },
                           },
                       ]
@@ -247,6 +267,10 @@ export const createMainInjection = ({
                               addition: {
                                   base: '\nOFFICIAL_EMAIL="exampe@gmail.com"\nOFFICIAL_EMAIL_PASSWORD="***"\nMAILER_SERVICE_PROVIDER=hotmail\n',
                                   additionIsFile: false,
+                                  conditional: {
+                                      type: "SUPPOSED_TO_BE_THERE",
+                                      data: "nMAILER_SERVICE_PROVIDER",
+                                  },
                               },
                           },
                       ]

@@ -14,6 +14,8 @@ class SubPath {
             entitiesPath,
             schemasPath,
             dtoPath,
+            pipesPath,
+            constantsPath,
             enumsPath,
             typesPath,
             middlewaresPath,
@@ -26,6 +28,8 @@ class SubPath {
         this.entitiesPath = entitiesPath;
         this.schemasPath = schemasPath;
         this.dtoPath = dtoPath;
+        this.pipesPath = pipesPath;
+        this.constantsPath = constantsPath;
         this.typesPath = typesPath;
         this.middlewaresPath = middlewaresPath;
     }
@@ -34,8 +38,10 @@ class SubPath {
     entitiesPath = "";
     schemasPath = "";
     dtoPath = "";
+    pipesPath = "";
     typesPath = "";
     middlewaresPath = "";
+    constantsPath = "";
     disablePlural = false;
 
     private getPaths = ({ mainDir, nameVariant }: NewPathProps) => {
@@ -49,6 +55,8 @@ class SubPath {
             dtoPath,
             typesPath,
             middlewaresPath,
+            constantsPath,
+            pipesPath,
         ] = [
             pathConvertor(mainDir, "entities"),
             pathConvertor(mainDir, "common/enums"),
@@ -62,6 +70,8 @@ class SubPath {
             ),
             pathConvertor(mainDir, `common/types`),
             pathConvertor(mainDir, `common/middlewares`),
+            pathConvertor(mainDir, `common/constants`),
+            pathConvertor(mainDir, `common/pipes`),
         ];
 
         // create the paths if they don't exist
@@ -72,6 +82,8 @@ class SubPath {
             enumsPath,
             typesPath,
             middlewaresPath,
+            constantsPath,
+            pipesPath,
         ]);
 
         return {
@@ -81,6 +93,8 @@ class SubPath {
             enumsPath,
             typesPath,
             middlewaresPath,
+            constantsPath,
+            pipesPath,
         };
     };
 }
