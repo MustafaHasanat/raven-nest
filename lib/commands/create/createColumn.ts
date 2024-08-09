@@ -1,122 +1,68 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CreateColumnProps } from "../../interfaces/builder.js";
 import { InjectTemplate } from "../../types/injectTemplate.js";
 import { join } from "path";
 
 const createColumnInjection = ({
-    columnData: {
-        columnName,
-        mapsData: { dtoCreate, dtoUpdate, entityType, dtoType },
-        entityProperties,
-        dtoProperties,
-        decorators: { decoratorsValues, decoratorsImports },
-        specialInjections,
+    columnAdditions: {
+        entityAdditions,
+        createDtoAdditions,
+        updateDtoAdditions,
     },
     paths: { entitiesPath, dtoPath, enumsPath },
-    tableNameVariants: { camelCaseName, upperCaseName },
-    columNameVariants: { upperSnakeCaseName },
+    tableNameVariants,
+    columNameVariants,
 }: CreateColumnProps): InjectTemplate[] =>
     [
         {
             signature: "TABLE.entity.ts",
-            injectable: join(entitiesPath, `${camelCaseName}.entity.ts`),
-            additions: [
-                decoratorsImports
-                    ? {
-                          keyword: "*",
-                          addition: {
-                              base: `${decoratorsImports}\n`,
-                              additionIsFile: false,
-                          },
-                      }
-                    : null,
+            injectable: join(
+                entitiesPath,
+                `${tableNameVariants.camelCaseName}.entity.ts`
+            ),
+            additions: entityAdditions,
+            deletions: [
                 {
-                    keyword: "--- columns ---",
-                    addition: {
-                        base:
-                            `\n${decoratorsValues || ""}` +
-                            `\n@Column({\n${
-                                entityProperties || ""
-                            }\n})\n${columnName}: ${entityType};\n`,
-                        additionIsFile: false,
+                    keyword: "// --- decorators ---",
+                    deletion: {
+                        isWholeLine: true,
                     },
-                },
-                {
-                    keyword: "{ Entity",
-                    addition: { base: ", Column", additionIsFile: false },
                 },
             ],
         },
         {
             signature: "create-TABLE.dto.ts",
-            injectable: join(dtoPath, `create-${camelCaseName}.dto.ts`),
-            additions: [
-                {
-                    keyword: "*",
-                    addition: {
-                        base: `import { ApiProperty } from '@nestjs/swagger';\n`,
-                        additionIsFile: false,
-                        conditional: {
-                            type: "SUPPOSED_TO_BE_THERE",
-                            data: "ApiProperty",
-                        },
-                    },
-                },
-                decoratorsImports
-                    ? {
-                          keyword: "*",
-                          addition: {
-                              base: `${decoratorsImports}\n`,
-                              additionIsFile: false,
-                          },
-                      }
-                    : null,
-                {
-                    keyword: "--- Original fields ---",
-                    addition: {
-                        base: `\n${decoratorsValues || ""}\n@ApiProperty({\n${
-                            dtoProperties ? dtoProperties + "," : ""
-                        }\n${dtoCreate || ""}\n})\n${columnName}: ${dtoType};\n`,
-                        additionIsFile: false,
-                    },
-                },
-            ],
+            injectable: join(
+                dtoPath,
+                `create-${tableNameVariants.camelCaseName}.dto.ts`
+            ),
+            additions: createDtoAdditions,
         },
         {
             signature: "update-TABLE.dto.ts",
-            injectable: join(dtoPath, `update-${camelCaseName}.dto.ts`),
-            additions: [
-                {
-                    keyword: "PartialType",
-                    addition: {
-                        base: ", ApiProperty ",
-                        additionIsFile: false,
-                    },
-                },
-                {
-                    keyword: "--- Original fields ---",
-                    addition: {
-                        base: `\n\n@ApiProperty({ ${
-                            dtoUpdate || ""
-                        } })\n${columnName}?: ${dtoType};\n`,
-                        additionIsFile: false,
-                    },
-                },
-            ],
+            injectable: join(
+                dtoPath,
+                `update-${tableNameVariants.camelCaseName}.dto.ts`
+            ),
+            additions: updateDtoAdditions,
         },
         {
             signature: "tables.enum.ts",
             injectable: join(enumsPath, "tables.enum.ts"),
             additions: [
                 {
-                    keyword: `${upperCaseName}Fields {`,
+                    keyword: `${tableNameVariants.upperCaseName}Fields {`,
                     addition: {
-                        base: `\n${upperSnakeCaseName} = '${columnName}', `,
+                        base: `\n${columNameVariants.upperSnakeCaseName} = '${columNameVariants.camelCaseName}',\n`,
                         additionIsFile: false,
+                        conditional: {
+                            type: "SUPPOSED_TO_BE_THERE",
+                            data: `${tableNameVariants.upperCaseName}Fields`,
+                        },
                     },
                 },
             ],
         },
-        ...specialInjections,
     ] as InjectTemplate[];
 
 export { createColumnInjection };

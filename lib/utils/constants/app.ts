@@ -1,4 +1,4 @@
-import { AppProps } from "lib/types/app";
+import { AppProps } from "../../types/app";
 import { join } from "path";
 
 const appConstants: AppProps = {

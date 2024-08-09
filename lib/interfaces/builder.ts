@@ -1,7 +1,12 @@
-import { ColumnTypeChoice } from "lib/enums/createAction.js";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+    ColumnDecoratorChoice,
+    ColumnPropertyChoice,
+    ColumnTypeChoice,
+} from "../enums/createAction.js";
 import NameVariant from "../models/nameVariant.js";
 import SubPath from "../models/subPath.js";
-import { InjectTemplate } from "../types/injectTemplate.js";
+import { InjectionAdditionAction } from "../types/injectTemplate.js";
 
 // create main
 export interface CreateMainProps {
@@ -39,27 +44,45 @@ export interface CreateTableProps {
 }
 
 // create column
+
+export interface ColumnAdditions {
+    entityAdditions: InjectionAdditionAction[];
+    createDtoAdditions: InjectionAdditionAction[];
+    updateDtoAdditions: InjectionAdditionAction[];
+}
+
+export interface GetColumnInjectionAdditions {
+    columNameVariants: NameVariant;
+    tableNameVariants: NameVariant;
+    columnType: ColumnTypeChoice[];
+    description: string;
+    defaultValue: string;
+    columnProperties: ColumnPropertyChoice[];
+    columnDecorators: ColumnDecoratorChoice[];
+}
+
 export interface CreateColumnProps {
-    columnData: {
-        columnName: string;
-        columnType: ColumnTypeChoice;
-        mapsData: {
-            dtoCreate: string | null;
-            dtoUpdate: string | null;
-            entityType: string;
-            dtoType: string;
-        };
-        entityProperties: string | null;
-        decorators: {
-            decoratorsValues: string | null;
-            decoratorsImports: string | null;
-        };
-        dtoProperties: string | null;
-        specialInjections: InjectTemplate[];
-    };
     paths: SubPath;
     tableNameVariants: NameVariant;
     columNameVariants: NameVariant;
+    columnAdditions: ColumnAdditions;
+    // columnData: {
+    //     columnName: string;
+    //     columnType: ColumnTypeChoice;
+    //     mapsData: {
+    //         dtoCreate: string | null;
+    //         dtoUpdate: string | null;
+    //         entityType: string;
+    //         dtoType: string;
+    //     };
+    //     entityProperties: string | null;
+    //     decorators: {
+    //         decoratorsValues: string | null;
+    //         decoratorsImports: string | null;
+    //     };
+    //     dtoProperties: string | null;
+    //     specialInjections: InjectTemplate[];
+    // };
 }
 
 // create relation

@@ -1,3 +1,6 @@
+import { ApiProperty } from "@nestjs/swagger";
+import * as ClassValidators from "class-validator";
+
 export class CreateTABLE_UPPER_NAMEDto {
     // --- Original fields ---
     // --- Relational fields ---

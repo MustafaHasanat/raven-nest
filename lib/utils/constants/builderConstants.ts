@@ -211,6 +211,12 @@ const builderConstants: BuilderConstantsProps = {
             default: "",
             message: "Write down a description for this field: (optional)",
         },
+        defaultValue: {
+            type: "input",
+            name: "defaultValue",
+            default: null,
+            message: "Write down the default value for this field: (optional)",
+        },
         columnProperties: {
             ...sharedAttrs.checkbox.multiple,
             type: "checkbox",

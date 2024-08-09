@@ -30,8 +30,8 @@ export const columnTypeChoices = [
         description: "create an enum colum (specified string values)",
     },
     {
-        name: "object",
-        value: "object",
+        name: "json",
+        value: "json",
         description: "create an object-shape column",
     },
     {

@@ -1,4 +1,4 @@
-import { InjectTemplate } from "lib/types/injectTemplate";
+import { InjectTemplate } from "../../types/injectTemplate";
 import { CloneTemplate } from "../../types/cloneTemplate";
 import { join } from "path";
 

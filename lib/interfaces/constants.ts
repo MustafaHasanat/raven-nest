@@ -31,6 +31,7 @@ export interface BuilderConstantsProps {
         newColumn: QuestionCollection<any>;
         tableName: QuestionCollection<any>;
         description: QuestionCollection<any>;
+        defaultValue: QuestionCollection<any>;
         mainDest: QuestionCollection<any>;
         columnName: QuestionCollection<any>;
         columnType: QuestionCollection<any>;

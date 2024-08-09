@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import inquirer from "inquirer";
 import constants from "../../utils/constants/builderConstants.js";
 import { createColumnInjection } from "../../commands/create/createColumn.js";
-import { getColumnAttributes } from "../../utils/helpers/columnHelpers.js";
-import { addSpecialItems } from "../../utils/helpers/columnSpecialTypes.js";
 import NameVariant from "../../models/nameVariant.js";
 import SubPath from "../../models/subPath.js";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "../../types/actions.js";
-import {
-    MemorizerProps,
-    memosToQuestions,
-} from "../../engines/memorizer.js";
+import { MemorizerProps, memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
-import { ColumnTypeChoice } from "../../enums/createAction.js";
+import {
+    ColumnTypeChoice,
+    ColumnDecoratorChoice,
+    ColumnPropertyChoice,
+} from "../../enums/createAction.js";
+import getEntityAdditions from "../../utils/helpers/columnHelpers/getEntityAdditions.js";
 
 const columnBuilder = async ({
     mainDest,
@@ -31,6 +32,7 @@ const columnBuilder = async ({
             constants.createColumn.columnName,
             constants.createColumn.columnType,
             constants.createColumn.description,
+            constants.createColumn.defaultValue,
             constants.createColumn.columnProperties,
             constants.createColumn.columnDecorators,
         ])
@@ -39,6 +41,7 @@ const columnBuilder = async ({
                 tableName,
                 columnName,
                 description,
+                defaultValue,
                 columnType,
                 columnProperties,
                 columnDecorators,
@@ -46,9 +49,10 @@ const columnBuilder = async ({
                 tableName: string;
                 columnName: string;
                 description: string;
+                defaultValue: string;
                 columnType: ColumnTypeChoice[];
-                columnProperties: string[];
-                columnDecorators: string[];
+                columnProperties: ColumnPropertyChoice[];
+                columnDecorators: ColumnDecoratorChoice[];
             }) => {
                 // get the names variants and the paths
                 const tableNameVariantObj = new NameVariant(tableName);
@@ -58,23 +62,24 @@ const columnBuilder = async ({
                     nameVariant: tableNameVariantObj,
                 });
 
-                const isRequired =
-                    columnProperties.indexOf("isRequired") !== -1;
+                const entityAdditions = await getEntityAdditions({
+                    tableNameVariants: tableNameVariantObj,
+                    columNameVariants: columnNameVariantObj,
+                    columnType,
+                    description,
+                    defaultValue,
+                    columnProperties,
+                    columnDecorators,
+                });
 
                 const isDone = await manipulator({
                     actionTag: "create-column",
                     injectionCommands: createColumnInjection({
-                        columnData: await addSpecialItems({
-                            columnName,
-                            columnType: columnType[0],
-                            isRequired,
-                            description,
-                            ...getColumnAttributes({
-                                columnProperties,
-                                columnDecorators,
-                                isRequired,
-                            }),
-                        }),
+                        columnAdditions: {
+                            entityAdditions,
+                            createDtoAdditions: [],
+                            updateDtoAdditions: [],
+                        },
                         paths: subPathObj,
                         tableNameVariants: tableNameVariantObj,
                         columNameVariants: columnNameVariantObj,

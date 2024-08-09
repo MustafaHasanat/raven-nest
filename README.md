@@ -124,16 +124,22 @@ Create the necessary files and directories for the selected 'files-set'.
 
 ### Available options
 
-| Option  | Files Set | Description                        | Details                      |
-| :------ | :-------- | :--------------------------------- | :--------------------------- |
-| aws     | app       | Add the AWS service to the app.    | s3 bucket                    |
-| mailer  | app       | Add the mailer service to the app. | outlook, gmail               |
-| special | table     | Create a special type of tables.   | product, notification  |
+| Option  | Files Set | Description                        | Details               |
+| :------ | :-------- | :--------------------------------- | :-------------------- |
+| aws     | app       | Add the AWS service to the app.    | s3 bucket             |
+| mailer  | app       | Add the mailer service to the app. | outlook, gmail        |
+| special | table     | Create a special type of tables.   | product, notification |
 
 ### Examples
 
--   `ravennest create --aws --mailer main`
--   `ravennest create --special product table`
+| Action                          | Command                                    |
+| :------------------------------ | :----------------------------------------- |
+| create the main files           | `ravennest create --aws --mailer main`     |
+| configure the database          | `ravennest create database`                |
+| create a table                  | `ravennest create table `                  |
+| create a special type of tables | `ravennest create --special product table` |
+| create a column                 | `ravennest create column `                 |
+| create a relation               | `ravennest create relation `               |
 
 # Specifications
 

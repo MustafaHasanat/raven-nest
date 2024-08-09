@@ -244,7 +244,11 @@ const createTableInjection = ({
             },
             {
                 addition: {
-                    base: `export enum ${upperCaseName}Fields {}\n\n`,
+                    base: `export enum ${upperCaseName}Fields {
+                            ID = "id",
+                            CREATED_AT = "createdAt",
+                            UPDATED_AT = "updatedAt",
+                        }\n\n`,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
