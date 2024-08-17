@@ -9,7 +9,7 @@ const createColumnInjection = ({
         createDtoAdditions,
         updateDtoAdditions,
     },
-    paths: { entitiesPath, dtoPath, enumsPath },
+    paths: { entitiesPath, dtoPath, enumsPath, pipesPath },
     tableNameVariants,
     columNameVariants,
 }: CreateColumnProps): InjectTemplate[] =>
@@ -26,6 +26,11 @@ const createColumnInjection = ({
                     keyword: "// --- decorators ---",
                     deletion: {
                         isWholeLine: true,
+                        conditional: {
+                            type: "REPLACED_WITH",
+                            data: "",
+                            special: "INDEX_CUT",
+                        },
                     },
                 },
             ],
@@ -62,6 +67,11 @@ const createColumnInjection = ({
                     },
                 },
             ],
+        },
+        {
+            signature: "post_patch.pipe.ts",
+            injectable: join(pipesPath, "post_patch.pipe.ts"),
+            additions: [],
         },
     ] as InjectTemplate[];
 

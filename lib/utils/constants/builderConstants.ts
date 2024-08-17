@@ -13,6 +13,7 @@ import {
     tableNamesValidator,
 } from "../validators/stringValidators.js";
 import { dirFilter, inputTrimmer } from "../filters/stringFilters.js";
+import { columnTableValidator } from "../validators/fileSystemValidators.js";
 
 const sharedAttrs = {
     input: {
@@ -189,6 +190,7 @@ const builderConstants: BuilderConstantsProps = {
             name: "tableName",
             message:
                 "What's the name of your table? (use singular camelCase nouns to avoid errors, like: user, product, ...)",
+            validate: (input: string) => columnTableValidator(input),
         },
         columnName: {
             ...sharedAttrs.input.name,

@@ -47,15 +47,15 @@ export const additionAction = async (props: {
             replica = false,
         } = additions[0];
 
-        if (!additionIsFile && replacements.length > 0) {
-            specialLog({
-                message:
-                    "You shouldn't have items in 'replacements' while 'additionIsFile' is false!",
-                situation: "ERROR",
-                scope: "tool misuse",
-            });
-            return null;
-        }
+        // if (!additionIsFile && replacements.length > 0) {
+        //     specialLog({
+        //         message:
+        //             "You shouldn't have items in 'replacements' while 'additionIsFile' is false!",
+        //         situation: "ERROR",
+        //         scope: "tool misuse",
+        //     });
+        //     return null;
+        // }
 
         if (type === "SUPPOSED_TO_BE_THERE" && replica) {
             specialLog({
@@ -79,12 +79,10 @@ export const additionAction = async (props: {
             : base;
 
         // apply all the replacements on the contents
-        const modifiedAddition = additionIsFile
-            ? await replaceStrings({
-                  contents: additionContents,
-                  items: replacements,
-              })
-            : additionContents;
+        const modifiedAddition = await replaceStrings({
+            contents: additionContents,
+            items: replacements,
+        });
 
         // inject the final result into the original file's contents
         const modifiedInjectable = injectString({

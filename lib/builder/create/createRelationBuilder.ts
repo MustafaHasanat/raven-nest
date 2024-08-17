@@ -5,10 +5,7 @@ import NameVariant from "../../models/nameVariant.js";
 import SubPath from "../../models/subPath.js";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
-import {
-    MemorizerProps,
-    memosToQuestions,
-} from "../../engines/memorizer.js";
+import { MemorizerProps, memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 
 const relationBuilder = async ({
@@ -40,7 +37,7 @@ const relationBuilder = async ({
                 nameVariant: tableNameVariantObj2,
             });
 
-            const isDone = await manipulator({
+            const { cloning, injection } = await manipulator({
                 actionTag: "create-relation",
                 injectionCommands: createRelationInjection({
                     relationType: relationType[0],
@@ -56,7 +53,7 @@ const relationBuilder = async ({
                 memo,
                 overwrite,
             });
-            if (!isDone) return;
+            if (!cloning || !injection) return;
 
             // ask the user if they want to add another relation
             await inquirer

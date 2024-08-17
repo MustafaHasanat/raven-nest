@@ -21,7 +21,7 @@ const getEntityAdditions = async ({
     const replacements: any = [];
 
     // get the default value
-    let specialDefault = "''";
+    let specialDefault = `"${defaultValue}"` || "''";
 
     if (columnType[0] === ColumnTypeChoice.TIME)
         specialDefault = "'new Date().toLocaleTimeString()'";
@@ -33,8 +33,8 @@ const getEntityAdditions = async ({
     const entityBase = `
         // --- decorators ---
         @Column({
-            type: "${columnType[0]}",
-            default: ${specialDefault || defaultValue},
+            type: "${columnType[0] === "string" ? "text" : columnType[0]}",
+            default: ${specialDefault},
             IS_NULLABLE_PLACEHOLDER
             IS_UNIQUE_PLACEHOLDER
             ENUM_PLACEHOLDER
@@ -52,7 +52,7 @@ const getEntityAdditions = async ({
                     },
                     {
                         oldString: "IS_REQUIRED_PLACEHOLDER",
-                        newString: "?",
+                        newString: "",
                     }
                 );
             } else if (property === ColumnPropertyChoice.IS_UNIQUE) {
@@ -77,7 +77,7 @@ const getEntityAdditions = async ({
         },
         {
             oldString: "IS_REQUIRED_PLACEHOLDER",
-            newString: "",
+            newString: "?",
         },
         {
             oldString: "IS_UNIQUE_PLACEHOLDER",
@@ -156,7 +156,7 @@ const getEntityAdditions = async ({
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: decoratorsMapObject[decorator].name,
+                        data: `, ${decoratorsMapObject[decorator].name}`,
                     },
                 },
             });

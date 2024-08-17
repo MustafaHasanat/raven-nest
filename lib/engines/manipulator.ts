@@ -17,6 +17,11 @@ interface ManipulatorProps {
     skipOverwrite?: boolean;
 }
 
+interface ReturnManipulator {
+    cloning: boolean;
+    injection: boolean;
+}
+
 export default async function manipulator({
     actionTag,
     cloningCommands = [],
@@ -24,7 +29,7 @@ export default async function manipulator({
     memo,
     overwrite,
     skipOverwrite = false,
-}: ManipulatorProps): Promise<boolean> {
+}: ManipulatorProps): Promise<ReturnManipulator> {
     try {
         // memorize the selections
         memo && (await memorizer(memo));
@@ -44,7 +49,7 @@ export default async function manipulator({
                 situation: "ERROR",
             });
             logNumberedList(missingFilesRes);
-            return false;
+            return { cloning: false, injection: false };
         }
         // filter the cloning and injecting commands based on the user selection
         const filteredCloningCommands = cloningCommands.filter(
@@ -60,7 +65,7 @@ export default async function manipulator({
                       skipOverwrite ? cloningCommands : filteredCloningCommands
                   )
                 : true;
-        if (!isCloneDone) return false;
+        if (!isCloneDone) return { cloning: false, injection: false };
         // apply the injection commands - only if the cloning stage was successful
         const isInjectDone =
             injectionCommands.length > 0
@@ -78,11 +83,11 @@ export default async function manipulator({
                 message: "All processes are done",
             });
             await memorizeAction(actionTag);
-            return true;
+            return { cloning: true, injection: true };
         }
-        return false;
+        return { cloning: isCloneDone, injection: isInjectDone };
     } catch (error) {
         specialLog({ situation: "ERROR", message: `${error}` });
-        return false;
+        return { cloning: false, injection: false };
     }
 }

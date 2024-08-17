@@ -2,6 +2,7 @@
     "usage": "This file will be used to track the actions of the tool. You can delete it after you finish setting up you project.",
 
     "ravennest": {
-        "usage": "This section is reserved for the raven-nest tool."
+        "usage": "This section is reserved for the raven-nest tool.",
+        "tables": {}
     }
 }

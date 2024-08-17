@@ -14,7 +14,7 @@ import SubPath from "../../models/subPath.js";
 import { CreateSpecialArgument } from "../../enums/actions.js";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
-import { memosToQuestions } from "../../engines/memorizer.js";
+import { memorizeTable, memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 
 /**
@@ -45,7 +45,7 @@ const createTableBuilder = async (
             "TABLE-fields.enum.ts",
             "relations.ts",
             "relations.ts",
-            "post_patch.pipe.ts"
+            "post_patch.pipe.ts",
         ]),
     ];
 
@@ -79,7 +79,7 @@ const createTableBuilder = async (
                 tableName: special || tableName,
             };
 
-            await manipulator({
+            const { cloning, injection } = await manipulator({
                 actionTag: "create-table",
                 cloningCommands: isSpecialTable
                     ? createSpecialTableCloning(createTableObj)
@@ -92,6 +92,12 @@ const createTableBuilder = async (
                     category: MemoCategory.RAVEN_NEST,
                 },
                 overwrite,
+            });
+            if (!cloning || !injection) return;
+
+            await memorizeTable({
+                category: MemoCategory.RAVEN_NEST,
+                tableName,
             });
         });
 };

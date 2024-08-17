@@ -18,6 +18,36 @@ export interface MemorizerProps {
     category: MemoCategory;
 }
 
+// -------------------------------------
+
+export const readMemoFile = async (category: MemoCategory): Promise<any> => {
+    try {
+        const memoFileContent: { [key: string]: any } = JSON.parse(
+            await readFile("memo.json", "utf8")
+        );
+
+        !!!memoFileContent[category] && (memoFileContent[category] = {});
+
+        return memoFileContent;
+    } catch (error) {
+        throw Error(`Error while reading 'memo.json': ${error}`);
+    }
+};
+
+export const writeMemoFile = async (memoFileContent: {
+    [key: string]: any;
+}): Promise<void> => {
+    try {
+        await writeFile(
+            join(process.cwd(), "memo.json"),
+            JSON.stringify(memoFileContent),
+            "utf8"
+        );
+    } catch (error) {
+        throw Error(`Error while modifying 'memo.json': ${error}`);
+    }
+};
+
 export const checkMemo = async ({
     keys,
     category,
@@ -76,26 +106,68 @@ export const memosToQuestions = (
 
 export const memorizer = async ({ pairs, category }: MemorizerProps) => {
     try {
-        const memoFileContent: { [key: string]: any } = JSON.parse(
-            await readFile("memo.json", "utf8")
-        );
-        !!!memoFileContent[category] && (memoFileContent[category] = {});
+        const memoFileContent = await readMemoFile(category);
 
         Object.entries(pairs).forEach((pair) => {
             const [key, value] = pair;
             memoFileContent[category][key] = value;
         });
 
-        await writeFile(
-            join(process.cwd(), "memo.json"),
-            JSON.stringify(memoFileContent),
-            "utf8"
-        );
+        await writeMemoFile(memoFileContent);
     } catch (error) {
         specialLog({
             situation: "ERROR",
             message: `${error}`,
             scope: "memorizer",
+        });
+    }
+};
+
+export const memorizeTable = async ({
+    tableName,
+    category,
+}: {
+    tableName: string;
+    category: MemoCategory;
+}): Promise<void> => {
+    try {
+        const memoFileContent = await readMemoFile(category);
+
+        memoFileContent[category]["tables"][tableName] = {
+            ...(memoFileContent[category]["tables"][tableName] || {}),
+        };
+
+        await writeMemoFile(memoFileContent);
+    } catch (error) {
+        specialLog({
+            situation: "ERROR",
+            message: `Error while memorizing the table: ${error}`,
+        });
+    }
+};
+
+export const memorizeColumn = async ({
+    columnName,
+    tableName,
+    category,
+}: {
+    columnName: string;
+    tableName: string;
+    category: MemoCategory;
+}): Promise<void> => {
+    try {
+        const memoFileContent = await readMemoFile(category);
+
+        memoFileContent[category]["tables"][tableName][columnName] = {
+            ...(memoFileContent[category]["tables"][tableName][columnName] ||
+                {}),
+        };
+
+        await writeMemoFile(memoFileContent);
+    } catch (error) {
+        specialLog({
+            situation: "ERROR",
+            message: `Error while memorizing the column: ${error}`,
         });
     }
 };

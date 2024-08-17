@@ -6,7 +6,11 @@ import NameVariant from "../../models/nameVariant.js";
 import SubPath from "../../models/subPath.js";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
-import { MemorizerProps, memosToQuestions } from "../../engines/memorizer.js";
+import {
+    memorizeColumn,
+    MemorizerProps,
+    memosToQuestions,
+} from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 import {
     ColumnTypeChoice,
@@ -14,6 +18,18 @@ import {
     ColumnPropertyChoice,
 } from "../../enums/createAction.js";
 import getEntityAdditions from "../../utils/helpers/columnHelpers/getEntityAdditions.js";
+import getCreateDtoAdditions from "../../utils/helpers/columnHelpers/getCreateDtoAdditions.js";
+import getUpdateDtoAdditions from "../../utils/helpers/columnHelpers/getUpdateDtoAdditions.js";
+
+interface ColumnPromptValues {
+    tableName: string;
+    columnName: string;
+    description: string;
+    defaultValue: string;
+    columnType: ColumnTypeChoice[];
+    columnProperties: ColumnPropertyChoice[];
+    columnDecorators: ColumnDecoratorChoice[];
+}
 
 const columnBuilder = async ({
     mainDest,
@@ -45,15 +61,7 @@ const columnBuilder = async ({
                 columnType,
                 columnProperties,
                 columnDecorators,
-            }: {
-                tableName: string;
-                columnName: string;
-                description: string;
-                defaultValue: string;
-                columnType: ColumnTypeChoice[];
-                columnProperties: ColumnPropertyChoice[];
-                columnDecorators: ColumnDecoratorChoice[];
-            }) => {
+            }: ColumnPromptValues) => {
                 // get the names variants and the paths
                 const tableNameVariantObj = new NameVariant(tableName);
                 const columnNameVariantObj = new NameVariant(columnName);
@@ -62,7 +70,7 @@ const columnBuilder = async ({
                     nameVariant: tableNameVariantObj,
                 });
 
-                const entityAdditions = await getEntityAdditions({
+                const props = {
                     tableNameVariants: tableNameVariantObj,
                     columNameVariants: columnNameVariantObj,
                     columnType,
@@ -70,15 +78,19 @@ const columnBuilder = async ({
                     defaultValue,
                     columnProperties,
                     columnDecorators,
-                });
+                };
 
-                const isDone = await manipulator({
+                const entityAdditions = await getEntityAdditions(props);
+                const createDtoAdditions = await getCreateDtoAdditions(props);
+                const updateDtoAdditions = await getUpdateDtoAdditions(props);
+
+                const { cloning, injection } = await manipulator({
                     actionTag: "create-column",
                     injectionCommands: createColumnInjection({
                         columnAdditions: {
                             entityAdditions,
-                            createDtoAdditions: [],
-                            updateDtoAdditions: [],
+                            createDtoAdditions,
+                            updateDtoAdditions,
                         },
                         paths: subPathObj,
                         tableNameVariants: tableNameVariantObj,
@@ -87,7 +99,13 @@ const columnBuilder = async ({
                     memo,
                     overwrite,
                 });
-                if (!isDone) return;
+                if (!cloning || !injection) return;
+
+                await memorizeColumn({
+                    category: MemoCategory.RAVEN_NEST,
+                    tableName,
+                    columnName,
+                });
 
                 // ask the user if they want to add another column
                 await inquirer
