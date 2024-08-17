@@ -28,7 +28,7 @@ import { UpdateRoleDto } from "../../common/dto/roles/update-role.dto";
 import { DeletionQuery } from "src/common/decorators/delete.decorator";
 import { getUserTokenData } from "src/common/helpers";
 
-@ControllerWrapper("roles")
+@ControllerWrapper("role")
 export class RolesController {
     constructor(private readonly rolesService: RolesService) {}
 

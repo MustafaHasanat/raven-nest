@@ -28,7 +28,7 @@ import { UpdatePermissionDto } from "../../common/dto/permissions/update-permiss
 import { DeletionQuery } from "src/common/decorators/delete.decorator";
 import { getUserTokenData } from "src/common/helpers";
 
-@ControllerWrapper("permissions")
+@ControllerWrapper("permission")
 export class PermissionsController {
     constructor(private readonly permissionsService: PermissionsService) {}
 

@@ -18,9 +18,9 @@ type TransformerMappingType = {
 };
 
 const tablesTransformers: { [tableName: string]: NewInstanceTransformer } = {
-    users: {},
-    roles: {},
-    permissions: {},
+    user: {},
+    role: {},
+    permission: {},
 };
 
 @Injectable()

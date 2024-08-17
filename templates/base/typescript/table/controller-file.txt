@@ -28,7 +28,7 @@ import { UpdateTABLE_UPPER_NAMEDto } from "../../common/dto/TABLE_PLURAL_LOWER_N
 import { DeletionQuery } from "src/common/decorators/delete.decorator";
 import { getUserTokenData } from "src/common/helpers";
 
-@ControllerWrapper("TABLE_PLURAL_LOWER_NAME")
+@ControllerWrapper("TABLE_LOWER_NAME")
 export class TABLE_PLURAL_UPPER_NAMEController {
     constructor(private readonly TABLE_PLURAL_LOWER_NAMEService: TABLE_PLURAL_UPPER_NAMEService) {}
 

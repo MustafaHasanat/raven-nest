@@ -106,7 +106,7 @@ const columnBuilder = async ({
 };
 
 /**
- * This function will be fired by the --create-column option
+ * This function will be fired by the "create column" command
  */
 const createColumnBuilder = async (memoValues: MemoValues) => {
     inquirer

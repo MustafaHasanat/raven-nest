@@ -125,7 +125,7 @@ const builderConstants: BuilderConstantsProps = {
         dbPassword: {
             ...sharedAttrs.input.name,
             type: "input",
-            name: "dbHost",
+            name: "dbPassword",
             message: "What's the password of your database?",
             default: "postgres",
         },

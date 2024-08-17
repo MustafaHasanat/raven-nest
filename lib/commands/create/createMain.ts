@@ -186,7 +186,7 @@ export const createMainInjection = ({
                                   additionIsFile: false,
                                   conditional: {
                                       type: "SUPPOSED_TO_BE_THERE",
-                                      data: "S3Module",
+                                      data: "// --- AWS-S3 ---",
                                   },
                               },
                               keyword: "// ===== services =====",
@@ -212,7 +212,7 @@ export const createMainInjection = ({
                                   base: "components/typescript/service/mailer.txt",
                                   conditional: {
                                       type: "SUPPOSED_TO_BE_THERE",
-                                      data: "MailerModule",
+                                      data: "// --- mailer ---",
                                   },
                               },
                           },

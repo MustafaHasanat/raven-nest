@@ -333,11 +333,11 @@ const createTableInjection = ({
             {
                 keyword: "NewInstanceTransformer } = {",
                 addition: {
-                    base: `${pluralLowerCaseName}: {},`,
+                    base: `${camelCaseName}: {},`,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: `${pluralLowerCaseName}`,
+                        data: `${camelCaseName}: {`,
                     },
                 },
             },

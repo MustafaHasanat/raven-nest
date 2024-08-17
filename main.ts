@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+
 "use strict";
 
 import { Argument, Command, Option, OptionValues } from "commander";

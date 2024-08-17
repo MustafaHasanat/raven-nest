@@ -27,7 +27,7 @@ export enum UserFields {
 export enum TablesNames {
     USER = "user",
     ROLE = "role",
-    PERMISSIONS = "permission",
+    PERMISSION = "permission",
     AWS = "aws",
     AUTH = "auth",
 }

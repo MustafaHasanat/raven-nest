@@ -178,3 +178,18 @@ Currently, the only available database is **PostgreSQL**
 # Future Updates
 
 -   **MongoDB** will be available to use
+
+---
+
+# Common Errors
+
+## Ravennest doesn't have permission on your terminal
+
+-   Open your terminal (steps for Ubuntu terminals)
+
+-   Open the `.bashrc` file using either VSCode or the terminal itself:
+
+    -   either: `code ~/.bashrc`
+    -   or: `nano ~/.bashrc`
+
+-   Provide permission to run ravennest by adding the following line at the end of the file **(after replacing the uppercase words with yours)**: `chmod +x /home/YOUR_USERNAME/.nvm/versions/node/YOUR_NODE_VERSION/bin/ravennest`
