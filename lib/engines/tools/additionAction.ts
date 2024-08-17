@@ -5,7 +5,7 @@ import { specialLog } from "../../utils/helpers/logHelpers.js";
 import { replaceStrings } from "../../utils/helpers/stringsHelpers.js";
 import { join } from "path";
 import { readFile } from "fs/promises";
-import { InjectionAdditionAction } from "../../types/injectTemplate.js";
+import { InjectionAdditionAction } from "engine";
 
 /**
  * Recursively inject the targets into the injectable string

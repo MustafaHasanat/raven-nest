@@ -1,4 +1,4 @@
-import { InjectionAdditionAction } from "../../types/injectTemplate.js";
+import { InjectionAdditionAction } from "engine";
 import { specialLog } from "../../utils/helpers/logHelpers.js";
 
 /**

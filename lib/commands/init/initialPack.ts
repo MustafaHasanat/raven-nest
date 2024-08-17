@@ -1,5 +1,4 @@
-import { CloneTemplate } from "../../types/cloneTemplate.js";
-import { InjectTemplate } from "../../types/injectTemplate.js";
+import { CloneTemplate, InjectTemplate } from "engine";
 
 export const initCloning = (): CloneTemplate[] => [
     {

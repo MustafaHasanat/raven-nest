@@ -1,7 +1,6 @@
 import { join } from "path";
 import { CreateTableProps } from "../../interfaces/builder.js";
-import { InjectTemplate } from "../../types/injectTemplate.js";
-import { CloneTemplate } from "../../types/cloneTemplate.js";
+import { CloneTemplate, InjectTemplate } from "engine";
 
 const createTableCloning = ({
     paths: { entitiesPath, dtoPath, schemasPath },
@@ -234,7 +233,7 @@ const createTableInjection = ({
             {
                 keyword: "AllTablesColumns =",
                 addition: {
-                    base: ` ${upperCaseName}Fields |`,
+                    base: ` ${upperCaseName}Fields`,
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",

@@ -6,7 +6,7 @@ import {
 } from "../enums/createAction.js";
 import NameVariant from "../models/nameVariant.js";
 import SubPath from "../models/subPath.js";
-import { InjectionAdditionAction } from "../types/injectTemplate.js";
+import { InjectionAdditionAction } from "engine";
 
 // create main
 export interface CreateMainProps {

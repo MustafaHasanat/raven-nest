@@ -5,7 +5,7 @@ import { createColumnInjection } from "../../commands/create/createColumn.js";
 import NameVariant from "../../models/nameVariant.js";
 import SubPath from "../../models/subPath.js";
 import manipulator from "../../engines/manipulator.js";
-import { MemoValues, QuestionQuery } from "../../types/actions.js";
+import { MemoValues, QuestionQuery } from "actions";
 import { MemorizerProps, memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 import {

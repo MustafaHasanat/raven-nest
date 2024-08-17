@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { join } from "path";
-import { CloneTemplate } from "../../types/cloneTemplate.js";
-import { InjectTemplate } from "../../types/injectTemplate.js";
 import { generateJWTSecret } from "../../utils/helpers/filesHelpers.js";
 import { CreateMainProps } from "../../interfaces/builder.js";
+import { CloneTemplate, InjectTemplate } from "engine";
 
 export const createMainCloning = ({
     rootDir,

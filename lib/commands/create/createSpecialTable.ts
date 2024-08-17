@@ -1,10 +1,9 @@
 /* eslint-disable no-empty-pattern */
 import { CreateTableProps } from "../../interfaces/builder.js";
-import { InjectTemplate } from "../../types/injectTemplate.js";
-import { CloneTemplate } from "../../types/cloneTemplate.js";
 import { CreateSpecialArgument } from "../../enums/actions.js";
 import { join } from "path";
 import { SpecialTableType } from "../../enums/createAction.js";
+import { CloneTemplate, InjectTemplate } from "engine";
 
 const createSpecialTableCloning = ({
     nameVariant: { camelCaseName, pluralLowerCaseName },

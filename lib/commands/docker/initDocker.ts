@@ -1,5 +1,4 @@
-import { InjectTemplate } from "../../types/injectTemplate";
-import { CloneTemplate } from "../../types/cloneTemplate";
+import { CloneTemplate, InjectTemplate } from "engine";
 import { join } from "path";
 
 const initDockerCloning = (projectName: string): CloneTemplate[] => [

@@ -8,7 +8,7 @@ import createTableBuilder from "../builder/create/createTableBuilder.js";
 import createColumnBuilder from "../builder/create/createColumnBuilder.js";
 import createRelationBuilder from "../builder/create/createRelationBuilder.js";
 import { OptionValues } from "commander";
-import { MemoValues } from "../types/actions.js";
+import { MemoValues } from "actions";
 import { preAction } from "../utils/helpers/preActionProcesses.js";
 
 export default async function createAction(

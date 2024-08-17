@@ -1,5 +1,4 @@
-import { CloneTemplate } from "../types/cloneTemplate.js";
-import { InjectTemplate } from "../types/injectTemplate.js";
+import { CloneTemplate, InjectTemplate } from "engine";
 import { logNumberedList, specialLog } from "../utils/helpers/logHelpers.js";
 import injectTemplates from "./injector.js";
 import cloneTemplates from "./cloner.js";
@@ -7,7 +6,7 @@ import { missingFiles } from "../utils/helpers/filesHelpers.js";
 import { join } from "path";
 import { execSync } from "child_process";
 import { MemorizerProps, memorizeAction, memorizer } from "./memorizer.js";
-import { ActionTag } from "../types/actions.js";
+import { ActionTag } from "actions";
 
 interface ManipulatorProps {
     actionTag: ActionTag;

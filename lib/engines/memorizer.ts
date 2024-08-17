@@ -2,7 +2,7 @@
 import { specialLog } from "../utils/helpers/logHelpers.js";
 import { MemoCategory } from "../enums/actions.js";
 import { readFile, writeFile } from "fs/promises";
-import { ActionTag, MemoValues, QuestionQuery } from "../types/actions.js";
+import { ActionTag, MemoValues, QuestionQuery } from "actions";
 import { QuestionCollection } from "inquirer";
 import { join } from "path";
 

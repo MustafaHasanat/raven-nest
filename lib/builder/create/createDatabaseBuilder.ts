@@ -6,7 +6,7 @@ import {
     createDatabaseInjection,
 } from "../../commands/create/createDatabase.js";
 import manipulator from "../../engines/manipulator.js";
-import { MemoValues, QuestionQuery } from "../../types/actions.js";
+import { MemoValues, QuestionQuery } from "actions";
 import { memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 import NameVariant from "../../models/nameVariant.js";

@@ -1,5 +1,5 @@
 import { specialLog } from "../../utils/helpers/logHelpers.js";
-import { InjectionDeletionAction } from "../../types/injectTemplate.js";
+import { InjectionDeletionAction } from "engine";
 import {
     getStrInBetween,
     indexStringCutter,

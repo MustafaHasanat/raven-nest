@@ -1,5 +1,5 @@
 import { join } from "path";
-import { CloneTemplate } from "../types/cloneTemplate.js";
+import { CloneTemplate } from "engine";
 import { writeFile } from "fs/promises";
 import { pathCreator } from "../utils/helpers/pathCreator.js";
 import { replaceStrings } from "../utils/helpers/stringsHelpers.js";

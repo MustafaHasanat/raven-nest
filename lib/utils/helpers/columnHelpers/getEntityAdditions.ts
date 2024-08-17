@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { InjectionAdditionAction } from "../../../types/injectTemplate.js";
 import { GetColumnInjectionAdditions } from "../../../interfaces/builder.js";
 import {
     ColumnDecoratorChoice,
@@ -9,6 +8,7 @@ import {
 import { decoratorsMapObject } from "../../../utils/constants/builderMapping.js";
 import inquirer from "inquirer";
 import constants from "../../../utils/constants/builderConstants.js";
+import { InjectionAdditionAction } from "engine";
 
 const getEntityAdditions = async ({
     columNameVariants,

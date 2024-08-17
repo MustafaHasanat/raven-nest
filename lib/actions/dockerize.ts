@@ -1,6 +1,6 @@
 import dockerizeInitBuilder from "../builder/docker/dockerizeInitBuilder.js";
 import { preAction } from "../utils/helpers/preActionProcesses.js";
-import { MemoValues } from "../types/actions.js";
+import { MemoValues } from "actions";
 import { specialLog } from "../utils/helpers/logHelpers.js";
 
 export default async function dockerizeAction() {

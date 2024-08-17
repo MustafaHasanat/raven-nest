@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { InjectTemplate } from "engine";
 import { CreateColumnProps } from "../../interfaces/builder.js";
-// import { InjectTemplate } from "../../types/injectTemplate.js";
 import { join } from "path";
 
 const createColumnInjection = ({

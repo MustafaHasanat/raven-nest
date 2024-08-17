@@ -2,7 +2,7 @@ import {
     DecoratorsMapProps,
     GetColumnAttributesProps,
     GetColumnAttributesReturn,
-} from "../../interfaces/utils.js";
+} from "utils-types";
 import {
     propertiesEntityMapObject,
     decoratorsMapObject,

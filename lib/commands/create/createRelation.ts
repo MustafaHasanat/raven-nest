@@ -1,5 +1,5 @@
 import { join } from "path";
-import { InjectTemplate } from "../../types/injectTemplate.js";
+import { InjectTemplate } from "engine";
 import { CreateRelationProps } from "../../interfaces/builder.js";
 
 const createRelationInjection = ({

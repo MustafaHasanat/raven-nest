@@ -1,4 +1,4 @@
-import { MemoValues } from "../../types/actions.js";
+import { MemoValues } from "actions";
 import { FullDependencies } from "../../interfaces/constants.js";
 import { checkMemo } from "../../engines/memorizer.js";
 import installPackages from "../../engines/installer.js";

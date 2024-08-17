@@ -6,7 +6,7 @@ import {
 } from "../../commands/create/createMain.js";
 import { OptionValues } from "commander";
 import manipulator from "../../engines/manipulator.js";
-import { MemoValues, QuestionQuery } from "../../types/actions.js";
+import { MemoValues, QuestionQuery } from "actions";
 import { memosToQuestions } from "../../engines/memorizer.js";
 import { MemoCategory } from "../../enums/actions.js";
 import { pathCreator } from "../../utils/helpers/pathCreator.js";

@@ -7,7 +7,7 @@ import {
 } from "../../commands/docker/initDocker.js";
 import { specialLog } from "../../utils/helpers/logHelpers.js";
 import { MemoCategory } from "../../enums/actions.js";
-import { MemoValues, QuestionQuery } from "../../types/actions.js";
+import { MemoValues, QuestionQuery } from "actions";
 import { memosToQuestions } from "../../engines/memorizer.js";
 
 export default async function dockerizeInitBuilder(memoValues: MemoValues) {

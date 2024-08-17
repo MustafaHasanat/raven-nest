@@ -1,7 +1,5 @@
-// import { CloneTemplate } from "../../types/cloneTemplate.js";
-import { CloneTemplate } from "engine";
+import { CloneTemplate, InjectTemplate } from "engine";
 import { CreateDatabaseProps } from "../../interfaces/builder.js";
-import { InjectTemplate } from "../../types/injectTemplate.js";
 
 const createDatabaseCloning = ({
     paths: { user, permission, role },

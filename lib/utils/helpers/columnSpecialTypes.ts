@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { InjectTemplate } from "../../types/injectTemplate.js";
+import { InjectTemplate } from "engine";
 import { ColumnTypeChoice } from "../../enums/createAction.js";
 import inquirer from "inquirer";
 import { replaceStrings } from "./stringsHelpers.js";
