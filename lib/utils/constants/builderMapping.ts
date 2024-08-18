@@ -32,18 +32,18 @@ export const decoratorsMapObject: {
         usage: string;
     };
 } = {
-    isUUID: { name: "IsUUID", usage: "@IsUUID()" },
-    length: { name: "Length", usage: "@Length(MIN_LENGTH, MAX_LENGTH)" },
-    isEmail: { name: "IsEmail", usage: "@IsEmail()" },
+    isUUID: { name: "IsUUID", usage: "@cv.IsUUID()" },
+    length: { name: "Length", usage: "@cv.Length(MIN_LENGTH, MAX_LENGTH)" },
+    isEmail: { name: "IsEmail", usage: "@cv.IsEmail()" },
     isStrongPassword: {
         name: "IsStrongPassword",
-        usage: "@IsStrongPassword()",
+        usage: "@cv.IsStrongPassword()",
     },
-    isPhoneNumber: { name: "IsPhoneNumber", usage: "@IsPhoneNumber()" },
-    isDecimal: { name: "IsDecimal", usage: "@IsDecimal()" },
-    isInt: { name: "IsInt", usage: "@IsInt()" },
-    isDate: { name: "IsDate", usage: "@IsDate()" },
-    isEnum: { name: "IsEnum", usage: "@IsEnum(ENUM_OBJECT)" },
+    isPhoneNumber: { name: "IsPhoneNumber", usage: "@cv.IsPhoneNumber()" },
+    isDecimal: { name: "IsDecimal", usage: "@cv.IsDecimal()" },
+    isInt: { name: "IsInt", usage: "@cv.IsInt()" },
+    isDate: { name: "IsDate", usage: "@cv.IsDate()" },
+    isEnum: { name: "IsEnum", usage: "@cv.IsEnum(ENUM_OBJECT)" },
 };
 
 /**

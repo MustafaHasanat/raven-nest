@@ -1,23 +1,55 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetColumnInjectionAdditions } from "../../../interfaces/builder.js";
-import {
-    ColumnDecoratorChoice,
-    ColumnPropertyChoice,
-    ColumnTypeChoice,
-} from "../../../enums/createAction.js";
-import { decoratorsMapObject } from "../../constants/builderMapping.js";
-import inquirer from "inquirer";
-import constants from "../../constants/builderConstants.js";
+import { ColumnPropertyChoice } from "../../../enums/createAction.js";
 import { InjectionAdditionAction } from "engine";
 
 const getUpdateDtoAdditions = async ({
     columNameVariants,
-    columnDecorators,
     columnProperties,
     columnType,
-    defaultValue,
+    specialReplacements,
 }: GetColumnInjectionAdditions): Promise<InjectionAdditionAction[]> => {
     const updateDtoAdditions: InjectionAdditionAction[] = [];
+    const replacements: any = [];
+
+    // create a base component
+    const dtoBase = `
+        @cv.IsOptional()
+        @ApiProperty({ required: false })
+        ${columNameVariants.camelCaseName}?: TYPE_PLACEHOLDER;
+    `;
+
+    // handle the properties
+    await Promise.all(
+        columnProperties.map((property) => {
+            if (property === ColumnPropertyChoice.ENUM) {
+                replacements.push({
+                    oldString: "TYPE_PLACEHOLDER",
+                    newString: "ENUM_OBJECT",
+                });
+            }
+        })
+    );
+
+    // clean up the unused keys
+    replacements.push({
+        oldString: "TYPE_PLACEHOLDER",
+        newString: columnType,
+    });
+
+    // add the column decorator with its properties
+    updateDtoAdditions.push({
+        keyword: "// --- Original fields ---",
+        replacements: [...replacements, ...specialReplacements],
+        addition: {
+            base: dtoBase,
+            additionIsFile: false,
+            conditional: {
+                type: "SUPPOSED_TO_BE_THERE",
+                data: columNameVariants.camelCaseName,
+            },
+        },
+    });
 
     return updateDtoAdditions;
 };

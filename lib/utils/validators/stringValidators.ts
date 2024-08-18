@@ -46,7 +46,7 @@ const enumValuesValidator = (input: string): boolean | string => {
     if (input.indexOf(",") === -1)
         return "You must have a comma-separated values!";
     if (input.indexOf(" ") !== -1) return "You shouldn't have any space!";
-    if (!input.match(/^[a-zA-Z0-9]+$/))
+    if (!input.match(/^[a-zA-Z0-9,]+$/))
         return "The input must only contains alphanumeric characters (except for the commas)";
 
     return true;

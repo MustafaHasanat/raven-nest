@@ -213,6 +213,12 @@ const builderConstants: BuilderConstantsProps = {
             default: "",
             message: "Write down a description for this field: (optional)",
         },
+        example: {
+            type: "input",
+            name: "example",
+            default: "",
+            message: "Write down an example for this field: (optional)",
+        },
         defaultValue: {
             type: "input",
             name: "defaultValue",

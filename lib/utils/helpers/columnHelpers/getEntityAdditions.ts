@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetColumnInjectionAdditions } from "../../../interfaces/builder.js";
 import {
-    ColumnDecoratorChoice,
     ColumnPropertyChoice,
     ColumnTypeChoice,
 } from "../../../enums/createAction.js";
 import { decoratorsMapObject } from "../../../utils/constants/builderMapping.js";
-import inquirer from "inquirer";
-import constants from "../../../utils/constants/builderConstants.js";
 import { InjectionAdditionAction } from "engine";
 
 const getEntityAdditions = async ({
@@ -16,32 +13,34 @@ const getEntityAdditions = async ({
     columnProperties,
     columnType,
     defaultValue,
+    specialReplacements,
 }: GetColumnInjectionAdditions): Promise<InjectionAdditionAction[]> => {
     const entityAdditions: InjectionAdditionAction[] = [];
     const replacements: any = [];
 
     // get the default value
-    let specialDefault = `"${defaultValue}"` || "''";
+    let specialDefault = `"${defaultValue || "''"}"`;
 
-    if (columnType[0] === ColumnTypeChoice.TIME)
+    if (columnType === ColumnTypeChoice.TIME)
         specialDefault = "'new Date().toLocaleTimeString()'";
 
-    if (columnType[0] === ColumnTypeChoice.ENUM)
+    if (columnType === ColumnTypeChoice.ENUM)
         specialDefault = "'ENUM_OBJECT.SELECT_OPTION'";
 
     // create a base component
     const entityBase = `
         // --- decorators ---
         @Column({
-            type: "${columnType[0] === "string" ? "text" : columnType[0]}",
+            type: "${columnType === "string" ? "text" : columnType}",
             default: ${specialDefault},
             IS_NULLABLE_PLACEHOLDER
             IS_UNIQUE_PLACEHOLDER
             ENUM_PLACEHOLDER
         })
-        ${columNameVariants.camelCaseName}IS_REQUIRED_PLACEHOLDER: ${columnType[0]};
+        ${columNameVariants.camelCaseName}IS_REQUIRED_PLACEHOLDER: TYPE_PLACEHOLDER;
     `;
 
+    // handle the properties
     await Promise.all(
         columnProperties.map((property) => {
             if (property === ColumnPropertyChoice.IS_REQUIRED) {
@@ -61,10 +60,16 @@ const getEntityAdditions = async ({
                     newString: "unique: true,",
                 });
             } else if (property === ColumnPropertyChoice.ENUM) {
-                replacements.push({
-                    oldString: "ENUM_PLACEHOLDER",
-                    newString: "enum: ENUM_OBJECT,",
-                });
+                replacements.push(
+                    {
+                        oldString: "ENUM_PLACEHOLDER",
+                        newString: "enum: ENUM_OBJECT,",
+                    },
+                    {
+                        oldString: "TYPE_PLACEHOLDER",
+                        newString: "ENUM_OBJECT",
+                    }
+                );
             }
         })
     );
@@ -86,57 +91,26 @@ const getEntityAdditions = async ({
         {
             oldString: "ENUM_PLACEHOLDER",
             newString: "",
+        },
+        {
+            oldString: "TYPE_PLACEHOLDER",
+            newString: columnType,
         }
     );
 
     // add the column decorator with its properties
     entityAdditions.push({
         keyword: "// --- columns ---",
-        replacements,
+        replacements: [...replacements, ...specialReplacements],
         addition: {
             base: entityBase,
             additionIsFile: false,
             conditional: {
                 type: "SUPPOSED_TO_BE_THERE",
-                data: columNameVariants.camelCaseName,
+                data: `${columNameVariants.camelCaseName}IS_REQUIRED_PLACEHOLDER: ${columnType};`,
             },
         },
     });
-
-    // --------------------
-    // handle special cases
-    // --------------------
-
-    const specialReplacements: any = [];
-
-    // handle the "Length" decorator
-    if (columnDecorators.includes(ColumnDecoratorChoice.LENGTH))
-        await inquirer
-            .prompt([constants.createColumn.stringLength])
-            .then(async ({ stringLength }) => {
-                const [minimum, maximum] = stringLength.trim().split(",");
-                specialReplacements.push(
-                    {
-                        oldString: "MIN_LENGTH",
-                        newString: minimum,
-                    },
-                    {
-                        oldString: "MAX_LENGTH",
-                        newString: maximum,
-                    }
-                );
-            });
-
-    // handle the "ENUM" decorator
-    if (columnProperties.includes(ColumnPropertyChoice.ENUM))
-        await inquirer
-            .prompt([constants.createColumn.enumName])
-            .then(async ({ enumName }) => {
-                specialReplacements.push({
-                    oldString: "ENUM_OBJECT",
-                    newString: enumName,
-                });
-            });
 
     // adding the decorators
     await Promise.all(
@@ -148,17 +122,6 @@ const getEntityAdditions = async ({
                     additionIsFile: false,
                 },
                 replacements: specialReplacements,
-            });
-            entityAdditions.push({
-                keyword: "import { IsUUID",
-                addition: {
-                    base: `, ${decoratorsMapObject[decorator].name}`,
-                    additionIsFile: false,
-                    conditional: {
-                        type: "SUPPOSED_TO_BE_THERE",
-                        data: `, ${decoratorsMapObject[decorator].name}`,
-                    },
-                },
             });
         })
     );

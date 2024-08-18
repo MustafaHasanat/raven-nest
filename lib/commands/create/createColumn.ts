@@ -2,6 +2,21 @@
 import { InjectTemplate } from "engine";
 import { CreateColumnProps } from "../../interfaces/builder.js";
 import { join } from "path";
+import { ColumnTypeChoice } from "../../enums/createAction.js";
+
+const deletions = [
+    {
+        keyword: "// --- decorators ---",
+        deletion: {
+            isWholeLine: true,
+            conditional: {
+                type: "REPLACED_WITH",
+                data: "",
+                special: "INDEX_CUT",
+            },
+        },
+    },
+];
 
 const createColumnInjection = ({
     columnAdditions: {
@@ -12,6 +27,7 @@ const createColumnInjection = ({
     paths: { entitiesPath, dtoPath, enumsPath, pipesPath },
     tableNameVariants,
     columNameVariants,
+    columnType,
 }: CreateColumnProps): InjectTemplate[] =>
     [
         {
@@ -21,19 +37,7 @@ const createColumnInjection = ({
                 `${tableNameVariants.camelCaseName}.entity.ts`
             ),
             additions: entityAdditions,
-            deletions: [
-                {
-                    keyword: "// --- decorators ---",
-                    deletion: {
-                        isWholeLine: true,
-                        conditional: {
-                            type: "REPLACED_WITH",
-                            data: "",
-                            special: "INDEX_CUT",
-                        },
-                    },
-                },
-            ],
+            deletions,
         },
         {
             signature: "create-TABLE.dto.ts",
@@ -42,6 +46,7 @@ const createColumnInjection = ({
                 `create-${tableNameVariants.camelCaseName}.dto.ts`
             ),
             additions: createDtoAdditions,
+            deletions,
         },
         {
             signature: "update-TABLE.dto.ts",
@@ -58,11 +63,11 @@ const createColumnInjection = ({
                 {
                     keyword: `${tableNameVariants.upperCaseName}Fields {`,
                     addition: {
-                        base: `\n${columNameVariants.upperSnakeCaseName} = '${columNameVariants.camelCaseName}',\n`,
+                        base: `\n${columNameVariants.upperSnakeCaseName} = "${columNameVariants.camelCaseName}",\n`,
                         additionIsFile: false,
                         conditional: {
                             type: "SUPPOSED_TO_BE_THERE",
-                            data: `${tableNameVariants.upperCaseName}Fields`,
+                            data: `${columNameVariants.upperSnakeCaseName} = "${columNameVariants.camelCaseName}"`,
                         },
                     },
                 },
@@ -71,7 +76,21 @@ const createColumnInjection = ({
         {
             signature: "post_patch.pipe.ts",
             injectable: join(pipesPath, "post_patch.pipe.ts"),
-            additions: [],
+            additions: [
+                ColumnTypeChoice.BOOLEAN,
+                ColumnTypeChoice.DATE,
+                ColumnTypeChoice.NUMBER,
+            ].includes(columnType)
+                ? [
+                      {
+                          keyword: `${tableNameVariants.camelCaseName}: {`,
+                          addition: {
+                              base: `${columNameVariants.camelCaseName}: "${columnType}",`,
+                              additionIsFile: false,
+                          },
+                      },
+                  ]
+                : [],
         },
     ] as InjectTemplate[];
 

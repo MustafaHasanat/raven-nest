@@ -54,9 +54,11 @@ export interface ColumnAdditions {
 export interface GetColumnInjectionAdditions {
     columNameVariants: NameVariant;
     tableNameVariants: NameVariant;
-    columnType: ColumnTypeChoice[];
+    columnType: ColumnTypeChoice;
     description: string;
+    example: string;
     defaultValue: string;
+    specialReplacements: any[];
     columnProperties: ColumnPropertyChoice[];
     columnDecorators: ColumnDecoratorChoice[];
 }
@@ -66,6 +68,7 @@ export interface CreateColumnProps {
     tableNameVariants: NameVariant;
     columNameVariants: NameVariant;
     columnAdditions: ColumnAdditions;
+    columnType: ColumnTypeChoice;
     // columnData: {
     //     columnName: string;
     //     columnType: ColumnTypeChoice;
