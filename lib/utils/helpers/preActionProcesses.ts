@@ -2,7 +2,7 @@ import { MemoValues } from "actions";
 import { FullDependencies } from "../../interfaces/constants.js";
 import { checkMemo } from "../../engines/memorizer.js";
 import installPackages from "../../engines/installer.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
 
 interface PreActionProps {
     deps?: FullDependencies | null;
@@ -23,7 +23,7 @@ const preAction = async ({
 }: PreActionProps) => {
     const memoValues = await checkMemo({
         keys: memos,
-        category: MemoCategory.RAVEN_NEST,
+        category: ConfigCategory.RAVEN_NEST,
     });
     if (!memoValues) return;
 

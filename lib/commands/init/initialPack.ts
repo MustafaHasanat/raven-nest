@@ -2,10 +2,10 @@ import { CloneTemplate, InjectTemplate } from "engine";
 
 export const initCloning = (): CloneTemplate[] => [
     {
-        signature: "memo.json",
-        target: "base/others/memo-json.txt",
+        signature: "ravenconfig.json",
+        target: "base/others/ravenconfig-json.txt",
         destination: ".",
-        newFileName: "memo.json",
+        newFileName: "ravenconfig.json",
     },
     // Constants
     {
@@ -224,11 +224,11 @@ export const initInjection = (): InjectTemplate[] => [
             {
                 keyword: "*",
                 addition: {
-                    base: "memo.json\n.env\n\n",
+                    base: "ravenconfig.json\n.env\n\n",
                     additionIsFile: false,
                     conditional: {
                         type: "SUPPOSED_TO_BE_THERE",
-                        data: "memo"
+                        data: "ravenconfig"
                     },
                 },
             },

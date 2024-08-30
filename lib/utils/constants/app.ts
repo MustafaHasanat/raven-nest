@@ -31,6 +31,10 @@ const appConstants: AppProps = {
                     flags: "--mailer",
                     description: "Add a mailing service to the app.",
                 },
+                mode: {
+                    flags: "--mode <mode-type>",
+                    description: "Switch between modes",
+                },
                 special: {
                     flags: "--special <table-name>",
                     description: "Create a special type of tables.",

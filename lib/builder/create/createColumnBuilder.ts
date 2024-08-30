@@ -11,7 +11,7 @@ import {
     MemorizerProps,
     memosToQuestions,
 } from "../../engines/memorizer.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
 import {
     ColumnTypeChoice,
     ColumnDecoratorChoice,
@@ -21,7 +21,12 @@ import getEntityAdditions from "../../utils/helpers/columnHelpers/getEntityAddit
 import getCreateDtoAdditions from "../../utils/helpers/columnHelpers/getCreateDtoAdditions.js";
 import getUpdateDtoAdditions from "../../utils/helpers/columnHelpers/getUpdateDtoAdditions.js";
 import { CloneTemplate } from "engine";
-import { join } from "path";
+import {
+    enumDecoratorHandler,
+    lengthDecoratorHandler,
+} from "../../utils/helpers/columnHelpers/specialInquirers.js";
+import { SpecialChunks } from "../../interfaces/builder.js";
+import { debuggerLog } from "../../utils/helpers/logHelpers.js";
 
 interface ColumnPromptValues {
     tableName: string;
@@ -77,67 +82,29 @@ const columnBuilder = async ({
 
                 const cloningCommands: CloneTemplate[] = [];
                 const specialReplacements: any[] = [];
+                const specialChunks: SpecialChunks = {};
 
                 // handle the "Length" decorator
-                if (columnDecorators.includes(ColumnDecoratorChoice.LENGTH))
-                    await inquirer
-                        .prompt([constants.createColumn.stringLength])
-                        .then(async ({ stringLength }) => {
-                            const [minimum, maximum] = stringLength
-                                .trim()
-                                .split(",");
-                            specialReplacements.push(
-                                {
-                                    oldString: "MIN_LENGTH",
-                                    newString: minimum,
-                                },
-                                {
-                                    oldString: "MAX_LENGTH",
-                                    newString: maximum,
-                                }
-                            );
-                        });
+                if (columnDecorators.includes(ColumnDecoratorChoice.LENGTH)) {
+                    const replacements = await lengthDecoratorHandler();
+                    specialReplacements.push(replacements);
+                }
 
                 // handle the "ENUM" decorator
-                if (columnProperties.includes(ColumnPropertyChoice.ENUM))
-                    await inquirer
-                        .prompt([
-                            constants.createColumn.enumName,
-                            constants.createColumn.enumValues,
-                        ])
-                        .then(async ({ enumName, enumValues }) => {
-                            specialReplacements.push({
-                                oldString: "ENUM_OBJECT",
-                                newString: enumName,
-                            });
-                            columnDecorators.push(
-                                "isEnum" as ColumnDecoratorChoice
-                            );
-
-                            cloningCommands.push({
-                                signature: "new-enum.enum.ts",
-                                target: "base/typescript/enum/file-enum.txt",
-                                destination: join(subPathObj.enumsPath),
-                                newFileName: `${tableNameVariantObj.camelCaseName}-${columnNameVariantObj.camelCaseName}-${enumName}.enum.ts`,
-                                replacements: [
-                                    {
-                                        oldString: "ENUM_NAME",
-                                        newString: enumName,
-                                    },
-                                    {
-                                        oldString: "ENUM_VALUE_PLACEHOLDER",
-                                        newString: (enumValues as string)
-                                            .split(",")
-                                            .map((item) => {
-                                                const itemVariant =
-                                                    new NameVariant(item);
-                                                return `${itemVariant.upperSnakeCaseName} = '${itemVariant.camelCaseName}'`;
-                                            })
-                                            .join(","),
-                                    },
-                                ],
-                            });
+                if (columnProperties.includes(ColumnPropertyChoice.ENUM)) {
+                    const { commands, decorators, replacements, enumInfo } =
+                        await enumDecoratorHandler({
+                            subPathObj,
+                            tableNameVariantObj,
+                            columnNameVariantObj,
                         });
+
+                    specialReplacements.push(replacements);
+                    columnDecorators.push(...decorators);
+                    cloningCommands.push(...commands);
+
+                    specialChunks["enumInfo"] = enumInfo;
+                }
 
                 const props = {
                     tableNameVariants: tableNameVariantObj,
@@ -149,9 +116,18 @@ const columnBuilder = async ({
                     columnProperties,
                     columnDecorators,
                     specialReplacements,
+                    specialChunks,
                 };
 
-                // TODO: add the import statement for the new enum to each one of those 
+                await debuggerLog({
+                    messages: {
+                        cloningCommands,
+                        specialReplacements,
+                        specialChunks,
+                        props,
+                    },
+                });
+
                 const entityAdditions = await getEntityAdditions(props);
                 const createDtoAdditions = await getCreateDtoAdditions(props);
                 const updateDtoAdditions = await getUpdateDtoAdditions(props);
@@ -176,7 +152,7 @@ const columnBuilder = async ({
                 if (!cloning || !injection) return;
 
                 await memorizeColumn({
-                    category: MemoCategory.RAVEN_NEST,
+                    category: ConfigCategory.RAVEN_NEST,
                     tableName,
                     columnName,
                 });
@@ -220,7 +196,7 @@ const createColumnBuilder = async (memoValues: MemoValues) => {
                 mainDest,
                 memo: {
                     pairs: { mainDest },
-                    category: MemoCategory.RAVEN_NEST,
+                    category: ConfigCategory.RAVEN_NEST,
                 },
                 overwrite,
             });

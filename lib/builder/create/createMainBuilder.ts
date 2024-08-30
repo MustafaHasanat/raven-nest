@@ -4,21 +4,21 @@ import {
     createMainInjection,
     createMainCloning,
 } from "../../commands/create/createMain.js";
-import { OptionValues } from "commander";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
 import { memosToQuestions } from "../../engines/memorizer.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
 import { pathCreator } from "../../utils/helpers/pathCreator.js";
 import { existsSync, writeFileSync } from "fs";
 import { join } from "path";
+import { AppOptions } from "app";
 
 /**
  * This function will be fired by the --create-main option
  */
 const createMainBuilder = async (
     memoValues: MemoValues,
-    options: OptionValues
+    options: AppOptions
 ) => {
     const { aws: isAWS, mailer: isMailer } = options;
 
@@ -84,7 +84,7 @@ const createMainBuilder = async (
                     injectionCommands: createMainInjection(createMainObj),
                     memo: {
                         pairs: { mainDest, rootDir, projectName, publicDir },
-                        category: MemoCategory.RAVEN_NEST,
+                        category: ConfigCategory.RAVEN_NEST,
                     },
                     overwrite,
                 });

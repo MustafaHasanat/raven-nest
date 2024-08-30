@@ -1,6 +1,4 @@
-import { RGB } from "../../enums/rgb.js";
-
-const coloringConstants: { colors: { [color: string]: RGB } } = {
+const coloringConstants = {
     colors: {
         white: { red: 255, green: 255, blue: 255 },
         black: { red: 0, green: 0, blue: 0 },

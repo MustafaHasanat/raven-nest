@@ -30,4 +30,5 @@ export enum ColumnDecoratorChoice {
     IS_DECIMAL = "isDecimal",
     IS_INT = "isInt",
     IS_DATE = "isDate",
+    // IS_ENUM = "isEnum",
 }

@@ -6,7 +6,7 @@ import {
     initDockerInjection,
 } from "../../commands/docker/initDocker.js";
 import { specialLog } from "../../utils/helpers/logHelpers.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
 import { MemoValues, QuestionQuery } from "actions";
 import { memosToQuestions } from "../../engines/memorizer.js";
 
@@ -32,7 +32,7 @@ export default async function dockerizeInitBuilder(memoValues: MemoValues) {
                 overwrite,
                 memo: {
                     pairs: { projectName },
-                    category: MemoCategory.RAVEN_NEST,
+                    category: ConfigCategory.RAVEN_NEST,
                 },
             });
 

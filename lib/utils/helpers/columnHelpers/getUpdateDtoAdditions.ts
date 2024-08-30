@@ -5,9 +5,12 @@ import { InjectionAdditionAction } from "engine";
 
 const getUpdateDtoAdditions = async ({
     columNameVariants,
+    tableNameVariants,
     columnProperties,
     columnType,
     specialReplacements,
+    columnDecorators,
+    specialChunks: { enumInfo },
 }: GetColumnInjectionAdditions): Promise<InjectionAdditionAction[]> => {
     const updateDtoAdditions: InjectionAdditionAction[] = [];
     const replacements: any = [];
@@ -50,6 +53,24 @@ const getUpdateDtoAdditions = async ({
             },
         },
     });
+
+    // adding the decorators
+    await Promise.all(
+        columnDecorators.map((decorator) => {
+            // adding special chunks
+
+            if ((decorator as string) === "isEnum") {
+                updateDtoAdditions.push({
+                    keyword: "*",
+                    addition: {
+                        base: `import { ${enumInfo?.name} } from "../common/enums/${tableNameVariants.camelCaseName}-${columNameVariants.camelCaseName}-${enumInfo?.name}.enum";\n`,
+                        additionIsFile: false,
+                    },
+                    replacements: specialReplacements,
+                });
+            }
+        })
+    );
 
     return updateDtoAdditions;
 };

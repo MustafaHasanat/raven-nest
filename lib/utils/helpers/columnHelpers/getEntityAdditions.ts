@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GetColumnInjectionAdditions } from "../../../interfaces/builder.js";
 import {
+    ColumnDecoratorChoice,
     ColumnPropertyChoice,
     ColumnTypeChoice,
 } from "../../../enums/createAction.js";
@@ -9,11 +10,13 @@ import { InjectionAdditionAction } from "engine";
 
 const getEntityAdditions = async ({
     columNameVariants,
+    tableNameVariants,
     columnDecorators,
     columnProperties,
     columnType,
     defaultValue,
     specialReplacements,
+    specialChunks: { enumInfo },
 }: GetColumnInjectionAdditions): Promise<InjectionAdditionAction[]> => {
     const entityAdditions: InjectionAdditionAction[] = [];
     const replacements: any = [];
@@ -123,6 +126,19 @@ const getEntityAdditions = async ({
                 },
                 replacements: specialReplacements,
             });
+
+            // adding special chunks
+
+            if ((decorator as string) === "isEnum") {
+                entityAdditions.push({
+                    keyword: "*",
+                    addition: {
+                        base: `import { ${enumInfo?.name} } from "../common/enums/${tableNameVariants.camelCaseName}-${columNameVariants.camelCaseName}-${enumInfo?.name}.enum";\n`,
+                        additionIsFile: false,
+                    },
+                    replacements: specialReplacements,
+                });
+            }
         })
     );
 

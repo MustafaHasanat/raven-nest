@@ -8,7 +8,7 @@ import {
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
 import { memosToQuestions } from "../../engines/memorizer.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
 import NameVariant from "../../models/nameVariant.js";
 import SubPath from "../../models/subPath.js";
 
@@ -108,7 +108,7 @@ const createDatabaseBuilder = async (memoValues: MemoValues) => {
                     injectionCommands: createDatabaseInjection(props),
                     memo: {
                         pairs: { rootDir, mainDest },
-                        category: MemoCategory.RAVEN_NEST,
+                        category: ConfigCategory.RAVEN_NEST,
                     },
                     overwrite,
                 });

@@ -25,7 +25,7 @@ const initAction = async () => {
             message: "Process finished",
             situation: "RESULT",
         });
-        // Initializing the "memo.json" file
+        // Initializing the "ravenconfig.json" file
         specialLog({
             message: "Initializing",
             situation: "PROCESS",

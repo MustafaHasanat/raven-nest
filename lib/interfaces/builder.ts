@@ -45,6 +45,10 @@ export interface CreateTableProps {
 
 // create column
 
+export interface SpecialChunks {
+    enumInfo?: { name: string; values: string };
+}
+
 export interface ColumnAdditions {
     entityAdditions: InjectionAdditionAction[];
     createDtoAdditions: InjectionAdditionAction[];
@@ -61,6 +65,7 @@ export interface GetColumnInjectionAdditions {
     specialReplacements: any[];
     columnProperties: ColumnPropertyChoice[];
     columnDecorators: ColumnDecoratorChoice[];
+    specialChunks: SpecialChunks;
 }
 
 export interface CreateColumnProps {

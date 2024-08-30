@@ -3,6 +3,7 @@
 
     "ravennest": {
         "usage": "This section is reserved for the raven-nest tool.",
+        "debugger": false,
         "tables": {}
     }
 }

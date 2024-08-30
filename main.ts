@@ -2,7 +2,7 @@
 
 "use strict";
 
-import { Argument, Command, Option, OptionValues } from "commander";
+import { Argument, Command, Option } from "commander";
 import constants from "./lib/utils/constants/app.js";
 import createAction from "./lib/actions/create.js";
 import dockerizeAction from "./lib/actions/dockerize.js";
@@ -12,7 +12,10 @@ import initAction from "./lib/actions/init.js";
 import {
     CreateFileSetArgument,
     CreateSpecialArgument,
+    RuntimeMode,
 } from "./lib/enums/actions.js";
+import { AppOptions } from "app";
+import { handleDebugger } from "./lib/middlewares/debugger.js";
 
 export default function InitAction() {
     // Initialize the cli-tool program
@@ -33,8 +36,9 @@ export default function InitAction() {
     program
         .command(constants.commands.init.command)
         .description(constants.commands.init.description)
-        .action(async () => {
+        .action(async (options: AppOptions) => {
             isNodeProject();
+            await handleDebugger(options);
             await initAction();
         });
 
@@ -42,8 +46,9 @@ export default function InitAction() {
     program
         .command(constants.commands.dockerize.command)
         .description(constants.commands.dockerize.description)
-        .action(async () => {
+        .action(async (options: AppOptions) => {
             isNodeProject();
+            await handleDebugger(options);
             await dockerizeAction();
         });
 
@@ -74,9 +79,16 @@ export default function InitAction() {
                 constants.commands.create.options.special.description
             ).choices(Object.values(CreateSpecialArgument))
         )
+        .addOption(
+            new Option(
+                constants.commands.create.options.mode.flags,
+                constants.commands.create.options.mode.description
+            ).choices(Object.values(RuntimeMode))
+        )
         .action(
-            async (filesSet: CreateFileSetArgument, options: OptionValues) => {
+            async (filesSet: CreateFileSetArgument, options: AppOptions) => {
                 isNodeProject();
+                await handleDebugger(options);
                 await createAction(filesSet, options);
             }
         );

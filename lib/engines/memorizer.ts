@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { specialLog } from "../utils/helpers/logHelpers.js";
-import { MemoCategory } from "../enums/actions.js";
+import { ConfigCategory } from "../enums/actions.js";
 import { readFile, writeFile } from "fs/promises";
 import { ActionTag, MemoValues, QuestionQuery } from "actions";
 import { QuestionCollection } from "inquirer";
@@ -8,43 +8,43 @@ import { join } from "path";
 
 interface CheckMemoProps {
     keys: string[];
-    category: MemoCategory;
+    category: ConfigCategory;
 }
 
 export interface MemorizerProps {
     pairs: {
         [key: string]: any;
     };
-    category: MemoCategory;
+    category: ConfigCategory;
 }
 
 // -------------------------------------
 
-export const readMemoFile = async (category: MemoCategory): Promise<any> => {
+export const readConfigFile = async (category: ConfigCategory): Promise<any> => {
     try {
         const memoFileContent: { [key: string]: any } = JSON.parse(
-            await readFile("memo.json", "utf8")
+            await readFile("ravenconfig.json", "utf8")
         );
 
         !!!memoFileContent[category] && (memoFileContent[category] = {});
 
         return memoFileContent;
     } catch (error) {
-        throw Error(`Error while reading 'memo.json': ${error}`);
+        throw Error(`Error while reading 'ravenconfig.json': ${error}`);
     }
 };
 
-export const writeMemoFile = async (memoFileContent: {
+export const writeConfigFile = async (memoFileContent: {
     [key: string]: any;
 }): Promise<void> => {
     try {
         await writeFile(
-            join(process.cwd(), "memo.json"),
+            join(process.cwd(), "ravenconfig.json"),
             JSON.stringify(memoFileContent),
             "utf8"
         );
     } catch (error) {
-        throw Error(`Error while modifying 'memo.json': ${error}`);
+        throw Error(`Error while modifying 'ravenconfig.json': ${error}`);
     }
 };
 
@@ -55,7 +55,7 @@ export const checkMemo = async ({
     try {
         const result: MemoValues = {};
         const memoFileContent: { [key: string]: any } = JSON.parse(
-            await readFile("memo.json", "utf8")
+            await readFile("ravenconfig.json", "utf8")
         );
 
         const curCategory = memoFileContent[category];
@@ -67,7 +67,7 @@ export const checkMemo = async ({
             });
         } else {
             throw new Error(
-                `Couldn't reach the category ${category} from 'memo.json'`
+                `Couldn't reach the category ${category} from 'ravenconfig.json'`
             );
         }
 
@@ -75,7 +75,7 @@ export const checkMemo = async ({
     } catch (error) {
         specialLog({
             situation: "ERROR",
-            message: `an error occurred while modifying the 'memo.json' file: ${error}`,
+            message: `an error occurred while modifying the 'ravenconfig.json' file: ${error}`,
         });
         return null;
     }
@@ -106,14 +106,14 @@ export const memosToQuestions = (
 
 export const memorizer = async ({ pairs, category }: MemorizerProps) => {
     try {
-        const memoFileContent = await readMemoFile(category);
+        const memoFileContent = await readConfigFile(category);
 
         Object.entries(pairs).forEach((pair) => {
             const [key, value] = pair;
             memoFileContent[category][key] = value;
         });
 
-        await writeMemoFile(memoFileContent);
+        await writeConfigFile(memoFileContent);
     } catch (error) {
         specialLog({
             situation: "ERROR",
@@ -128,16 +128,19 @@ export const memorizeTable = async ({
     category,
 }: {
     tableName: string;
-    category: MemoCategory;
+    category: ConfigCategory;
 }): Promise<void> => {
     try {
-        const memoFileContent = await readMemoFile(category);
+        const memoFileContent = await readConfigFile(category);
+
+        if (!memoFileContent[category]["tables"])
+            memoFileContent[category]["tables"] = {};
 
         memoFileContent[category]["tables"][tableName] = {
             ...(memoFileContent[category]["tables"][tableName] || {}),
         };
 
-        await writeMemoFile(memoFileContent);
+        await writeConfigFile(memoFileContent);
     } catch (error) {
         specialLog({
             situation: "ERROR",
@@ -153,17 +156,17 @@ export const memorizeColumn = async ({
 }: {
     columnName: string;
     tableName: string;
-    category: MemoCategory;
+    category: ConfigCategory;
 }): Promise<void> => {
     try {
-        const memoFileContent = await readMemoFile(category);
+        const memoFileContent = await readConfigFile(category);
 
         memoFileContent[category]["tables"][tableName][columnName] = {
             ...(memoFileContent[category]["tables"][tableName][columnName] ||
                 {}),
         };
 
-        await writeMemoFile(memoFileContent);
+        await writeConfigFile(memoFileContent);
     } catch (error) {
         specialLog({
             situation: "ERROR",

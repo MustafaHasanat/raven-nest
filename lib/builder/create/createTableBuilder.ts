@@ -8,21 +8,21 @@ import {
     createSpecialTableCloning,
     createSpecialTableInjection,
 } from "../../commands/create/createSpecialTable.js";
-import { OptionValues } from "commander";
 import NameVariant from "../../models/nameVariant.js";
 import SubPath from "../../models/subPath.js";
 import { CreateSpecialArgument } from "../../enums/actions.js";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
 import { memorizeTable, memosToQuestions } from "../../engines/memorizer.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
+import { AppOptions } from "app";
 
 /**
  * This function will be fired by the --create-table option
  */
 const createTableBuilder = async (
     memoValues: MemoValues,
-    options: OptionValues
+    options: AppOptions
 ) => {
     const { special } = options;
     let isSpecialTable = !!special;
@@ -89,14 +89,14 @@ const createTableBuilder = async (
                     : createTableInjection(createTableObj),
                 memo: {
                     pairs: { mainDest },
-                    category: MemoCategory.RAVEN_NEST,
+                    category: ConfigCategory.RAVEN_NEST,
                 },
                 overwrite,
             });
             if (!cloning || !injection) return;
 
             await memorizeTable({
-                category: MemoCategory.RAVEN_NEST,
+                category: ConfigCategory.RAVEN_NEST,
                 tableName,
             });
         });

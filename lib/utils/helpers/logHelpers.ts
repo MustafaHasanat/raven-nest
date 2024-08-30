@@ -1,15 +1,18 @@
 import { RGB } from "../../enums/rgb.js";
 import { getColoredText } from "./coloringLog.js";
 import constants from "../constants/coloring.js";
+import { getIsDebugging } from "../../middlewares/debugger.js";
 
 const { colors } = constants;
 
+type Situation = "RESULT" | "PROCESS" | "MESSAGE" | "ERROR" | "DEBUGGER";
+
 interface SpecialLogProps {
     message: string;
-    situation: "RESULT" | "PROCESS" | "MESSAGE" | "ERROR";
     headerColor?: RGB;
     scope?: string;
     isBreak?: boolean;
+    situation: Situation;
 }
 
 const specialLog = ({
@@ -50,4 +53,31 @@ const logNumberedList = (array: (string | number)[], isLog = true): string =>
         })
         .join("\n");
 
-export { specialLog, logNumberedList };
+const debuggerLog = async ({
+    messages,
+    scope,
+    extraCondition = true,
+}: {
+    messages: { [key: string]: string | Record<any, any> };
+    scope?: string;
+    isBreak?: boolean;
+    extraCondition?: boolean;
+}) => {
+    const isDebugging = await getIsDebugging();
+    const entries = Object.entries(messages);
+
+    if (!isDebugging || !extraCondition || entries.length === 0) return;
+
+    const header = `\n| DEBUGGER ${scope ? `(${scope})` : ""}: `;
+
+    process.stdout.write(getColoredText(header, colors.blue));
+
+    Promise.all(
+        entries.map(([key, message]) => {
+            console.log(`===== ${key} =====`);
+            console.log(`${JSON.stringify(message)}`);
+        })
+    );
+};
+
+export { specialLog, logNumberedList, debuggerLog };

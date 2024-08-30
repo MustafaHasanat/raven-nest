@@ -1,4 +1,4 @@
-export enum MemoCategory {
+export enum ConfigCategory {
     RAVEN_NEST = "ravennest",
 }
 
@@ -17,4 +17,8 @@ export enum CreateFileSetArgument {
 export enum CreateSpecialArgument {
     PRODUCT = "product",
     NOTIFICATION = "notification",
+}
+
+export enum RuntimeMode {
+    DEBUG = "debug",
 }

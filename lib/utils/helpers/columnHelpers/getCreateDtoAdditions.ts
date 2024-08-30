@@ -13,6 +13,8 @@ const getCreateDtoAdditions = async ({
     description,
     example,
     specialReplacements,
+    tableNameVariants,
+    specialChunks: { enumInfo },
 }: GetColumnInjectionAdditions): Promise<InjectionAdditionAction[]> => {
     const createDtoAdditions: InjectionAdditionAction[] = [];
     const replacements: any = [];
@@ -100,6 +102,19 @@ const getCreateDtoAdditions = async ({
                 },
                 replacements: specialReplacements,
             });
+
+            // adding special chunks
+
+            if ((decorator as string) === "isEnum") {
+                createDtoAdditions.push({
+                    keyword: "*",
+                    addition: {
+                        base: `import { ${enumInfo?.name} } from "../common/enums/${tableNameVariants.camelCaseName}-${columNameVariants.camelCaseName}-${enumInfo?.name}.enum";\n`,
+                        additionIsFile: false,
+                    },
+                    replacements: specialReplacements,
+                });
+            }
         })
     );
 

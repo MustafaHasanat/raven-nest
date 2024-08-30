@@ -6,7 +6,7 @@ import SubPath from "../../models/subPath.js";
 import manipulator from "../../engines/manipulator.js";
 import { MemoValues, QuestionQuery } from "actions";
 import { MemorizerProps, memosToQuestions } from "../../engines/memorizer.js";
-import { MemoCategory } from "../../enums/actions.js";
+import { ConfigCategory } from "../../enums/actions.js";
 
 const relationBuilder = async ({
     mainDest,
@@ -91,7 +91,7 @@ const createRelationBuilder = async (memoValues: MemoValues) => {
                 mainDest,
                 memo: {
                     pairs: { mainDest },
-                    category: MemoCategory.RAVEN_NEST,
+                    category: ConfigCategory.RAVEN_NEST,
                 },
                 overwrite,
             });

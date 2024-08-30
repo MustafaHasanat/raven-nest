@@ -38,4 +38,11 @@ declare module "app" {
             [option: string]: OptionType;
         };
     };
+
+    type AppOptions = {
+        aws?: string;
+        mailer?: string;
+        special?: "product" | "notification";
+        mode?: "debug";
+    };
 }

@@ -1,3 +1,5 @@
+import { ColumnDecoratorChoice } from "../../enums/createAction.js";
+
 export const columnTypeChoices = [
     {
         name: "string",
@@ -64,47 +66,51 @@ export const columnPropertiesChoices = [
     },
 ];
 
-export const columnDecoratorsChoices = [
+export const columnDecoratorsChoices: {
+    name: string;
+    value: ColumnDecoratorChoice;
+    description: string;
+}[] = [
     {
         name: "isUUID",
-        value: "isUUID",
+        value: ColumnDecoratorChoice.IS_UUID,
         description: "the string must follow the UUID format",
     },
     {
         name: "length",
-        value: "length",
+        value: ColumnDecoratorChoice.LENGTH,
         description: "the string's length must be within the specified range",
     },
     {
         name: "isEmail",
-        value: "isEmail",
+        value: ColumnDecoratorChoice.IS_EMAIL,
         description: "the string must follow the email format: xx@yy.zz",
     },
     {
         name: "isStrongPassword",
-        value: "isStrongPassword",
+        value: ColumnDecoratorChoice.IS_STRONG_PASS,
         description:
             "the string must have uppercase, lowercase, number, special character, and be longer than 8",
     },
     {
         name: "isPhoneNumber",
-        value: "isPhoneNumber",
+        value: ColumnDecoratorChoice.IS_PHONE_NUMBER,
         description:
             "the string must follow the phone number format: +(country-code)(number)",
     },
     {
         name: "isDecimal",
-        value: "isDecimal",
+        value: ColumnDecoratorChoice.IS_DECIMAL,
         description: "the number must have a decimal point",
     },
     {
         name: "isInt",
-        value: "isInt",
+        value: ColumnDecoratorChoice.IS_INT,
         description: "the number must be an integer",
     },
     {
         name: "isDate",
-        value: "isDate",
+        value: ColumnDecoratorChoice.IS_DATE,
         description: "the input must be of date type (format: M/D/Y)",
     },
 ];
